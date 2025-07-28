@@ -3,7 +3,12 @@ import jwt from 'jsonwebtoken';
 
 export const verifyJWT = (req, res, next) => {
     try {
+        console.log('Manager auth middleware - Cookies:', req.cookies);
+        console.log('Manager auth middleware - Authorization header:', req.header("Authorization"));
+        
         const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "");
+
+        console.log('Manager auth middleware - Extracted token:', token ? 'Token found' : 'No token');
 
         if (!token) {
             return res.status(401).json({ message: "Unauthorized request: No token provided" });

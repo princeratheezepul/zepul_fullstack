@@ -112,8 +112,10 @@ const loginUser = async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: process.env.NODE_ENV !== "development",
-            sameSite: "Lax"
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+            path: "/",
+            maxAge: 24 * 60 * 60 * 1000, // 24 hours
         };
 
         return res.status(200)
@@ -141,8 +143,9 @@ const logoutUser = async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: process.env.NODE_ENV !== "development",
-            sameSite: "Lax"
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+            path: "/",
         };
 
         return res.status(200)
@@ -182,8 +185,10 @@ const refreshAccessToken = async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: process.env.NODE_ENV !== "development",
-            sameSite: "Lax"
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "None",
+            path: "/",
+            maxAge: 24 * 60 * 60 * 1000, // 24 hours
         };
 
         const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshToken(user._id);

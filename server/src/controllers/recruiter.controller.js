@@ -134,8 +134,9 @@ export const recruiterSignin = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "Lax",
+      sameSite: "None",
       path: "/",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
     };
 
     console.log('Setting cookies with options:', options);
@@ -165,7 +166,7 @@ export const recruiterLogout = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "Lax",
+      sameSite: "None",
       path: "/",
     };
 
@@ -232,8 +233,9 @@ export const refreshRecruiterToken = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "Lax",
+      sameSite: "None",
       path: "/",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
     };
 
     return res.status(200)

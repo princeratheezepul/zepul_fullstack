@@ -63,6 +63,9 @@ const ManagerAccountSettings = () => {
       const apiUrl = getApiUrl('/api/manager/profile');
       console.log('Using API URL:', apiUrl);
       
+      // Log cookies for debugging
+      console.log('Current cookies:', document.cookie);
+      
       // Try direct fetch first to debug
       const response = await fetch(apiUrl, {
         method: 'GET',
@@ -74,6 +77,7 @@ const ManagerAccountSettings = () => {
       
       console.log('Response status:', response.status);
       console.log('Response ok:', response.ok);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
       
       if (!response.ok) {
         const errorText = await response.text();

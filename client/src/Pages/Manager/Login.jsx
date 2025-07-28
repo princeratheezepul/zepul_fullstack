@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Toaster, toast } from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
+import { getApiUrl } from "../../config/config.js";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ export default function Login() {
     setIsLoading(true);
     const data = { email, password };
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/manager/login`, { 
+      const response = await fetch(getApiUrl('/api/manager/login'), { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
