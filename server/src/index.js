@@ -26,8 +26,12 @@ console.log('NODE_ENV:', process.env.NODE_ENV);
 const allowedOrigins = [
   ServerConfig.Frontend_URL,
   "http://localhost:5173",
-  "https://zepulfullstack3.vercel.app"
+  "https://zepulfullstack3.vercel.app",
+  "https://zepul-fullstack-9hgn.vercel.app"
 ].filter(Boolean); // Remove any undefined values
+
+console.log('CORS allowed origins:', allowedOrigins);
+console.log('ServerConfig.Frontend_URL:', ServerConfig.Frontend_URL);
 
 app.use(
   cors({

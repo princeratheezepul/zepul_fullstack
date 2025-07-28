@@ -3,8 +3,8 @@ export const config = {
   // Backend URL - use environment variable or fallback to production URL
   backendUrl: import.meta.env.VITE_BACKEND_URL || 'https://zepul-fullstack.onrender.com',
   
-  // Frontend URL - use environment variable or fallback to localhost
-  frontendUrl: import.meta.env.VITE_FRONTEND_URL || 'http://localhost:5173',
+  // Frontend URL - use environment variable or fallback to the correct Vercel URL
+  frontendUrl: import.meta.env.VITE_FRONTEND_URL || 'https://zepul-fullstack-9hgn.vercel.app',
   
   // Environment
   isDevelopment: import.meta.env.DEV,
@@ -23,5 +23,6 @@ export const logConfig = () => {
     frontendUrl: config.frontendUrl,
     isDevelopment: config.isDevelopment,
     isProduction: config.isProduction,
+    currentLocation: window.location.href,
   });
 }; 
