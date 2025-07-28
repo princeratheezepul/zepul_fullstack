@@ -175,7 +175,7 @@ const SavedResumes = ({ jobId, onBack, jobtitle }) => {
       <div className="w-full max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2 mb-2">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 leading-tight">Candidate List</h1>
+            <div className="text-2xl font-bold text-gray-900 leading-tight">Candidate List</div>
             <div className="text-gray-500 text-sm mt-1">Managing candidate for {capitalizeFirstLetter(jobtitle || '')}</div>
           </div>
           {/* Filter Tabs */}
@@ -213,7 +213,7 @@ const SavedResumes = ({ jobId, onBack, jobtitle }) => {
                 <tr>
                   <td colSpan={5} className="text-center py-12">
                     <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No Candidates Yet</h3>
+                    <div className="text-lg font-semibold text-gray-900 mb-2">No Candidates Yet</div>
                     <p className="text-gray-500">Resumes submitted for this job will appear here.</p>
                   </td>
                 </tr>

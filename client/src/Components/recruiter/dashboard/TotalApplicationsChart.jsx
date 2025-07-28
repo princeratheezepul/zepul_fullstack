@@ -109,7 +109,7 @@ const TotalApplicationsChart = () => {
   if (loading) {
     return (
       <div className="bg-white rounded-lg p-6 shadow-md font-sans">
-        <h3 className="text-xl font-semibold mb-6">Total Applications</h3>
+        <div className="text-xl font-semibold mb-6">Total Applications</div>
         <div className="flex items-center justify-center h-64">
           <div className="text-gray-500">Loading applications...</div>
         </div>
@@ -120,7 +120,7 @@ const TotalApplicationsChart = () => {
   if (error) {
     return (
       <div className="bg-white rounded-lg p-6 shadow-md font-sans">
-        <h3 className="text-xl font-semibold mb-6">Total Applications</h3>
+        <div className="text-xl font-semibold mb-6">Total Applications</div>
         <div className="flex items-center justify-center h-64">
           <div className="text-red-500">Error: {error}</div>
         </div>
@@ -130,7 +130,7 @@ const TotalApplicationsChart = () => {
 
   return (
     <div className="bg-white rounded-lg p-6 shadow-md font-sans">
-      <h3 className="text-xl font-semibold mb-6">Total Applications</h3>
+      <div className="text-xl font-semibold mb-6">Total Applications</div>
       <div className="flex items-center gap-8">
         <div className="relative w-64 h-64">
           <ResponsiveContainer width="100%" height="100%">

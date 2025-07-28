@@ -134,7 +134,7 @@ export const recruiterSignin = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "None",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       path: "/",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     };
@@ -150,10 +150,9 @@ export const recruiterSignin = async (req, res) => {
 
     // Send response
     res.json({ 
+      status: 200,
       message: "Login successful", 
-      user,
-      accessToken,
-      refreshToken
+      data: { user, accessToken, refreshToken }
     });
   } catch (err) {
     console.error("Signin failed:", err);
@@ -166,7 +165,7 @@ export const recruiterLogout = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "None",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       path: "/",
     };
 
@@ -233,7 +232,7 @@ export const refreshRecruiterToken = async (req, res) => {
     const options = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "None",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       path: "/",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     };

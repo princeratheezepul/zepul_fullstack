@@ -147,8 +147,8 @@ const   loginAccountManager = async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: process.env.NODE_ENV !== "development",
-            sameSite: "Lax"
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
         };
 
         return res.status(200)
@@ -176,8 +176,8 @@ const logoutAccountManager = async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: process.env.NODE_ENV !== "development",
-            sameSite: "Lax"
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
         };
 
         return res.status(200)
@@ -223,8 +223,8 @@ const refreshAccessToken = async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: process.env.NODE_ENV !== "development",
-            sameSite: "Lax"
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax"
         };
 
         const { accessToken, refreshToken: newRefreshToken } = await generateAccessAndRefreshToken(user._id);

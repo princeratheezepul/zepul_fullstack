@@ -305,7 +305,7 @@ const SavedResumes = ({ jobId, onBack, jobtitle }) => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 className="text-3xl font-bold text-gray-900">Candidate List</h1>
+            <div className="text-3xl font-bold text-gray-900">Candidate List</div>
           </div>
           <div className="text-gray-500 text-base">Managing candidate for {capitalizeFirstLetter(jobtitle || '')}</div>
         </div>

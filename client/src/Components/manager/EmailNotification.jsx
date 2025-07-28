@@ -4,7 +4,7 @@ const notifications = [
   {
     id: 1,
     title: 'Notification from us',
-    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at velit, ipsum turpis scelerisque facilisi nisl. Arcu ullamcorper a in molestie et risus pulvinar orci vel.',
+    desc: 'Stay informed about new job assignments and recruitment opportunities that match your team\'s expertise and current workload.',
     enabled: true,
     type: 'New Job Assigned',
     sub: 'Get News about product and feature updates.'
@@ -12,7 +12,7 @@ const notifications = [
   {
     id: 2,
     title: 'Notification from us',
-    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at velit, ipsum turpis scelerisque facilisi nisl. Arcu ullamcorper a in molestie et risus pulvinar orci vel.',
+    desc: 'Receive alerts when candidates miss scheduled interviews to help you quickly reschedule or find alternative candidates.',
     enabled: true,
     type: 'Candidate No-show',
     sub: 'Get News about product and feature updates.'
@@ -20,7 +20,7 @@ const notifications = [
   {
     id: 3,
     title: 'Notification from us',
-    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at velit, ipsum turpis scelerisque facilisi nisl. Arcu ullamcorper a in molestie et risus pulvinar orci vel.',
+    desc: 'Get updates on interview schedule changes and modifications to keep your recruitment process running smoothly.',
     enabled: true,
     type: 'Candidate No-show',
     sub: 'Get News about product and feature updates.'
@@ -28,7 +28,7 @@ const notifications = [
   {
     id: 4,
     title: 'Notification from us',
-    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at velit, ipsum turpis scelerisque facilisi nisl. Arcu ullamcorper a in molestie et risus pulvinar orci vel.',
+    desc: 'Receive gentle reminders to submit candidate evaluations and feedback within the specified timeframe.',
     enabled: false,
     type: 'Scorecard Submission Reminder',
     sub: 'Get News about product and feature updates.'
@@ -36,7 +36,7 @@ const notifications = [
   {
     id: 5,
     title: 'Notification from us',
-    desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at velit, ipsum turpis scelerisque facilisi nisl. Arcu ullamcorper a in molestie et risus pulvinar orci vel.',
+    desc: 'Stay on top of important deadlines for job postings, candidate submissions, and other time-sensitive activities.',
     enabled: true,
     type: 'Deadline Reminder',
     sub: 'Get News about product and feature updates.'
@@ -54,7 +54,7 @@ const EmailNotification = () => {
     <div className="w-full max-w-5xl pt-4">
       <h1 className="text-3xl font-bold text-black mb-1">Email Notification</h1>
       <p className="text-base text-gray-500 mb-8 max-w-2xl">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at velit, ipsum turpis scelerisque facilisi nisl. Arcu ullamcorper a in molestie et risus pulvinar orci vel.
+        Customize your email notification preferences to stay informed about important recruitment activities and ensure you never miss critical updates that affect your team's workflow.
       </p>
       <div className="bg-white rounded-xl shadow border border-gray-200 divide-y divide-gray-200">
         {notifications.map((n, idx) => (
@@ -65,20 +65,41 @@ const EmailNotification = () => {
               <div className="text-gray-400 text-sm max-w-xs">{n.desc}</div>
             </div>
             {/* Center: Switch */}
-            <div className="flex items-center gap-2 min-w-[90px]">
-              <button
-                type="button"
-                className={`relative inline-flex h-7 w-12 border-2 border-transparent rounded-full cursor-pointer transition-colors duration-200 focus:outline-none ${toggles[idx] ? 'bg-blue-600' : 'bg-gray-300'}`}
-                onClick={() => handleToggle(idx)}
-                aria-pressed={toggles[idx]}
-              >
-                <span className="sr-only">Toggle notification</span>
-                <span
-                  className={`inline-block h-6 w-6 rounded-full bg-white shadow transform ring-0 transition duration-200 ${toggles[idx] ? 'translate-x-5' : 'translate-x-0'}`}
-                />
-              </button>
-              <span className={`ml-2 text-sm font-medium ${toggles[idx] ? 'text-blue-600' : 'text-gray-400'}`}>{toggles[idx] ? 'Yes' : 'NO'}</span>
-            </div>
+                         <div className="flex items-center gap-2 min-w-[90px]">
+               <button
+                 type="button"
+                                   style={{
+                    position: 'relative',
+                    display: 'inline-flex',
+                    height: '24px',
+                    width: '44px',
+                    border: '2px solid transparent',
+                    borderRadius: '9999px',
+                    cursor: 'pointer',
+                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                    outline: 'none',
+                    backgroundColor: toggles[idx] ? '#2563eb' : '#d1d5db'
+                  }}
+                 onClick={() => handleToggle(idx)}
+                 aria-pressed={toggles[idx]}
+               >
+                 <span className="sr-only">Toggle notification</span>
+                                   <span 
+                    style={{
+                      position: 'absolute',
+                      top: '2px',
+                      left: toggles[idx] ? '22px' : '2px',
+                      height: '16px',
+                      width: '16px',
+                      borderRadius: '50%',
+                      backgroundColor: 'white',
+                      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                  />
+               </button>
+               <span className={`ml-2 text-sm font-medium ${toggles[idx] ? 'text-blue-600' : 'text-gray-400'}`}>{toggles[idx] ? 'Yes' : 'NO'}</span>
+             </div>
             {/* Right: Type and subdesc */}
             <div className="flex flex-col min-w-[180px]">
               <span className="font-semibold text-gray-900">{n.type}</span>

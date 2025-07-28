@@ -125,7 +125,7 @@ const RecruiterJobDetailPage = () => {
                 <div>
                   <div className="text-xs text-blue-600 font-semibold mb-1">JOB DETAILS</div>
                   <div className="flex items-center gap-2 mb-1">
-                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{job.jobtitle}</h1>
+                    <div className="text-2xl md:text-3xl font-bold text-gray-900">{job.jobtitle}</div>
                     {/* {job.isNew && <s  pan className="ml-2 px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-semibold">New</span>} */}
                   </div>
                 </div>
@@ -152,21 +152,21 @@ const RecruiterJobDetailPage = () => {
             <div className="flex flex-col lg:flex-row gap-8 w-full mt-8">
               {/* Left: Job Description Card */}
               <div className="flex-1 rounded-xl p-6 md:p-10 mb-6 lg:mb-0 bg-gray-50">
-                <h2 className="text-xl font-bold mb-4">Job Description:</h2>
+                <div className="text-xl font-bold mb-4">Job Description:</div>
                 <p className="text-gray-700 mb-6 whitespace-pre-line">{job.description}</p>
-                <h3 className="text-lg font-semibold mb-2">Key Responsibilities:</h3>
+                <div className="text-lg font-semibold mb-2">Key Responsibilities:</div>
                 <ul className="list-disc pl-6 mb-6 text-gray-700">
                   {job.responsibilities.map((item, idx) => (
                     <li key={idx}>{item}</li>
                   ))}
                 </ul>
-                <h3 className="text-lg font-semibold mb-2">Required Skills & Experience:</h3>
+                <div className="text-lg font-semibold mb-2">Required Skills & Experience:</div>
                 <ul className="list-disc pl-6 mb-6 text-gray-700">
                   {job.requiredSkills.map((item, idx) => (
                     <li key={idx}>{item}</li>
                   ))}
                 </ul>
-                <h3 className="text-lg font-semibold mb-2">Preferred Qualifications (Nice to Have):</h3>
+                <div className="text-lg font-semibold mb-2">Preferred Qualifications (Nice to Have):</div>
                 <ul className="list-disc pl-6 mb-6 text-gray-700">
                   {job.preferredQualifications.map((item, idx) => (
                     <li key={idx}>{item}</li>

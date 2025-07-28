@@ -84,7 +84,7 @@ const CandidateSubmissionChart = () => {
   if (loading) {
     return (
       <div className="bg-white p-6 rounded-2xl shadow-md px-8">
-        <h3 className="text-xl font-bold text-gray-800 mb-4">Candidate Submission</h3>
+        <div className="text-xl font-bold text-gray-800 mb-4">Candidate Submission</div>
         <div className="flex items-center justify-center h-80">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -95,7 +95,7 @@ const CandidateSubmissionChart = () => {
   if (error) {
     return (
       <div className="bg-white p-6 rounded-2xl shadow-md px-8">
-        <h3 className="text-xl font-bold text-gray-800 mb-4">Candidate Submission</h3>
+        <div className="text-xl font-bold text-gray-800 mb-4">Candidate Submission</div>
         <div className="flex items-center justify-center h-80">
           <div className="text-center">
             <p className="text-red-500 mb-2">Error loading data</p>
@@ -116,7 +116,7 @@ const CandidateSubmissionChart = () => {
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-md px-8">
-      <h3 className="text-xl font-bold text-gray-800 mb-4">Candidate Submission</h3>
+      <div className="text-xl font-bold text-gray-800 mb-4">Candidate Submission</div>
       <ResponsiveContainer width="100%" height={400}>
         <AreaChart
           data={data}

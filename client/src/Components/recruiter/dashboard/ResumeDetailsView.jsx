@@ -109,7 +109,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
         <div className="flex items-center gap-4 md:gap-6">
           <img src={`https://api.dicebear.com/8.x/initials/svg?seed=${resumeData.name}`} alt={resumeData.name} className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-gray-200" />
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{resumeData.name}</h1>
+            <div className="text-3xl font-bold text-gray-900">{resumeData.name}</div>
             <p className="text-gray-600 text-lg">{resumeData.title}</p>
           </div>
         </div>
@@ -175,41 +175,43 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
         {/* Left & Middle Column */}
         <div className="col-span-1 lg:col-span-2 space-y-8">
             {/* AI Summary & Scorecard */}
-            <div className="p-6 border rounded-xl">
-                <h2 className="text-xl font-bold text-gray-800 mb-6">AI Resume Summary</h2>
-                <div className="space-y-6">
+            <div className="p-6 border rounded-xl bg-gray-50">
+                <div className="text-lg font-bold text-gray-800 mb-8">AI Resume Summary</div>
+                <div className="space-y-8">
                     {Object.entries(resumeData.aiSummary).map(([key, value]) => (
                         <div key={key} className="flex gap-4 items-start">
-                            <div className="bg-gray-100 rounded-full w-7 h-7 flex-shrink-0 flex items-center justify-center mt-1">
-                                <HelpCircle size={16} className="text-gray-500" />
+                            <div className="bg-gray-200 rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center mt-1">
+                                <HelpCircle size={18} className="text-gray-600" />
                             </div>
                             <div>
-                                <h3 className="font-semibold text-gray-900 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
-                                <p className="text-gray-600">{value}</p>
+                                <div className="font-bold text-gray-900 capitalize text-base mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                                <p className="text-gray-700 text-sm leading-relaxed">{value}</p>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                <hr className="my-8 border-t border-gray-200" />
+                <hr className="my-10 border-t border-gray-300" />
                 
-                <h2 className="text-xl font-bold text-gray-800 mb-6">AI Scorecard</h2>
-                <div className="space-y-5">
+                <div className="text-lg font-bold text-gray-800 mb-8">AI Scorecard</div>
+                <div className="space-y-6">
                     {Object.entries(resumeData.aiScorecard).map(([key, value]) => (
                         <div key={key}>
-                            <div className="flex justify-between items-center mb-2">
-                                <h3 className="text-gray-700 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
-                                <span className="font-semibold text-gray-800">{value}%</span>
+                            <div className="flex justify-between items-center mb-3">
+                                <div className="text-gray-800 capitalize font-semibold text-base">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                                <span className="font-bold text-gray-900 text-base">{value}%</span>
                             </div>
-                            <ProgressBar value={value} />
+                            <div className="w-full bg-gray-300 rounded-full h-3">
+                                <div className="bg-blue-600 h-3 rounded-full transition-all duration-500" style={{ width: `${value}%` }}></div>
+                            </div>
                         </div>
                     ))}
                 </div>
             </div>
 
             {/* Application Details */}
-            <div className="p-6 border rounded-xl">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">Application Details</h2>
+            <div className="p-6 border rounded-xl bg-gray-50">
+                <div className="text-xl font-bold text-gray-800 mb-4">Application Details</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-gray-600 mt-4">
                     <div><span className="font-semibold text-gray-800 block mb-1">Position Applied</span><p>{resumeData.applicationDetails.position}</p></div>
                     <div><span className="font-semibold text-gray-800 block mb-1">Application Date</span><p>{resumeData.applicationDetails.date}</p></div>
@@ -217,11 +219,11 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                     <div><span className="font-semibold text-gray-800 block mb-1">Application Source</span><p>{resumeData.applicationDetails.source}</p></div>
                 </div>
                 <div className="mt-6">
-                    <h3 className="font-semibold text-gray-800">About</h3>
+                    <div className="font-semibold text-gray-800">About</div>
                     <p className="text-gray-600 mt-1">{resumeData.about}</p>
                 </div>
                 <div className="mt-6">
-                    <h3 className="font-semibold text-gray-800">Key Skills</h3>
+                    <div className="font-semibold text-gray-800">Key Skills</div>
                     <div className="flex flex-wrap gap-2 mt-2">
                         {resumeData.skills.map(skill => <span key={skill} className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">{skill}</span>)}
                     </div>
@@ -231,7 +233,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
         {/* Right Column */}
         <div className="col-span-1">
-          <div className="rounded-2xl border p-4 shadow bg-white flex flex-col">
+          <div className="rounded-2xl border p-4 shadow bg-gray-50 flex flex-col">
             {/* Match Label */}
             <div className={`w-full text-lg font-semibold mb-2 ${match.color}`}>{match.label}</div>
             <div className="text-base font-bold text-black mb-2">Overall Score</div>

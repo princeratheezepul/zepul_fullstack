@@ -61,7 +61,7 @@ const AverageScore = () => {
   if (loading) {
     return (
       <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm flex flex-col h-full">
-        <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Average Score</h3>
+        <div className="text-lg sm:text-xl font-semibold text-gray-800">Average Score</div>
         <div className="flex-grow flex items-center justify-center my-4">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -72,7 +72,7 @@ const AverageScore = () => {
   if (error) {
     return (
       <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm flex flex-col h-full">
-        <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Average Score</h3>
+        <div className="text-lg sm:text-xl font-semibold text-gray-800">Average Score</div>
         <div className="flex-grow flex items-center justify-center my-4">
           <div className="text-center">
             <p className="text-red-500 mb-2">Error loading data</p>
@@ -90,7 +90,7 @@ const AverageScore = () => {
 
   return (
     <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm flex flex-col h-full">
-      <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Average Score</h3>
+      <div className="text-lg sm:text-xl font-semibold text-gray-800">Average Score</div>
       
       <div className="flex-grow flex items-center justify-center my-4">
         <div className="relative w-40 h-40 sm:w-48 sm:h-48">

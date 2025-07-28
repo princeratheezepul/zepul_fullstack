@@ -98,7 +98,7 @@ const JobCard = ({ job, onClick }) => {
         )}
       </div>
       <div className="pr-16">
-        <h3 className="text-xl font-bold text-gray-800">{job.jobtitle}</h3>
+        <div className="text-xl font-bold text-gray-800">{job.jobtitle}</div>
         <p className="text-gray-600 mt-2 text-sm max-w-2xl whitespace-pre-line" style={{ 
           display: '-webkit-box',
           WebkitLineClamp: 3,

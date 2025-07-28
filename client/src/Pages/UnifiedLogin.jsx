@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import toast, { Toaster } from "react-hot-toast";
+import { config } from "../config/config";
 
 const roleEndpoints = {
   recruiter: "/api/recruiter/signin",
@@ -28,7 +29,8 @@ export default function UnifiedLogin() {
   useEffect(() => {
     if (isAuthenticated && user) {
       const dashboardRoute = dashboardRoutes[user.type] || "/";
-      navigate(dashboardRoute);
+      console.log('Navigating to dashboard:', dashboardRoute, 'for user type:', user.type);
+      navigate(dashboardRoute, { replace: true });
     }
   }, [isAuthenticated, user, navigate]);
 
@@ -42,7 +44,8 @@ export default function UnifiedLogin() {
       return;
     }
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}${endpoint}`, {
+      console.log('Making login request to:', `${config.backendUrl}${endpoint}`);
+      const response = await fetch(`${config.backendUrl}${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -56,21 +59,16 @@ export default function UnifiedLogin() {
       if (userData.token || userData.accessToken) {
         localStorage.setItem('authToken', userData.token || userData.accessToken);
       }
-      // Normalize recruiter response
+      // All responses now have the same structure
       let normalizedUserData = userData;
-      if (role === 'recruiter') {
-        normalizedUserData = {
-          data: {
-            user: userData.user,
-            accessToken: userData.accessToken,
-            refreshToken: userData.refreshToken
-          }
-        };
-      }
       login(normalizedUserData);
       toast.success("Login successful!");
       const dashboardRoute = dashboardRoutes[normalizedUserData.data?.user?.type] || "/";
-      navigate(dashboardRoute);
+      console.log('Login successful, navigating to:', dashboardRoute, 'for user type:', normalizedUserData.data?.user?.type);
+      // Use setTimeout to ensure the login state is properly set before navigation
+      setTimeout(() => {
+        navigate(dashboardRoute, { replace: true });
+      }, 100);
     } catch (error) {
       toast.error(error.message || "Login failed");
     } finally {

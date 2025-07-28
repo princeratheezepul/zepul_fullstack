@@ -56,8 +56,7 @@ export default function EmailNotification() {
     <div className="w-full max-w-5xl mx-auto">
       <h1 className="text-3xl font-bold mb-2 mt-2">Email Notification</h1>
       <p className="text-gray-500 mb-8 max-w-2xl">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at velit, ipsum turpis scelerisque facilisi nisl. Arcu ullamcorper a in molestie et risus pulvinar orci vel.
-      </p>
+        Customize your email notification preferences to stay informed about important recruitment activities and ensure you never miss critical updates that affect your team's workflow.      </p>
       <div className="space-y-6">
         {notificationsList.map((notif, idx) => (
           <div key={notif.id} className="flex items-center justify-between border-b last:border-b-0 border-gray-200 py-6">
@@ -68,7 +67,7 @@ export default function EmailNotification() {
             </div>
             {/* Center: Toggle */}
             <div className="flex flex-col items-center px-8">
-              <button
+              <div
                 type="button"
                 aria-pressed={toggles[notif.id]}
                 onClick={() => handleToggle(notif.id)}
@@ -78,7 +77,7 @@ export default function EmailNotification() {
                 <span
                   className={`inline-block h-6 w-6 transform rounded-full bg-white shadow transition-transform ${toggles[notif.id] ? 'translate-x-7' : 'translate-x-1'}`}
                 />
-              </button>
+              </div>
               <span className="mt-2 text-xs font-medium text-gray-700">
                 {toggles[notif.id] ? <span className="text-blue-600">Yes</span> : <span className="text-gray-400">NO</span>}
               </span>

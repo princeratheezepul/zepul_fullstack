@@ -162,7 +162,7 @@ console.log(jobs)
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-gray-800 text-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-6 text-center">Create New Job</h1>
+      <div className="text-2xl font-bold mb-6 text-center">Create New Job</div>
 
       {error && <div className="text-red-500 mb-4">{error}</div>}
 
@@ -196,7 +196,7 @@ console.log(jobs)
       </form>
 
       <div className="mt-10">
-        <h2 className="text-xl font-semibold mb-4">Jobs Posted by You</h2>
+        <div className="text-xl font-semibold mb-4">Jobs Posted by You</div>
         {jobs.length === 0 ? (
           <p>No jobs found.</p>
         ) : (
@@ -206,7 +206,7 @@ console.log(jobs)
 
               return (
                 <li key={job._id} className="p-4 bg-gray-700 rounded">
-                  <h3 className="text-lg font-bold">{job.jobtitle}</h3>
+                  <div className="text-lg font-bold">{job.jobtitle}</div>
                   <p><strong>Description:</strong> {job.description}</p>
                   <p><strong>Location:</strong> {job.location}</p>
                   <p><strong>Salary:</strong> ₹{job.salary}</p>

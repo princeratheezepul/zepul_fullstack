@@ -417,7 +417,7 @@ const AccountManagerResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => 
               
               ${resume.aiScorecard ? `
               <div class="section">
-                <h3>AI Scorecard</h3>
+                <h3 >AI Scorecard</h3>
                 ${Object.entries(resume.aiScorecard).map(([key, value]) => `
                   <div style="margin-bottom: 15px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
@@ -598,34 +598,34 @@ const AccountManagerResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => 
             {/* Left & Middle Column */}
             <div className="xl:col-span-2 space-y-6 lg:space-y-8">
                 {/* AI Summary & Scorecard */}
-                <div className="p-4 md:p-6 border rounded-xl bg-white">
-                    <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">AI Resume Summary</h2>
-                    <div className="space-y-4 md:space-y-6">
+                <div className="p-6 border rounded-xl bg-gray-50">
+                    <h2 className="text-lg font-bold text-gray-800 mb-8">AI Resume Summary</h2>
+                    <div className="space-y-8">
                         {resume.aiSummary && Object.entries(resume.aiSummary).map(([key, value]) => (
-                            <div key={key} className="flex gap-3 md:gap-4 items-start">
-                                <div className="bg-gray-100 rounded-full w-6 h-6 md:w-7 md:h-7 flex-shrink-0 flex items-center justify-center mt-1">
-                                    <HelpCircle size={14} className="text-gray-500" />
+                            <div key={key} className="flex gap-4 items-start">
+                                <div className="bg-gray-200 rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center mt-1">
+                                    <HelpCircle size={18} className="text-gray-600" />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-gray-900 capitalize text-sm md:text-base">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
-                                    <p className="text-gray-600 text-sm md:text-base">{value}</p>
+                                    <h3 className="font-bold text-gray-900 capitalize text-base mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
+                                    <p className="text-gray-700 text-sm leading-relaxed">{value}</p>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <hr className="my-6 md:my-8 border-t border-gray-200" />
+                    <hr className="my-10 border-t border-gray-300" />
                     
-                    <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">AI Scorecard</h2>
-                    <div className="space-y-4 md:space-y-5">
+                    <h2 className="text-lg font-bold text-gray-800 mb-8">AI Scorecard</h2>
+                    <div className="space-y-6">
                         {resume.aiScorecard && Object.entries(resume.aiScorecard).map(([key, value]) => (
                             <div key={key}>
-                                <div className="flex justify-between items-center mb-2">
-                                    <h3 className="text-gray-700 capitalize text-sm md:text-base">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
-                                    <span className="font-semibold text-gray-800 text-sm md:text-base">{value}%</span>
+                                <div className="flex justify-between items-center mb-3">
+                                    <h3 className="text-gray-800 capitalize font-semibold text-base">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
+                                    <span className="font-bold text-gray-900 text-base">{value}%</span>
                                 </div>
-                                <div className="w-full bg-gray-200 rounded-full h-1.5">
-                                    <div className="bg-blue-600 h-1.5 rounded-full transition-all duration-300" style={{ width: `${value}%` }}></div>
+                                <div className="w-full bg-gray-300 rounded-full h-3">
+                                    <div className="bg-blue-600 h-3 rounded-full transition-all duration-500" style={{ width: `${value}%` }}></div>
                                 </div>
                             </div>
                         ))}
@@ -633,7 +633,7 @@ const AccountManagerResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => 
                 </div>
 
                 {/* Application Details */}
-                <div className="p-4 md:p-6 border rounded-xl bg-white">
+                <div className="p-4 md:p-6 border rounded-xl bg-gray-50">
                     <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-4">Application Details</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 md:gap-x-8 gap-y-4 text-gray-600 mt-4">
                         <div><span className="font-semibold text-gray-800 block mb-1 text-sm md:text-base">Position Applied</span><p className="text-sm md:text-base">{resume.applicationDetails?.position || 'N/A'}</p></div>
@@ -655,7 +655,7 @@ const AccountManagerResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => 
 
                 {/* Interview Transcript Section - Only show if transcript data exists */}
                 {resume.interviewEvaluation && resume.interviewEvaluation.evaluationResults && resume.interviewEvaluation.evaluationResults.length > 0 && (
-                    <div className="p-4 md:p-6 border rounded-xl bg-white">
+                    <div className="p-4 md:p-6 border rounded-xl bg-gray-50">
                         <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">Interview Transcript</h2>
                         
                         <div className="space-y-4 md:space-y-6">
@@ -701,7 +701,7 @@ const AccountManagerResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => 
 
             {/* Right Column - Redesigned to match image */}
             <div className="xl:col-span-1">
-                <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 space-y-6">
+                <div className="bg-gray-50 rounded-xl shadow-sm border p-4 md:p-6 space-y-6">
                     {/* Overall Score Section */}
                     <div className="text-center">
                         <div className={`text-sm font-semibold ${match.color} mb-1`}>{match.label}</div>

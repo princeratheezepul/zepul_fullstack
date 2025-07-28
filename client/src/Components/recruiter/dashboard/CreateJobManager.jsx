@@ -154,7 +154,7 @@ export default function CreateJobManager({ onBack }) {
     <div className="min-h-screen w-full flex flex-col bg-white">
       <div className="flex items-center px-8 pt-8">
         <button onClick={onBack} className="mr-4 text-2xl text-gray-500 hover:text-blue-600 font-bold">←</button>
-        <h1 className="text-3xl font-bold">Create Job</h1>
+        <div className="text-3xl font-bold">Create Job</div>
       </div>
       <form id="create-job-form" className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 pt-8 w-full flex-1" onSubmit={handleCreateJob}>
         <div className="flex flex-col gap-6">

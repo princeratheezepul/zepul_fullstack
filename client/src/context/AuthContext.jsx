@@ -89,8 +89,10 @@ export const AuthProvider = ({ children }) => {
     };
 
     localStorage.setItem('authUser', JSON.stringify(minimalUserData));
+    console.log('AuthContext login - setting user state:', minimalUserData);
     setUser(minimalUserData);
     setIsAuthenticated(true);
+    console.log('AuthContext login - authentication state updated');
   };
 
   const logout = () => {

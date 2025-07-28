@@ -479,8 +479,8 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                }
                
                /* Name and Title Styling */
-               .flex.items-center.gap-4 h1,
-               .flex.items-center.gap-6 h1 {
+               .flex.items-center.gap-4 div,
+               .flex.items-center.gap-6 div {
                  font-size: 24px !important;
                  font-weight: 700 !important;
                  color: #1f2937 !important;
@@ -811,14 +811,14 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                }
                
                /* Section titles in Application Details */
-               h2.text-xl.font-bold.text-gray-900 {
+               div.text-xl.font-bold.text-gray-900 {
                  color: #111827 !important;
                  font-size: 20px !important;
                  font-weight: 700 !important;
                  margin-bottom: 24px !important;
                }
                
-               h3.text-lg.font-semibold.text-gray-900 {
+               div.text-lg.font-semibold.text-gray-900 {
                  color: #111827 !important;
                  font-size: 18px !important;
                  font-weight: 600 !important;
@@ -877,15 +877,15 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                }
                
                /* Section Headers */
-               h1, h2, h3 {
+               div, div, div {
                  font-weight: 700 !important;
                  color: #0f172a !important;
                  margin-bottom: 16px !important;
                }
                
-               h1 { font-size: 28px !important; }
-               h2 { font-size: 20px !important; }
-               h3 { font-size: 16px !important; }
+               div { font-size: 28px !important; }
+               div { font-size: 20px !important; }
+               div { font-size: 16px !important; }
                
                /* Progress Bar Container Styling */
                .w-full.bg-gray-200.rounded-full.h-1\\.5 {
@@ -1014,13 +1014,13 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  }
                  
                  /* Ensure AI Resume Summary stays together on first page */
-                 h2:contains("AI Resume Summary") {
+                 div:contains("AI Resume Summary") {
                    page-break-before: avoid !important;
                    break-before: avoid !important;
                  }
                  
                  /* Prevent unwanted breaks in AI Resume Summary */
-                 h2:contains("AI Resume Summary") + div {
+                 div:contains("AI Resume Summary") + div {
                    page-break-before: avoid !important;
                    break-before: avoid !important;
                  }
@@ -1194,8 +1194,8 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  }
                  
                  /* Name and title for print */
-                 .flex.items-center.gap-4 h1,
-                 .flex.items-center.gap-6 h1 {
+                 .flex.items-center.gap-4 div,
+                 .flex.items-center.gap-6 div {
                    font-size: 20px !important;
                    font-weight: 700 !important;
                    color: #1f2937 !important;
@@ -1416,14 +1416,14 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  }
                  
                  /* Section titles for print */
-                 h2.text-xl.font-bold.text-gray-900 {
+                 div.text-xl.font-bold.text-gray-900 {
                    color: #111827 !important;
                    font-size: 18px !important;
                    font-weight: 700 !important;
                    margin-bottom: 20px !important;
                  }
                  
-                 h3.text-lg.font-semibold.text-gray-900 {
+                 div.text-lg.font-semibold.text-gray-900 {
                    color: #111827 !important;
                    font-size: 16px !important;
                    font-weight: 600 !important;
@@ -1527,7 +1527,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  .mt-6 { margin-top: 16px !important; }
                  
                  /* Better AI Scorecard section */
-                 .flex.justify-between.items-center.mb-2 h3 {
+                 .flex.justify-between.items-center.mb-2 div {
                    font-size: 14px !important;
                    font-weight: 600 !important;
                    color: #374151 !important;
@@ -1810,7 +1810,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
             <div className="flex flex-col items-center text-center gap-2 mb-3">
               <img src={`https://api.dicebear.com/8.x/initials/svg?seed=${resumeData.name}`} alt={resumeData.name} className="w-20 h-20 rounded-full border-2 border-gray-200 bg-green-600" />
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{resumeData.name || 'Prince Rathi'}</h1>
+                <div className="text-2xl font-bold text-gray-900">{resumeData.name || 'Prince Rathi'}</div>
                 <p className="text-gray-600 text-base">{resumeData.title || 'FullStack Developer'}</p>
               </div>
             </div>
@@ -1868,17 +1868,17 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
             {/* Left & Middle Column */}
             <div className="xl:col-span-2 space-y-4 lg:space-y-6">
                 {/* AI Resume Summary */}
-                <div className="p-4 md:p-6 border rounded-xl bg-white">
-                    <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">AI Resume Summary</h2>
-                    <div className="space-y-4 md:space-y-6">
+                <div className="p-6 border rounded-xl bg-gray-50">
+                    <div className="text-sm font-semibold text-red-800 mb-4">AI Resume Summary</div>
+                    <div className="space-y-8">
                         {resumeData.aiSummary && Object.entries(resumeData.aiSummary).map(([key, value]) => (
-                            <div key={key} className="flex gap-3 md:gap-4 items-start">
-                                <div className="bg-gray-100 rounded-full w-6 h-6 md:w-7 md:h-7 flex-shrink-0 flex items-center justify-center mt-1">
-                                    <HelpCircle size={14} className="text-gray-500" />
+                            <div key={key} className="flex gap-4 items-start">
+                                <div className="bg-gray-200 rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center mt-1">
+                                    <HelpCircle size={18} className="text-gray-600" />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-gray-900 capitalize text-sm md:text-base">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
-                                    <p className="text-gray-600 text-sm md:text-base">{value}</p>
+                                    <div className="font-bold text-gray-900 capitalize text-base mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                                    <p className="text-gray-700 text-sm leading-relaxed">{value}</p>
                                 </div>
                             </div>
                         ))}
@@ -1886,9 +1886,9 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                 </div>
 
                 {/* AI Scorecard - Separate Container */}
-                <div className="ai-scorecard-section p-4 md:p-6 border rounded-xl bg-white">
-                    <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">AI Scorecard</h2>
-                    <div className="space-y-4 md:space-y-5">
+                <div className=" p-6 border rounded-xl bg-gray-50">
+                    <div className="text-lg font-bold text-red-800 mb-8">AI Scorecard</div>
+                    <div className="space-y-6">
                         {resumeData.aiScorecard && Object.keys(resumeData.aiScorecard).length > 0 ? 
                             Object.entries(resumeData.aiScorecard).map(([key, value]) => {
                                 const numericValue = parseInt(value) || 0;
@@ -1899,17 +1899,15 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                                 
                                 return (
                                     <div key={key} className="scorecard-item">
-                                        <div className="flex justify-between items-center mb-2">
-                                            <h3 className="text-gray-700 font-medium text-sm md:text-base">{displayName}</h3>
-                                            <span className="font-semibold text-gray-800 text-sm md:text-base">{numericValue}%</span>
+                                        <div className="flex justify-between items-center mb-3">
+                                            <div className="text-gray-800 font-semibold text-base">{displayName}</div>
+                                            <span className="font-bold text-gray-900 text-base">{numericValue}%</span>
                                         </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                        <div className="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
                                             <div 
-                                                className="bg-blue-600 h-2 rounded-full" 
+                                                className="bg-blue-600 h-3 rounded-full transition-all duration-500" 
                                                 style={{ 
-                                                    width: `${Math.min(Math.max(numericValue, 0), 100)}%`,
-                                                    backgroundColor: '#3b82f6',
-                                                    transition: 'width 0.8s ease-out'
+                                                    width: `${Math.min(Math.max(numericValue, 0), 100)}%`
                                                 }}
                                             ></div>
                                         </div>
@@ -1917,41 +1915,41 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                                 );
                             }) : (
                             // Fallback with sample data if no aiScorecard
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                                 <div className="scorecard-item">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h3 className="text-gray-700 font-medium text-sm md:text-base">Technical Skill Match</h3>
-                                        <span className="font-semibold text-gray-800 text-sm md:text-base">85%</span>
+                                    <div className="flex justify-between items-center mb-3">
+                                        <div className="text-gray-800 font-semibold text-base">Technical Skill Match</div>
+                                        <span className="font-bold text-gray-900 text-base">85%</span>
                                     </div>
-                                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '85%', backgroundColor: '#3b82f6', transition: 'width 0.8s ease-out' }}></div>
+                                    <div className="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
+                                        <div className="bg-blue-600 h-3 rounded-full transition-all duration-500" style={{ width: '85%' }}></div>
                                     </div>
                                 </div>
                                 <div className="scorecard-item">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h3 className="text-gray-700 font-medium text-sm md:text-base">Communication</h3>
-                                        <span className="font-semibold text-gray-800 text-sm md:text-base">78%</span>
+                                    <div className="flex justify-between items-center mb-3">
+                                        <div className="text-gray-800 font-semibold text-base">Communication</div>
+                                        <span className="font-bold text-gray-900 text-base">78%</span>
                                     </div>
-                                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '78%', backgroundColor: '#3b82f6', transition: 'width 0.8s ease-out' }}></div>
-                                    </div>
-                                </div>
-                                <div className="scorecard-item">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h3 className="text-gray-700 font-medium text-sm md:text-base">Culture Fit</h3>
-                                        <span className="font-semibold text-gray-800 text-sm md:text-base">72%</span>
-                                    </div>
-                                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '72%', backgroundColor: '#3b82f6', transition: 'width 0.8s ease-out' }}></div>
+                                    <div className="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
+                                        <div className="bg-blue-600 h-3 rounded-full transition-all duration-500" style={{ width: '78%' }}></div>
                                     </div>
                                 </div>
                                 <div className="scorecard-item">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h3 className="text-gray-700 font-medium text-sm md:text-base">Team Leadership</h3>
-                                        <span className="font-semibold text-gray-800 text-sm md:text-base">65%</span>
+                                    <div className="flex justify-between items-center mb-3">
+                                        <div className="text-gray-800 font-semibold text-base">Culture Fit</div>
+                                        <span className="font-bold text-gray-900 text-base">72%</span>
                                     </div>
-                                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '65%', backgroundColor: '#3b82f6', transition: 'width 0.8s ease-out' }}></div>
+                                    <div className="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
+                                        <div className="bg-blue-600 h-3 rounded-full transition-all duration-500" style={{ width: '72%' }}></div>
+                                    </div>
+                                </div>
+                                <div className="scorecard-item">
+                                    <div className="flex justify-between items-center mb-3">
+                                        <div className="text-gray-800 font-semibold text-base">Team Leadership</div>
+                                        <span className="font-bold text-gray-900 text-base">65%</span>
+                                    </div>
+                                    <div className="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
+                                        <div className="bg-blue-600 h-3 rounded-full transition-all duration-500" style={{ width: '65%' }}></div>
                                     </div>
                                 </div>
                             </div>
@@ -1960,8 +1958,8 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                 </div>
 
                 {/* Application Details - Enhanced Design */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Application Details</h2>
+                <div className="p-4 md:p-6 border rounded-xl bg-gray-50">
+                    <div className="text-xl font-bold text-gray-900 mb-6">Application Details</div>
                     
                     {/* Application Info Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 mb-8">
@@ -1985,7 +1983,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
                     {/* About Section */}
                     <div className="mb-8">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-3">About</h3>
+                        <div className="text-lg font-semibold text-gray-900 mb-3">About</div>
                         <p className="text-base text-gray-700 leading-relaxed">
                             {resumeData.about || 'Prince Rathi is a FullStack + Devops Developer with experience in building and deploying various projects. He has won several hackathons and showcases skills in various programming languages and frameworks.'}
                         </p>
@@ -1993,7 +1991,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
                     {/* Key Skills Section */}
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Key Skills</h3>
+                        <div className="text-lg font-semibold text-gray-900 mb-4">Key Skills</div>
                         <div className="flex flex-wrap gap-2">
                             {resumeData.skills && resumeData.skills.length > 0 ? 
                                 resumeData.skills.map(skill => (
@@ -2014,17 +2012,17 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
                 {/* Interview Transcript Section - Only show if transcript data exists */}
                 {resumeData.interviewEvaluation && resumeData.interviewEvaluation.evaluationResults && resumeData.interviewEvaluation.evaluationResults.length > 0 && (
-                    <div className="p-4 md:p-6 border rounded-xl bg-white">
-                        <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">Interview Transcript</h2>
+                    <div className="p-4 md:p-6 border rounded-xl bg-gray-50">
+                        <div className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">Interview Transcript</div>
                         
                         <div className="space-y-4 md:space-y-6">
                             {resumeData.interviewEvaluation.evaluationResults.map((result, index) => (
                                 <div key={index} className="border border-gray-200 rounded-xl p-4 md:p-6">
                                     {/* Question */}
                                     <div className="mb-3 md:mb-4">
-                                        <h3 className="font-light text-gray-900 text-base md:text-lg">
+                                        <div className="font-light text-gray-900 text-base md:text-lg">
                                             Q{index + 1}. {result.question}
-                                        </h3>
+                                        </div>
                                     </div>
 
                                     {/* Evaluation Summary */}
@@ -2060,7 +2058,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
             {/* Right Column - Redesigned to match image */}
             <div className="xl:col-span-1">
-                <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 space-y-6">
+                <div className="bg-gray-50 rounded-xl shadow-sm border p-4 md:p-6 space-y-6">
                     {/* Overall Score Section - Match Reference Image */}
                     <div className="text-center py-8">
                         <div className="text-orange-500 text-sm font-semibold mb-3">{match.label}</div>
@@ -2075,7 +2073,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
                     {/* Key Strength Section */}
                     <div className="bg-green-50 rounded-lg p-4">
-                        <h3 className="font-bold text-gray-900 mb-3">Key Strength</h3>
+                        <div className="font-bold text-gray-900 mb-3">Key Strength</div>
                         <ul className="space-y-2">
                             {resumeData.keyStrength && resumeData.keyStrength.length > 0 ? (
                                 resumeData.keyStrength.map((strength, index) => (
@@ -2105,7 +2103,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
                     {/* Potential Concern Section */}
                     <div className="bg-red-50 rounded-lg p-4">
-                        <h3 className="font-bold text-gray-900 mb-3">Potential Concern</h3>
+                        <div className="font-bold text-gray-900 mb-3">Potential Concern</div>
                         <ul className="space-y-2">
                             {resumeData.potentialConcern && resumeData.potentialConcern.length > 0 ? (
                                 resumeData.potentialConcern.map((concern, index) => (
@@ -2135,7 +2133,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
                     {/* Added Notes Section - Enhanced Design */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 added-notes-section">
-                        <h3 className="text-lg font-bold text-gray-900 mb-4">Added Notes</h3>
+                        <div className="text-lg font-bold text-gray-900 mb-4">Added Notes</div>
                         <div className="mb-6">
                             <textarea
                                 className="w-full border-0 bg-transparent text-gray-700 text-sm leading-relaxed min-h-[120px] resize-none focus:outline-none placeholder-gray-400"

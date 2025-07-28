@@ -352,8 +352,8 @@ function RecruiterDetailPage({ recruiterId, onClose, token }) {
         </div>
       </div>
       <div className="w-full max-w-6xl mx-auto flex-1 px-4 md:px-8 py-8">
-        <h2 className="text-blue-700 text-xs font-semibold mb-2">EDIT RECRUITER INFORMATION</h2>
-        <h1 className="text-3xl font-bold mb-8 text-gray-900">Basic Information</h1>
+        <div className="text-blue-700 text-xs font-semibold mb-2">EDIT RECRUITER INFORMATION</div>
+        <div className="text-3xl font-bold mb-8 text-gray-900">Basic Information</div>
         {loading ? (
           <div className="text-center py-12">Loading...</div>
         ) : error ? (
@@ -391,7 +391,7 @@ function RecruiterDetailPage({ recruiterId, onClose, token }) {
               </div>
             </div>
             {/* Role & Job Details */}
-            <h2 className="text-xl font-semibold mt-4 mb-2">Role & Job Details</h2>
+            <div className="text-xl font-semibold mt-4 mb-2">Role & Job Details</div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <label className="block text-gray-700 mb-1 font-medium">Location :</label>
@@ -437,7 +437,7 @@ function RecruiterDetailPage({ recruiterId, onClose, token }) {
               </div>
             </div>
             {/* Confirm & Create */}
-            <h2 className="text-xl font-semibold mt-4 mb-2">Confirm & Create</h2>
+            <div className="text-xl font-semibold mt-4 mb-2">Confirm & Create</div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div>
                 <label className="block text-gray-700 mb-1 font-medium">Role</label>
@@ -583,7 +583,7 @@ function RecruiterPerformance({ recruiter, onClose }) {
           >
             &larr; Back to My Recruiters
           </button>
-          <h1 className="text-2xl font-bold text-gray-900">Recruiter Performance</h1>
+          <div className="text-2xl font-bold text-gray-900">Recruiter Performance</div>
         </div>
       </div>
 
@@ -592,7 +592,7 @@ function RecruiterPerformance({ recruiter, onClose }) {
         {/* Job Closed */}
         <div className="bg-white rounded-2xl shadow p-10">
           <div className="flex justify-between items-start mb-8">
-            <h2 className="font-bold text-gray-900 text-xl">Job Closed</h2>
+            <div className="font-bold text-gray-900 text-xl">Job Closed</div>
             <div className="bg-black text-white text-base px-5 py-3 rounded">
               Target: 42/50
             </div>
@@ -629,7 +629,7 @@ function RecruiterPerformance({ recruiter, onClose }) {
 
         {/* Average TAT */}
         <div className="bg-white rounded-2xl shadow p-10">
-          <h2 className="font-bold text-gray-900 text-xl mb-8">Average TAT</h2>
+          <div className="font-bold text-gray-900 text-xl mb-8">Average TAT</div>
           <div className="flex items-center justify-center">
             <div className="relative">
               <svg width="400" height="200" viewBox="0 0 400 200">
@@ -663,13 +663,13 @@ function RecruiterPerformance({ recruiter, onClose }) {
 
       {/* Candidate Submission Trend */}
       <div className="bg-white rounded-2xl shadow p-8 mb-6">
-        <h2 className="font-bold text-gray-900 text-xl mb-6">Candidate Submission Trend</h2>
+        <div className="font-bold text-gray-900 text-xl mb-6">Candidate Submission Trend</div>
         <JobClosedTrendChart selectedRecruiter={recruiter} />
       </div>
 
       {/* Red Flags */}
       <div className="bg-white rounded-2xl shadow p-6">
-        <h2 className="font-semibold text-gray-900 mb-4">Red Flags</h2>
+        <div className="font-semibold text-gray-900 mb-4">Red Flags</div>
         {loading ? (
           <div className="flex items-center justify-center py-8">
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
@@ -1122,7 +1122,7 @@ export default function ManagerDashboard() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
           <div>
             <div className="text-xs text-blue-600 font-semibold tracking-wide mb-1">JOB DETAILS</div>
-            <h1 className="text-2xl font-bold text-gray-900">My Recruiters</h1>
+            <div className="text-2xl font-bold text-gray-900">My Recruiters</div>
           </div>
           <div className="flex gap-2 mt-2 md:mt-0">
            
@@ -1247,7 +1247,7 @@ export default function ManagerDashboard() {
         {showDeleteDialog && (
           <div className="fixed inset-0 bg-transparent flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg p-6 max-w-md w-full shadow-2xl border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Delete Recruiter</h3>
+              <div className="text-lg font-semibold text-gray-900 mb-4">Delete Recruiter</div>
               <p className="text-gray-600 mb-6">
                 Are you sure you want to delete <strong>{recruiterToDelete?.fullname}</strong>? This action cannot be undone.
               </p>
@@ -1324,7 +1324,7 @@ export default function ManagerDashboard() {
               <div className="flex items-start justify-between">
                 <div>
                   <div className="text-xs text-blue-600 font-semibold tracking-wide mb-1">DASHBOARD</div>
-                  <h1 className="text-2xl font-bold text-gray-900">Manager Overview</h1>
+                  <div className="text-2xl font-bold text-gray-900">Manager Overview</div>
                 </div>
               </div>
               <hr className="my-4 border-gray-200" />
@@ -1343,7 +1343,7 @@ export default function ManagerDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
               {/* Candidate Pipeline */}
               <div className="bg-white rounded-2xl shadow p-4 md:p-8 mb-6 overflow-x-auto">
-                <h2 className="font-semibold text-gray-900 mb-6 text-xs md:text-sm">Candidate Pipeline</h2>
+                <div className="font-semibold text-gray-900 mb-6 text-xs md:text-sm">Candidate Pipeline</div>
                 {pipelineLoading ? (
                   <div className="flex items-center justify-center h-32">
                     <div className="text-gray-500">Loading pipeline data...</div>
@@ -1399,7 +1399,7 @@ export default function ManagerDashboard() {
               </div>
               {/* Pending Scorecard Review */}
               <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-center w-full max-w-sm mx-auto">
-                <h2 className="font-semibold text-gray-900 mb-6 text-lg text-left w-full">Pending Scorecard Review</h2>
+                <div className="font-semibold text-gray-900 mb-6 text-lg text-left w-full">Pending Scorecard Review</div>
                 {scorecardLoading ? (
                   <div className="flex items-center justify-center h-48">
                     <div className="text-gray-500">Loading...</div>
@@ -1490,7 +1490,7 @@ export default function ManagerDashboard() {
             {/* Recruiter Performance Summary */}
             <div className="bg-white rounded-2xl shadow p-6">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-2">
-                <h2 className="font-bold text-gray-900 text-xl">Recruiter Performance Summary</h2>
+                <div className="font-bold text-gray-900 text-xl">Recruiter Performance Summary</div>
               </div>
               <div className="overflow-x-auto">
                 {performanceLoading ? (
