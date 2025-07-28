@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MapPin, Briefcase, Calendar, Users, IndianRupee, CalendarDays } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import SavedResumes from '../../../components/manager/dashboard/SavedResumes';
+import SavedResumes from '../../../Components/manager/dashboard/SavedResumes';
 
 const   ManagerJobDetailPage = () => {
   const [loading, setLoading] = useState(false);

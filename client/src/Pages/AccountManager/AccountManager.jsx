@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {  useNavigate } from 'react-router-dom';
 
-import AccountManagerJobs from '../../components/accountmanager/dashboard/AccountManagerJobs.jsx';
+import AccountManagerJobs from '../../Components/accountmanager/dashboard/AccountManagerJobs.jsx';
 import CompanyList from './Navigation/CompanyList.jsx';
-import AccountManagerInfo from '../../components/AccountManagerInfo.jsx';
-import PasswordSecurity from '../../components/manager/PasswordSecurity.jsx';
-import EmailNotification from '../../components/manager/EmailNotification.jsx';
+import AccountManagerInfo from '../../Components/AccountManagerInfo.jsx';
+import PasswordSecurity from '../../Components/manager/PasswordSecurity.jsx';
+import EmailNotification from '../../Components/manager/EmailNotification.jsx';
 import { useAuth } from '../../context/AuthContext';
 
 // Remove static jobsData

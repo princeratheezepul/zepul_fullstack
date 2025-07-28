@@ -30,7 +30,7 @@ const { user, isAuthenticated, isLoading, login, logout, updateUser } = useAuth(
 - Loading states for better UX
 - Type-safe user data
 
-### ProtectedRoute (`src/components/ProtectedRoute.jsx`)
+### ProtectedRoute (`src/Components/ProtectedRoute.jsx`)
 ```javascript
 <ProtectedRoute allowedRoles={['admin', 'manager']}>
   <AdminDashboard />
@@ -80,7 +80,7 @@ const handleLogin = async (credentials) => {
 
 ### Protected Components
 ```javascript
-import ProtectedRoute from '../components/ProtectedRoute';
+import ProtectedRoute from '../Components/ProtectedRoute';
 
 function App() {
   return (

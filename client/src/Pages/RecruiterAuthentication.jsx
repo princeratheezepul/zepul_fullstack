@@ -1,6 +1,6 @@
 import React from 'react'
-import RecruiterSignin from '../components/RecruiterSignin'
-import recruiterSignup from '../components/RecruiterSignupByManager'
+import RecruiterSignin from '../Components/RecruiterSignin'
+import recruiterSignup from '../Components/RecruiterSignupByManager'
 
 function RecruiterAuthentication() {
   return (

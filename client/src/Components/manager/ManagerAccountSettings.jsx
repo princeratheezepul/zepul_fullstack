@@ -3,8 +3,8 @@ import { useAuth } from '../../context/AuthContext';
 import { logoutUser, getAuthHeaders } from '../../utils/authUtils';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
-import EmailNotification from './EmailNotification';
-import PasswordSecurity from './PasswordSecurity';
+import EmailNotification from './EmailNotification.jsx';
+import PasswordSecurity from './PasswordSecurity.jsx';
 
 const settingsNav = [
   { name: 'Account Info' },

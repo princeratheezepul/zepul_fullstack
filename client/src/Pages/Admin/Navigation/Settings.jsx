@@ -1,7 +1,7 @@
 import React from 'react'
-import AdminPassSec from '../../../components/AdminPassSec'
-import AdminInfo from '../../../components/AdminInfo'
-import AdminLogout from '../../../components/AdminLogout'
+import AdminPassSec from '../../../Components/AdminPassSec'
+import AdminInfo from '../../../Components/AdminInfo'
+import AdminLogout from '../../../Components/AdminLogout'
 
 const AdminSettings = () => {
   return (

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import Header from '../components/recruiter/dashboard/Header';
-import StatsGroup from '../components/recruiter/dashboard/StatsGroup';
-import CandidateSubmissionChart from '../components/recruiter/dashboard/CandidateSubmissionChart';
-import TotalApplicationsChart from '../components/recruiter/dashboard/TotalApplicationsChart';
-import AverageScore from '../components/recruiter/dashboard/AverageScore';
-import ShortlistChart from '../components/recruiter/dashboard/ShortlistChart';
-import Sidebar from '../components/recruiter/dashboard/Sidebar';
-import RecruiterJobs from '../components/recruiter/dashboard/RecruiterJobs';
-import Settings from '../components/recruiter/dashboard/Settings';
+import Header from '../Components/recruiter/dashboard/Header';
+import StatsGroup from '../Components/recruiter/dashboard/StatsGroup';
+import CandidateSubmissionChart from '../Components/recruiter/dashboard/CandidateSubmissionChart';
+import TotalApplicationsChart from '../Components/recruiter/dashboard/TotalApplicationsChart';
+import AverageScore from '../Components/recruiter/dashboard/AverageScore';
+import ShortlistChart from '../Components/recruiter/dashboard/ShortlistChart';
+import Sidebar from '../Components/recruiter/dashboard/Sidebar';
+import RecruiterJobs from '../Components/recruiter/dashboard/RecruiterJobs';
+import Settings from '../Components/recruiter/dashboard/Settings';
 
 
 const RecruiterDashboard = () => {

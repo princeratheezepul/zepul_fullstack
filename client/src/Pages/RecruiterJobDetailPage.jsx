@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MapPin, Briefcase, Calendar, Users, IndianRupee, CalendarDays } from 'lucide-react';
-import Sidebar from '../components/recruiter/dashboard/Sidebar';
-import Settings from '../components/recruiter/dashboard/Settings';
+import Sidebar from '../Components/recruiter/dashboard/Sidebar';
+import Settings from '../Components/recruiter/dashboard/Settings';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import ResumeUpload from '../components/recruiter/dashboard/ResumeUpload';
-import SavedResumes from '../components/recruiter/dashboard/SavedResumes';
+import ResumeUpload from '../Components/recruiter/dashboard/ResumeUpload';
+import SavedResumes from '../Components/recruiter/dashboard/SavedResumes';
 
 const RecruiterJobDetailPage = () => {
   const [activeComponent, setActiveComponent] = useState('Jobs');

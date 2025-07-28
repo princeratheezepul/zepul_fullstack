@@ -42,7 +42,7 @@ router.get("/stats/monthly", verifyRecruiterJWT, getMonthlySubmissionData);
 
 ### Frontend Changes
 
-#### 1. Updated Component (`client/src/components/recruiter/dashboard/CandidateSubmissionChart.jsx`)
+#### 1. Updated Component (`client/src/Components/recruiter/dashboard/CandidateSubmissionChart.jsx`)
 
 **Key Changes:**
 - Replaced static data with API calls

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {  FaUser, FaUsers, FaUserTie, FaUserShield, FaChartLine,  FaEdit, FaTrash,  FaBriefcase, FaSave } from 'react-icons/fa';
 
-import AdminJobs from '../../components/admin/dashboard/AdminJobs';
-import AdminCompanyDetails from '../../components/admin/dashboard/AdminCompanyDetails.jsx';
-import JobCard from '../../components/recruiter/dashboard/JobCard';
-import JobDetails from '../../components/recruiter/dashboard/JobDetails';
-import CandidateList from '../../components/recruiter/dashboard/CandidateList';
+import AdminJobs from '../../Components/admin/dashboard/AdminJobs';
+import AdminCompanyDetails from '../../Components/admin/dashboard/AdminCompanyDetails.jsx';
+import JobCard from '../../Components/recruiter/dashboard/JobCard';
+import JobDetails from '../../Components/recruiter/dashboard/JobDetails';
+import CandidateList from '../../Components/recruiter/dashboard/CandidateList';
 import { useAuth } from '../../context/AuthContext';
 import { logoutUser } from '../../utils/authUtils';
 import toast from 'react-hot-toast';

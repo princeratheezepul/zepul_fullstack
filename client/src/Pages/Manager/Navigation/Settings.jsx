@@ -1,7 +1,7 @@
 import React from 'react'
-import LogoutButton from '../../../components/Logout'
-import ManagerInfo from '../../../components/ManagerInfo'
-import Passwordsec from '../../../components/Passwordsec'
+import LogoutButton from '../../../Components/Logout'
+import ManagerInfo from '../../../Components/ManagerInfo'
+import Passwordsec from '../../../Components/Passwordsec'
 
 const Settings = () => {
   return (

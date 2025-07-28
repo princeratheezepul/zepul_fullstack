@@ -1,7 +1,7 @@
 import React from 'react'
 
-import GetRecruitersByAdmin from '../../../components/GetRecruitersByAdmin.jsx'
-import GetManagersByAdmin from '../../../components/GetManagersbyAdmin.jsx'
+import GetRecruitersByAdmin from '../../../Components/GetRecruitersByAdmin.jsx'
+import GetManagersByAdmin from '../../../Components/GetManagersbyAdmin.jsx'
 
 const Dashboard = () => {
   return (

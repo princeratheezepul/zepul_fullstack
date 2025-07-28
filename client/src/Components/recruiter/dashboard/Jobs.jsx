@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import JobCard from './JobCard';
-import JobDetails from './JobDetails';
-import CandidateList from './CandidateList';
-import CreateJobManager from './CreateJobManager';
-import JobSidebar from './JobSidebar';
+import JobCard from './JobCard.jsx';
+import JobDetails from './JobDetails.jsx';
+import CandidateList from './CandidateList.jsx';
+import CreateJobManager from './CreateJobManager.jsx';
+import JobSidebar from './JobSidebar.jsx';
 
 const Jobs = () => {
   const [jobs, setJobs] = useState([]);

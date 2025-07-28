@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { MapPin, Briefcase, Calendar, Users, IndianRupee, CalendarDays } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-import AccountManagerCandidateList from '../../../components/accountmanager/dashboard/AccountManagerCandidateList';
+import AccountManagerCandidateList from '../../../Components/accountmanager/dashboard/AccountManagerCandidateList';
 
 const AccountManagerJobDetailPage = () => {
   const [loading, setLoading] = useState(false);
