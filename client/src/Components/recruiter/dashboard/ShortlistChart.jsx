@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Legend, LabelList, Tooltip } from 'recharts';
 import { useAuth } from '../../../context/AuthContext';
+import { useApi } from '../../../hooks/useApi';
 
 const renderCustomizedLabel = (props) => {
     const { x, y, width, value, dataKey, payload, hoveredMonth } = props;
@@ -62,6 +63,7 @@ const CustomXAxisTick = ({ x, y, payload, hoveredMonth }) => {
 };
 
 const ShortlistChart = () => {
+    const { get } = useApi();
     const [hoveredMonth, setHoveredMonth] = useState(null);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -81,14 +83,8 @@ const ShortlistChart = () => {
             console.log('userInfo from localStorage:', userInfo);
             console.log('Full userInfo structure:', JSON.stringify(userInfo, null, 2));
             
-            // Use cookies instead of Authorization header since backend stores token in cookies
-            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/resumes/stats/shortlist`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include' // This will send cookies with the request
-            });
+            // Use useApi hook for consistent authentication
+            const response = await get(`${import.meta.env.VITE_BACKEND_URL}/api/resumes/stats/shortlist`);
 
             console.log('Response status:', response.status);
             console.log('Response headers:', response.headers);

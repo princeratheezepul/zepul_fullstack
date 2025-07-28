@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../../../context/AuthContext';
+import { useApi } from '../../../hooks/useApi';
 
 const COLORS = ['#1E75FF', '#0F172A', '#F97316', '#64748B', '#FBBF24', '#F0F2F5'];
 
 const TotalApplicationsChart = () => {
   const { user } = useAuth();
+  const { get } = useApi();
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -33,30 +35,28 @@ const TotalApplicationsChart = () => {
         setLoading(true);
         setError(null);
 
-        // Get the token from localStorage
-        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        const token = userInfo?.data?.accessToken;
-
-        if (!token) {
-          throw new Error('No authentication token found');
+        console.log('Fetching resume stats for user:', user.id);
+        
+        // Try direct fetch first to debug
+        const testResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/resumes/stats/recruiter`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        console.log('Direct fetch status:', testResponse.status);
+        console.log('Direct fetch ok:', testResponse.ok);
+        
+        if (!testResponse.ok) {
+          const errorText = await testResponse.text();
+          console.error('Direct fetch error response:', errorText);
+          throw new Error(`Failed to fetch resume statistics: ${testResponse.status}`);
         }
 
-        const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URL}/api/resumes/stats/recruiter`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch resume statistics');
-        }
-
-        const result = await response.json();
+        const result = await testResponse.json();
+        console.log('Direct fetch API result:', result);
         
         // Use the real data from API
         setData(result.data || []);
@@ -73,7 +73,7 @@ const TotalApplicationsChart = () => {
     };
 
     fetchResumeStats();
-  }, [user?.id]);
+  }, [user?.id]); // Only depend on user.id, not get function
 
   const chartData = data.length > 0 ? data : defaultData;
   const chartTotal = total > 0 ? total : 523;
@@ -122,7 +122,11 @@ const TotalApplicationsChart = () => {
                 endAngle={-270}
               >
                 {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke={COLORS[index % COLORS.length]} />
+                  <Cell 
+                    key={`cell-${index}`} 
+                    fill={COLORS[index % COLORS.length]} 
+                    stroke={COLORS[index % COLORS.length]} 
+                  />
                 ))}
               </Pie>
             </PieChart>
@@ -135,7 +139,10 @@ const TotalApplicationsChart = () => {
         <ul className="list-none p-0 m-0 flex flex-col gap-4">
             {legendData.map((entry, index) => (
                 <li key={`item-${index}`} className="flex items-center gap-3">
-                    <span className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[index] }}></span>
+                    <span 
+                      className="w-3 h-3 rounded-full" 
+                      style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                    ></span>
                     <span className="flex-grow text-base text-gray-700">{entry.name}</span>
                     <span className="bg-gray-800 text-white py-1 px-3 rounded-2xl text-sm font-medium">{entry.value}</span>
                 </li>

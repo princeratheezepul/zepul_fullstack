@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import StatCard from './StatCard';
+import { useApi } from '../../../hooks/useApi';
 
 const StatsGroup = () => {
+  const { get } = useApi();
   const [stats, setStats] = useState([
     { title: 'Total Jobs', value: '0', percentage: '0', since: 'since last week' },
     { title: 'Candidates in Process', value: '0', percentage: '0', since: 'since last week' },
@@ -20,29 +22,11 @@ const StatsGroup = () => {
     try {
       setLoading(true);
       
-      // Fetch jobs, resumes, and recruiter stats data
+      // Fetch jobs, resumes, and recruiter stats data using useApi hook
       const [jobsResponse, resumesResponse, recruiterStatsResponse] = await Promise.all([
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/assigned-jobs`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include'
-        }),
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/resumes/recruiter`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include'
-        }),
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/stats`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include'
-        })
+        get(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/assigned-jobs`),
+        get(`${import.meta.env.VITE_BACKEND_URL}/api/resumes/recruiter`),
+        get(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/stats`)
       ]);
 
       let totalJobs = 0;

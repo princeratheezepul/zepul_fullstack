@@ -4,6 +4,7 @@ import { logoutUser, getAuthHeaders } from '../../../utils/authUtils';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
 import EmailNotification from './EmailNotification';
+import { useApi } from '../../../hooks/useApi';
 
 const settingsNav = [
   { name: 'Account Info' },
@@ -14,6 +15,7 @@ const settingsNav = [
 
 function PasswordAndSecurity() {
   const { user } = useAuth();
+  const { put } = useApi();
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -47,16 +49,9 @@ function PasswordAndSecurity() {
     
     try {
       // Use the correct endpoint for manager password update
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/manager/update-password`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          oldPassword,
-          newPassword,
-        }),
-        credentials: 'include',
+      const response = await put(`${import.meta.env.VITE_BACKEND_URL}/api/manager/update-password`, {
+        oldPassword,
+        newPassword,
       });
 
       const data = await response.json();
@@ -152,6 +147,7 @@ function PasswordAndSecurity() {
 
 const AccountInfoContent = () => {
   const { user } = useAuth();
+  const { get, put } = useApi();
   const [formData, setFormData] = useState({
     fullname: '',
     DOB: '',
@@ -204,10 +200,7 @@ const AccountInfoContent = () => {
       const endpoint = getApiEndpoint();
       console.log('Using endpoint:', endpoint);
       
-      const response = await fetch(endpoint, {
-        headers: getAuthHeaders(),
-        credentials: 'include',
-      });
+      const response = await get(endpoint);
 
       console.log('Response status:', response.status);
       
@@ -262,12 +255,7 @@ const AccountInfoContent = () => {
         phone: formData.phone,
       };
 
-      const response = await fetch(endpoint, {
-        method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(updateData),
-        credentials: 'include',
-      });
+      const response = await put(endpoint, updateData);
 
       if (!response.ok) {
         const errorData = await response.json();

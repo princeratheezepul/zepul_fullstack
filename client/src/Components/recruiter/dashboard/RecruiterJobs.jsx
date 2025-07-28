@@ -3,8 +3,10 @@ import RecruiterJobCard from './RecruiterJobCard';
 import JobSidebar from './JobSidebar';
 import JobDetailsView from './JobDetailsView';
 import { useNavigate } from 'react-router-dom';
+import { useApi } from '../../../hooks/useApi';
 
 const RecruiterJobs = () => {
+  const { get } = useApi();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,14 +44,8 @@ const RecruiterJobs = () => {
         return;
       }
 
-      // Use the recruiter assigned jobs endpoint with cookie-based authentication
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/assigned-jobs`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include' // Include cookies for authentication
-      });
+      // Use the recruiter assigned jobs endpoint with useApi hook
+      const response = await get(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/assigned-jobs`);
 
       if (response.ok) {
         const data = await response.json();
@@ -106,14 +102,8 @@ const RecruiterJobs = () => {
         return;
       }
 
-      // Fetch assigned jobs to calculate counts with cookie-based authentication
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/assigned-jobs`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include' // Include cookies for authentication
-      });
+      // Fetch assigned jobs to calculate counts with useApi hook
+      const response = await get(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/assigned-jobs`);
 
       if (response.ok) {
         const data = await response.json();

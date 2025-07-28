@@ -26,10 +26,7 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
   // Test authentication function
   const testAuth = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/test-auth`, {
-        method: 'GET',
-        credentials: 'include',
-      });
+      const response = await get(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/test-auth`);
       const data = await response.json();
       console.log('Auth test result:', data);
       return data;
@@ -142,16 +139,8 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
       // Debug: Check cookies
       console.log('All cookies:', document.cookie);
       
-      // Try direct fetch with proper credentials
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/resumes/save/${jobId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('authToken')}`, // Try Authorization header
-        },
-        credentials: 'include', // Include cookies for authentication
-        body: JSON.stringify(resumeData),
-      });
+      // Use useApi hook for consistent authentication
+      const response = await post(`${import.meta.env.VITE_BACKEND_URL}/api/resumes/save/${jobId}`, resumeData);
 
       console.log('Response status:', response.status);
       console.log('Response headers:', response.headers);

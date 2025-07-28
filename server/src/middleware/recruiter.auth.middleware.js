@@ -5,9 +5,13 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key_here";
 
 export const verifyRecruiterJWT = (req, res, next) => {
     try {
-        const token = req.cookies?.recruiterToken || req.header("Authorization")?.replace("Bearer ", "");
+        // Check for token in multiple places for compatibility
+        const token = req.cookies?.recruiterToken || 
+                     req.cookies?.accessToken || 
+                     req.header("Authorization")?.replace("Bearer ", "");
         
         console.log('Recruiter auth middleware - Token found:', !!token);
+        console.log('Recruiter auth middleware - Token value:', token ? token.substring(0, 20) + '...' : 'none');
         console.log('Recruiter auth middleware - Cookies:', req.cookies);
         console.log('Recruiter auth middleware - All headers:', req.headers);
         console.log('Recruiter auth middleware - Cookie header:', req.headers.cookie);

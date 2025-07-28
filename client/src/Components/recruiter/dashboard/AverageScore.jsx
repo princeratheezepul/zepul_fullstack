@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../../../context/AuthContext';
+import { useApi } from '../../../hooks/useApi';
 
 const AverageScore = () => {
+  const { get } = useApi();
   const [scoreData, setScoreData] = useState({
     totalScore: 0,
     totalTotalScore: 0,
@@ -22,15 +24,8 @@ const AverageScore = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/resumes/stats/average-score`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include', // Include cookies for authentication
-        }
+      const response = await get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/resumes/stats/average-score`
       );
 
       if (!response.ok) {

@@ -142,7 +142,9 @@ export const recruiterSignin = async (req, res) => {
     console.log('Access token:', accessToken);
     console.log('Refresh token:', refreshToken);
 
+    // Set both cookie names for compatibility
     res.cookie("recruiterToken", accessToken, options);
+    res.cookie("accessToken", accessToken, options);
     res.cookie("refreshToken", refreshToken, options);
 
     // Send response
@@ -164,10 +166,12 @@ export const recruiterLogout = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Lax",
+      path: "/",
     };
 
     return res.status(200)
       .clearCookie("recruiterToken", options)
+      .clearCookie("accessToken", options)
       .clearCookie("refreshToken", options)
       .json({
         message: "Recruiter logged out successfully",
@@ -229,10 +233,12 @@ export const refreshRecruiterToken = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "Lax",
+      path: "/",
     };
 
     return res.status(200)
       .cookie("recruiterToken", newAccessToken, options)
+      .cookie("accessToken", newAccessToken, options)
       .cookie("refreshToken", newRefreshToken, options)
       .json({
         status: 200,
