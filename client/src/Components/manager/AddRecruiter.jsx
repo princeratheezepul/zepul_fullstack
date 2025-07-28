@@ -1,25 +1,22 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { useApi } from '../../hooks/useApi';
 
 export default function AddRecruiter({ onClose }) {
-  // Get manager's info from localStorage
-  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-  const managerFullname = userInfo?.data?.user?.fullname || 'Manager';
-  const managerId = userInfo?.data?.user?._id;
-
+  const { user } = useAuth();
+  const { post } = useApi();
+  const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
     fullname: "",
     dateOfBirth: "",
     gender: "",
     email: "",
     phone: "",
-    onboardedBy: managerFullname // Prefill with manager's fullname
+    onboardedBy: ""
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const generateRandomPassword = () => {
@@ -33,30 +30,15 @@ export default function AddRecruiter({ onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Validate form
-    if (!form.fullname.trim() || !form.email.trim() || !form.dateOfBirth || !form.gender) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
-    if (!form.email.includes('@')) {
-      alert('Please enter a valid email address');
-      return;
-    }
-
     setIsLoading(true);
-    
+
     try {
-      // Get user info from localStorage
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-      if (!userInfo?.data?.accessToken) {
-        alert('No authentication token found');
-        return;
-      }
+      const managerId = userInfo?.data?.user?._id || user?.id;
+      const managerFullname = userInfo?.data?.user?.fullname || user?.fullname || 'Manager';
 
       const randomPassword = generateRandomPassword();
-      
+
       const requestData = {
         fullname: form.fullname,
         email: form.email,
@@ -68,18 +50,10 @@ export default function AddRecruiter({ onClose }) {
         managerId: managerId
       };
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/create-by-manager`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${userInfo.data.accessToken}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestData)
-      });
-
-      const data = await response.json();
+      const response = await post('/api/recruiter/create-by-manager', requestData);
 
       if (response.ok) {
+        const data = await response.json();
         alert(`Recruiter created successfully! Password reset link has been sent to ${form.email}`);
         console.log('Password set URL:', data.data?.user?.resetPasswordToken ? 
           `${import.meta.env.VITE_FRONTEND_URL || 'http://localhost:5173'}/recruiter/set_password/${data.data.user._id}/${data.data.user.resetPasswordToken}` : 
@@ -97,6 +71,7 @@ export default function AddRecruiter({ onClose }) {
         
         if (onClose) onClose();
       } else {
+        const data = await response.json();
         alert(data.message || 'Failed to create recruiter');
       }
     } catch (err) {

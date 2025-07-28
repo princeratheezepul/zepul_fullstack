@@ -36,27 +36,19 @@ const TotalApplicationsChart = () => {
         setError(null);
 
         console.log('Fetching resume stats for user:', user.id);
+        const response = await get('/api/resumes/stats/recruiter');
         
-        // Try direct fetch first to debug
-        const testResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/resumes/stats/recruiter`, {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
         
-        console.log('Direct fetch status:', testResponse.status);
-        console.log('Direct fetch ok:', testResponse.ok);
-        
-        if (!testResponse.ok) {
-          const errorText = await testResponse.text();
-          console.error('Direct fetch error response:', errorText);
-          throw new Error(`Failed to fetch resume statistics: ${testResponse.status}`);
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Error response:', errorText);
+          throw new Error(`Failed to fetch resume statistics: ${response.status}`);
         }
 
-        const result = await testResponse.json();
-        console.log('Direct fetch API result:', result);
+        const result = await response.json();
+        console.log('API result:', result);
         
         // Use the real data from API
         setData(result.data || []);

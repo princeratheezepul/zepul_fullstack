@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { logoutUser, getAuthHeaders } from '../../utils/authUtils';
+import { logoutUser } from '../../utils/authUtils';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
 import EmailNotification from './EmailNotification.jsx';
 import PasswordSecurity from './PasswordSecurity.jsx';
+import { useApi } from '../../hooks/useApi';
+import { getApiUrl, logConfig } from '../../config/config.js';
 
 const settingsNav = [
   { name: 'Account Info' },
@@ -15,6 +17,7 @@ const settingsNav = [
 
 const ManagerAccountSettings = () => {
   const { user, logout } = useAuth();
+  const { get, put } = useApi();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Account Info');
   const [formData, setFormData] = useState({
@@ -43,16 +46,62 @@ const ManagerAccountSettings = () => {
     try {
       setLoading(true);
       setError(null);
-      const endpoint = `${import.meta.env.VITE_BACKEND_URL}/api/manager/profile`;
-      const response = await fetch(endpoint, {
-        headers: getAuthHeaders(),
-        credentials: 'include',
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch profile data');
+      
+      // Log configuration for debugging
+      logConfig();
+      
+      console.log('Fetching manager profile for user:', user);
+      console.log('User ID:', user?.id);
+      console.log('User type:', user?.type);
+      
+      // Check if user is authenticated
+      if (!user?.id) {
+        throw new Error('User not authenticated. Please login again.');
       }
+      
+      // Use the configuration helper
+      const apiUrl = getApiUrl('/api/manager/profile');
+      console.log('Using API URL:', apiUrl);
+      
+      // Try direct fetch first to debug
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      console.log('Response status:', response.status);
+      console.log('Response ok:', response.ok);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response text:', errorText);
+        
+        // Check if it's an HTML response (likely a 404 or error page)
+        if (errorText.includes('<!DOCTYPE') || errorText.includes('<html')) {
+          throw new Error(`Server returned HTML instead of JSON. This might be a routing issue. Status: ${response.status}`);
+        }
+        
+        // Try to parse as JSON if possible
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch (e) {
+          errorData = { message: `HTTP ${response.status}: ${errorText.substring(0, 100)}...` };
+        }
+        
+        throw new Error(errorData.message || `Failed to fetch profile data: ${response.status}`);
+      }
+      
       const data = await response.json();
+      console.log('Profile data received:', data);
+      
+      if (!data.manager) {
+        throw new Error('Invalid response format: manager data not found');
+      }
+      
       const profileData = data.manager;
       setFormData({
         fullname: profileData.fullname || '',
@@ -63,6 +112,7 @@ const ManagerAccountSettings = () => {
         onboardedBy: profileData.onboardedBy || 'N/A'
       });
     } catch (err) {
+      console.error('Error fetching profile data:', err);
       setError(err.message);
       toast.error('Failed to load profile data');
     } finally {
@@ -82,26 +132,43 @@ const ManagerAccountSettings = () => {
     e.preventDefault();
     setSaving(true);
     try {
-      const endpoint = `${import.meta.env.VITE_BACKEND_URL}/api/manager/profile`;
       const updateData = {
         fullname: formData.fullname,
         DOB: formData.DOB ? new Date(formData.DOB).toISOString() : '',
         gender: formData.gender,
         phone: formData.phone,
       };
-      const response = await fetch(endpoint, {
+      
+      // Use the configuration helper
+      const apiUrl = getApiUrl('/api/manager/profile');
+      
+      const response = await fetch(apiUrl, {
         method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(updateData),
         credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateData),
       });
+      
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorText = await response.text();
+        console.error('Update error response:', errorText);
+        
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch (e) {
+          errorData = { message: `HTTP ${response.status}: ${errorText.substring(0, 100)}...` };
+        }
+        
         throw new Error(errorData.message || 'Failed to update profile');
       }
+      
       toast.success('Profile updated successfully!');
       await fetchProfileData();
     } catch (err) {
+      console.error('Error updating profile:', err);
       toast.error(err.message || 'Failed to update profile');
     } finally {
       setSaving(false);

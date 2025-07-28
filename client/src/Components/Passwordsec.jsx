@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useApi } from '../hooks/useApi';
+
 const Passwordsec = () => {
+  const { put } = useApi();
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -18,27 +21,18 @@ const Passwordsec = () => {
       setLoading(true);
       setMessage('');
 
-      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/manager/update-password`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userInfo.data.accessToken}`,
-        },
-        body: JSON.stringify({
-          oldPassword,
-          newPassword,
-        }),
+      const response = await put('/api/manager/update-password', {
+        oldPassword,
+        newPassword,
       });
 
-      const result = await res.json();
-
-      if (res.ok) {
+      if (response.ok) {
         setMessage('Password updated successfully!');
         setOldPassword('');
         setNewPassword('');
         setConfirmPassword('');
       } else {
+        const result = await response.json();
         setMessage(result.error || 'Failed to update password');
       }
     } catch (error) {

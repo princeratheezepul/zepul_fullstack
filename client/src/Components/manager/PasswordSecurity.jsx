@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import toast from 'react-hot-toast';
+import { useApi } from '../../hooks/useApi';
 
 export default function PasswordSecurity() {
+  const { put } = useApi();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -27,21 +29,15 @@ export default function PasswordSecurity() {
     }
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/manager/update-password`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ oldPassword, newPassword }),
-        credentials: 'include',
-      });
-      const data = await response.json();
+      const response = await put('/api/manager/update-password', { oldPassword, newPassword });
+      
       if (response.ok) {
         toast.success('Password updated successfully!');
         setOldPassword("");
         setNewPassword("");
         setConfirmPassword("");
       } else {
+        const data = await response.json();
         toast.error(data.error || data.message || 'Failed to update password');
       }
     } catch (error) {
