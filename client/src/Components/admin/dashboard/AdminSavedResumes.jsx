@@ -212,7 +212,17 @@ const AdminSavedResumes = ({ jobId, onBack, jobtitle }) => {
     str ? str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : '';
 
   const getAvatarColor = (name) => {
-    const colors = ['bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-purple-500', 'bg-pink-500'];
+    // Professional, subtle color palette
+    const colors = [
+      'bg-blue-100 text-blue-700 border border-blue-200',
+      'bg-green-100 text-green-700 border border-green-200',
+      'bg-purple-100 text-purple-700 border border-purple-200',
+      'bg-orange-100 text-orange-700 border border-orange-200',
+      'bg-teal-100 text-teal-700 border border-teal-200',
+      'bg-indigo-100 text-indigo-700 border border-indigo-200',
+      'bg-pink-100 text-pink-700 border border-pink-200',
+      'bg-gray-100 text-gray-700 border border-gray-200'
+    ];
     const index = name.charCodeAt(0) % colors.length;
     return colors[index];
   };
@@ -307,7 +317,7 @@ const AdminSavedResumes = ({ jobId, onBack, jobtitle }) => {
           </button>
           <div className="w-px h-6 bg-gray-300"></div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Candidate List</h1>
+            <div className="text-2xl font-bold text-gray-900">Candidate List</div>
             <p className="text-gray-600">Managing candidate for {jobtitle}</p>
           </div>
         </div>
@@ -340,19 +350,19 @@ const AdminSavedResumes = ({ jobId, onBack, jobtitle }) => {
         ) : filteredResumes.length === 0 ? (
           <div className="text-center py-12">
             <Users size={48} className="mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No candidates found</h3>
+            <div className="text-lg font-medium text-gray-900 mb-2">No candidates found</div>
             <p className="text-gray-600">No candidates match the current filter.</p>
           </div>
         ) : (
           <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             {/* Table Header */}
             <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-              <div className="grid grid-cols-5 gap-4 text-xs font-semibold text-gray-700 uppercase tracking-wide">
-                <div>CANDIDATE</div>
-                <div>APPLIED DATE</div>
-                <div>SCORE</div>
-                <div>STATUS</div>
-                <div>NOTES</div>
+              <div className="grid grid-cols-12 gap-4 text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                <div className="col-span-4">CANDIDATE</div>
+                <div className="col-span-2">APPLIED DATE</div>
+                <div className="col-span-2">SCORE</div>
+                <div className="col-span-2">STATUS</div>
+                <div className="col-span-2">NOTES</div>
               </div>
             </div>
 
@@ -364,37 +374,45 @@ const AdminSavedResumes = ({ jobId, onBack, jobtitle }) => {
                   onClick={() => setSelectedResume(resume)}
                   className="px-6 py-4 hover:bg-gray-50 cursor-pointer transition-colors"
                 >
-                  <div className="grid grid-cols-5 gap-4 items-center">
+                  <div className="grid grid-cols-12 gap-4 items-center">
                     {/* CANDIDATE Column */}
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm ${getAvatarColor(resume.name)}`}>
+                    <div className="col-span-4 flex items-center gap-3">
+                      <div 
+                        className={`rounded-full flex items-center justify-center font-medium text-sm shadow-sm flex-shrink-0 ${getAvatarColor(resume.name)}`}
+                        style={{
+                          width: '42px !important',
+                          height: '42px !important',
+                          minWidth: '42px',
+                          minHeight: '42px'
+                        }}
+                      >
                         {getInitials(resume.name)}
                       </div>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-gray-900">{capitalizeFirstLetter(resume.name)}</span>
-                        <span className="text-sm text-gray-600">{resume.email}</span>
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-semibold text-gray-900 truncate">{capitalizeFirstLetter(resume.name)}</span>
+                        <span className="text-sm text-gray-600 truncate">{resume.email}</span>
                       </div>
                     </div>
 
                     {/* APPLIED DATE Column */}
-                    <div className="text-gray-900">
+                    <div className="col-span-2 text-gray-900 text-sm">
                       {formatDate(resume.createdAt)}
                     </div>
 
                     {/* SCORE Column */}
-                    <div className="text-gray-900">
+                    <div className="col-span-2 text-gray-900 text-sm">
                       {resume.overallScore ? `${resume.overallScore}%` : 'N/A'}
                     </div>
 
                     {/* STATUS Column */}
-                    <div>
+                    <div className="col-span-2">
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${STATUS_COLORS[resume.status] || 'bg-gray-100 text-gray-700'}`}>
                         {STATUS_LABELS[resume.status] || resume.status}
                       </span>
                     </div>
 
                     {/* NOTES Column */}
-                    <div>
+                    <div className="col-span-2">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
