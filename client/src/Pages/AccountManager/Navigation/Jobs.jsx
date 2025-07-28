@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import CandidateList from "../../../components/CandidateList";
-import CandidateDetails from "../../../components/CandidateDetails";
+import CandidateList from "../../../Components/CandidateList";
+import CandidateDetails from "../../../Components/CandidateDetails";
 
 const AccountManagerJobs = () => {
   const [jobs, setJobs] = useState([]);

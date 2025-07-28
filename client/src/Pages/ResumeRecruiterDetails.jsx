@@ -1,5 +1,5 @@
 import React from 'react'
-import ResumeDetail from '../components/ResumeDetail'
+import ResumeDetail from '../Components/ResumeDetail'
 
 function ResumeRecruiterDetails() {
   return (

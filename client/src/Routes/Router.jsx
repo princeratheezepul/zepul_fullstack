@@ -9,13 +9,13 @@ import PublicLayout from "../Layout/PublicLayout";
 
 import "../App.css";
 import { AuthProvider } from "../context/AuthContext";
-import ProtectedRoute from "../components/ProtectedRoute";
+import ProtectedRoute from "../Components/ProtectedRoute";
 
 
 import Recruiter from "../pages/Recruiter";
 import ResumeRecruiterDetails from "../pages/ResumeRecruiterDetails";
 
-import RecruiterSignup from "../components/RecruiterSignupByManager.jsx";
+import RecruiterSignup from "../Components/RecruiterSignupByManager.jsx";
 import Register from "../pages/Manager/Register";
 import Company from "../pages/Manager/Company";
 import Jobs from "../pages/jobs/[companyid].jsx";
@@ -26,7 +26,7 @@ import ChangeEmail from "../pages/Manager/ChangeEmail.jsx";
 import ChangeEmailRequest from "../pages/Manager/ChangeEmailRequest.jsx";
 import Manager from "../pages/Manager/Manager.jsx";
 import Myteam from "../pages/Manager/Navigation/Myteam.jsx";
-import RecruiterDetails from "../components/RecruiterDetails.jsx";
+import RecruiterDetails from "../Components/RecruiterDetails.jsx";
 import ListOfJobs from "../pages/Manager/Navigation/ListOfJobs.jsx";
 import ScorecardReviews from "../pages/Manager/Navigation/ScorecardReviews.jsx";
 import Settings from "../pages/Manager/Navigation/Settings.jsx";
@@ -39,7 +39,7 @@ import AdminJobs from "../pages/Admin/Navigation/Jobs.jsx";
 import AdminSettings from "../pages/Admin/Navigation/Settings.jsx";
 
 import ApplyJob from "../pages/Admin/Navigation/ApplyJob.jsx";
-import ResumeDetail from "../components/ResumeDetail.jsx";
+import ResumeDetail from "../Components/ResumeDetail.jsx";
 import AccountManagerRegister from "../pages/AccountManager/Register.jsx";
 import AccountManager from "../pages/AccountManager/AccountManager.jsx";
 import AccountManagerForgotPassword from "../pages/AccountManager/AccountManagerForgotPassword.jsx";
@@ -49,10 +49,10 @@ import AccountManagerCompanyManagement from "../pages/AccountManager/Navigation/
 import AccountManagerCompanyDetails from "../pages/AccountManager/Navigation/AccountManagerCompanyDetails.jsx";
 import AccountManagerJobs from "../pages/AccountManager/Navigation/Jobs.jsx";
 import AccountManagerDashboard from "../pages/AccountManager/Dashboard.jsx";
-import CandidateDetails from "../components/CandidateDetails.jsx";
+import CandidateDetails from "../Components/CandidateDetails.jsx";
 import Candidate from "../pages/Admin/Navigation/Candidate.jsx";
 import AdminCandidateDetails from "../pages/Admin/AdminCandidateDetails.jsx";
-import RecruiterPassSet from "../components/RecruiterPassSet.jsx";
+import RecruiterPassSet from "../Components/RecruiterPassSet.jsx";
 import RecruiterForgotPassword from "../pages/RecruiterForgotPassword.jsx";
 import RecruiterDashboard from "../pages/RecruiterDashboard.jsx";
 import { Toaster } from "react-hot-toast";

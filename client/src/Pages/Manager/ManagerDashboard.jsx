@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import AddRecruiter from "../../components/manager/AddRecruiter";
-import ManagerAccountSettings from '../../components/manager/ManagerAccountSettings';
+import AddRecruiter from "../../Components/manager/AddRecruiter";
+import ManagerAccountSettings from '../../Components/manager/ManagerAccountSettings';
 import toast from 'react-hot-toast';
-import Jobs from '../../components/recruiter/dashboard/Jobs';
+import Jobs from '../../Components/recruiter/dashboard/Jobs';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine } from 'recharts';
 
 

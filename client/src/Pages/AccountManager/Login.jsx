@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Loader from "../../components/ui/Loader.jsx";
+import Loader from "../../Components/ui/Loader.jsx";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import logo from "../../assets/react.svg"; // Replace with your actual logo path

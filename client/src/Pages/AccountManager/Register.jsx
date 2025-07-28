@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import Loader from "../../components/ui/Loader";
+import Loader from "../../Components/ui/Loader";
 
 function AccountManagerRegister() {
   const [fullname, setFullName] = useState("");

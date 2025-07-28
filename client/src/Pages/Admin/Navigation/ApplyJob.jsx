@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"; // Or useRouter() for Next.js
-import ResumeParser from "../../../components/ResumeParser";
+import ResumeParser from "../../../Components/ResumeParser";
 
 const ApplyJob = () => {
     const { jobid } = useParams(); // useRouter().query.id in Next.js
