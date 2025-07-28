@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaRegCalendarAlt, FaUser, FaUsers, FaUserTie, FaUserShield, FaChartLine, FaThLarge, FaCog, FaSignOutAlt, FaEdit, FaTrash, FaEye, FaBriefcase, FaSave, FaTimes } from 'react-icons/fa';
-import AdminLogout from '../../components/AdminLogout.jsx';
+import {  FaUser, FaUsers, FaUserTie, FaUserShield, FaChartLine,  FaEdit, FaTrash,  FaBriefcase, FaSave } from 'react-icons/fa';
+
 import AdminJobs from '../../components/admin/dashboard/AdminJobs';
 import AdminCompanyDetails from '../../components/admin/dashboard/AdminCompanyDetails.jsx';
 import JobCard from '../../components/recruiter/dashboard/JobCard';

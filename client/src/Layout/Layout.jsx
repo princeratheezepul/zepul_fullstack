@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import TopScroller from "../Components/TopScroller";
+
 import Router from "../Routes/Router";
 
 const Layout = () => {

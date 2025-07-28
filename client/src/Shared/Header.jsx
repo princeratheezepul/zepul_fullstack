@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import "../styles/Header.css";
 import { Link } from "react-router-dom";
-import { FaBars, FaBurger } from "react-icons/fa6";
+import { FaBars } from "react-icons/fa6";
 const Header = () => {
   return (
     <Fragment>

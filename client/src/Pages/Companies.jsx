@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import CommonHeroSection from "../Components/CommonHeroSection";
-import PartnerCarousel from "../Components/PartnerCarousel";
+
 import Standout from "../Components/Standout";
 import CompaniesTabs from "../AllTabs/CompaniesTabs";
 

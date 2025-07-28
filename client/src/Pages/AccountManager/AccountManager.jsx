@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import LogoutButton from './AccountManagerLogout.jsx';
+import {  useNavigate } from 'react-router-dom';
+
 import AccountManagerJobs from '../../components/accountmanager/dashboard/AccountManagerJobs.jsx';
 import CompanyList from './Navigation/CompanyList.jsx';
 import AccountManagerInfo from '../../components/AccountManagerInfo.jsx';

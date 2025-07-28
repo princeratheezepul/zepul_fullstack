@@ -1,15 +1,7 @@
 import React, { Fragment } from "react";
 import "../styles/Home.css";
 import HeroSection from "../Components/HomeHeroSection";
-import PartnerCarousel from "../Components/PartnerCarousel";
-import {
-  FaUser,
-  FaHome,
-  FaSearch,
-  FaGlobe,
-  FaCheck,
-  FaCartPlus,
-} from "react-icons/fa";
+
 import RecruitmentPlatform from "../Components/Recruitment-platform";
 
 

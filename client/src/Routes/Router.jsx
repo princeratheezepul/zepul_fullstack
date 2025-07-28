@@ -10,11 +10,11 @@ import PublicLayout from "../Layout/PublicLayout";
 import "../App.css";
 import { AuthProvider } from "../context/AuthContext";
 import ProtectedRoute from "../components/ProtectedRoute";
-import ResumeParser from "../components/ResumeParser";
+
 
 import Recruiter from "../pages/Recruiter";
 import ResumeRecruiterDetails from "../pages/ResumeRecruiterDetails";
-import RecruiterAuthentication from "../pages/RecruiterAuthentication";
+
 import RecruiterSignup from "../components/RecruiterSignupByManager.jsx";
 import Register from "../pages/Manager/Register";
 import Company from "../pages/Manager/Company";
@@ -37,8 +37,7 @@ import Dashboard from "../pages/Admin/Navigation/Dashboard.jsx";
 import CompanyManagement from "../pages/Admin/Navigation/CompanyManagement.jsx";
 import AdminJobs from "../pages/Admin/Navigation/Jobs.jsx";
 import AdminSettings from "../pages/Admin/Navigation/Settings.jsx";
-import AdminForgotPassword from "../pages/Admin/AdminForgotPassword.jsx";
-import AdminResetPassword from "../pages/Admin/AdminResetPassword.jsx";
+
 import ApplyJob from "../pages/Admin/Navigation/ApplyJob.jsx";
 import ResumeDetail from "../components/ResumeDetail.jsx";
 import AccountManagerRegister from "../pages/AccountManager/Register.jsx";
