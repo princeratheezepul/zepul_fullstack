@@ -1,7 +1,7 @@
 import Recruiter from "../models/recruiter.model.js";
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key_here";
+const JWT_SECRET = process.env.ACCESS_TOKEN_SECRET || process.env.JWT_SECRET || "your_secret_key_here";
 
 export const verifyRecruiterJWT = (req, res, next) => {
     try {

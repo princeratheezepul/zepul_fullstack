@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../../../context/AuthContext';
 import { useApi } from '../../../hooks/useApi';
+import { getApiUrl, logConfig } from '../../../config/config.js';
 
 const COLORS = ['#1E75FF', '#0F172A', '#F97316', '#64748B', '#FBBF24', '#F0F2F5'];
 
@@ -36,15 +37,48 @@ const TotalApplicationsChart = () => {
         setError(null);
 
         console.log('Fetching resume stats for user:', user.id);
-        const response = await get('/api/resumes/stats/recruiter');
+        console.log('User type:', user.type);
+        
+        // Log configuration for debugging
+        logConfig();
+        
+        // Use direct fetch for debugging
+        const apiUrl = getApiUrl('/api/resumes/stats/recruiter');
+        console.log('Using API URL:', apiUrl);
+        
+        // Log cookies for debugging
+        console.log('Current cookies:', document.cookie);
+        
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
         
         console.log('Response status:', response.status);
         console.log('Response ok:', response.ok);
+        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
         
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('Error response:', errorText);
-          throw new Error(`Failed to fetch resume statistics: ${response.status}`);
+          console.error('Error response text:', errorText);
+          
+          // Check if it's an HTML response (likely a 404 or error page)
+          if (errorText.includes('<!DOCTYPE') || errorText.includes('<html')) {
+            throw new Error(`Server returned HTML instead of JSON. This might be an authentication issue. Status: ${response.status}`);
+          }
+          
+          // Try to parse as JSON if possible
+          let errorData;
+          try {
+            errorData = JSON.parse(errorText);
+          } catch (e) {
+            errorData = { message: `HTTP ${response.status}: ${errorText.substring(0, 100)}...` };
+          }
+          
+          throw new Error(errorData.message || `Failed to fetch resume statistics: ${response.status}`);
         }
 
         const result = await response.json();

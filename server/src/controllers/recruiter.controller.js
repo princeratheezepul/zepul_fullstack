@@ -5,7 +5,7 @@ import { Job } from "../models/job.model.js";
 import nodemailer from "nodemailer";
 import { User } from '../models/user.model.js';
 import { Admin } from "../models/admin.model.js";
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key_here";
+const JWT_SECRET = process.env.ACCESS_TOKEN_SECRET || process.env.JWT_SECRET || "your_secret_key_here";
 
 const transporter = nodemailer.createTransport({
   service: "gmail", // or use SMTP config
