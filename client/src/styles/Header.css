@@ -1,0 +1,36 @@
+.sign-in-button {
+  border-radius: 8px;
+  outline: none;
+  font-size: 16px;
+  border: none;
+}
+
+.sign-in-button.btnn {
+  background-color: black;
+  color: white;
+  width: 98px;
+  height: 44px;
+}
+.logo img {
+  width: 150px;
+}
+.nav-link{
+  padding:1rem !important;
+}
+.mob-nav{
+  display:none;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}

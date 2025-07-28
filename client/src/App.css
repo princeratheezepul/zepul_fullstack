@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+/* Candidate pipeline segment: rectangle with left and right triangles */
+.pipeline-segment-shape {
+  position: relative;
+  background: inherit;
+}
+.pipeline-segment-shape::before,
+.pipeline-segment-shape::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 100%;
+  z-index: 1;
+}
+.pipeline-segment-shape::before {
+  left: -16px;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-right: 16px solid inherit;
+}
+.pipeline-segment-shape::after {
+  right: -16px;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  border-left: 16px solid inherit;
+}
+
+/* Candidate pipeline segment: cut-out arrow shapes */
+.pipeline-segment {
+  position: relative;
+  height: 40px;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  font-size: 1rem;
+  z-index: 1;
+  transition: background 0.2s;
+}
+.pipeline-segment.first {
+  /* Same as last segment - flat on both sides */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+.pipeline-segment.middle {
+  /* Arrow tip on the left, cut on the right (mirror) */
+  clip-path: polygon(100% 0, 10% 0, 0 50%, 10% 100%, 100% 100%, 90% 50%);
+}
+.pipeline-segment.last {
+  /* Arrow tip on the left, flat on the right (mirror) */
+  clip-path: polygon(100% 0, 10% 0, 0 50%, 10% 100%, 100% 100%);
+}
+.pipeline-segment.empty {
+  background: #f3f4f6 !important;
+  color: #a3a3a3 !important;
+}

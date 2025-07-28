@@ -1,0 +1,40 @@
+footer {
+  background-color: #000;
+  color: #fff;
+}
+footer p {
+  color: white;
+  font-size:15px;
+}
+.list1 ul li {
+  margin-top:1rem;
+}
+hr {
+  height: 1px;
+}
+
+footer .logo p {
+  font-size: 14px;
+}
+.list1 .title {
+  font-size: 22px;
+  font-weight: 400;
+}
+.icon {
+  font-size: 20px;
+  color: #808490;
+}
+.footer-info li{
+  margin:1rem 0rem;
+
+}
+.icon:hover {
+  color: #fff;
+}
+.copy-right{
+  font-size:15px;
+}
+.address-info img{
+  width:23px;
+  height:23px;
+}

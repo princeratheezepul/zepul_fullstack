@@ -1,0 +1,140 @@
+@media screen and (max-width: 767px) {
+  .sign-in-button.hero,
+  .learn-more-button.hero {
+    height: 50px !important;
+    font-size: 14px !important;
+  }
+  .portfolio-card-details {
+    display: flex;
+    justify-content: center;
+  }
+  .intro h1 {
+    font-size: 20px !important;
+  }
+  .w-50 {
+    width: 100% !important;
+  }
+  .home-img {
+    width: 75% !important;
+    height: 400px !important;
+  }
+  .home-img2 {
+    width: 300px !important;
+    background-color: #e3e3e3;
+    height: 300px !important;
+    border-radius: 8px;
+    left: 0px !important;
+    top: 200px;
+    display: none;
+  }
+  .standout h1 {
+    font-size: 50px !important;
+  }
+  .standout h2 {
+    font-size: 25px !important;
+  }
+  .navbar {
+    display: none;
+  }
+  .mob-nav {
+    display: block;
+  }
+}
+@media screen and (max-width: 568px) {
+  .dropdowns-item h5 {
+    font-size:16px !important;
+  }
+
+
+
+  .sign-in-button {
+
+
+    font-size: 14px;
+    
+  }
+  
+  .sign-in-button.btnn {
+    background-color: black;
+    color: white;
+    width: 60px;
+    height: 34px;
+  }
+
+
+
+  .container{
+    margin-top:20px;
+  }
+  .card-item {
+    margin-top: 1rem !important;
+    margin-left: 0rem !important;
+    margin-right: 0rem !important;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+  }
+  .hero-title {
+    font-size: 30px !important;
+  }
+  .home-img2 {
+    display: none;
+  }
+  .home-img {
+    width: 100% !important;
+  }
+  h1 {
+    font-size: 25px !important;
+  }
+  .cards {
+    margin: 1rem 0rem;
+    padding:0px !important;
+  }
+  .card-item h3 {
+    padding: 0.5rem;
+    font-size: 1rem !important;
+  }
+
+  .btn-grp {
+    justify-content: center;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .why-list2,.list-text{
+    font-size:1rem !important;
+  }
+
+
+
+  .hero-title {
+    font-size: 35px !important;
+  }
+  .intro h1 {
+    font-size: 30px !important;
+  }
+  .home-img2 {
+    display: none;
+  }
+  .card-item h3 {
+    font-size: 20px;
+  }
+  .standout h1 {
+    font-size: 50px !important;
+  }
+}
+
+@media (min-width: 576px) {
+  .container-sm {
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 1210px) {
+  .serviceBox .title {
+    font-size: 16px !important;
+  }
+  .serviceBox .description {
+    font-size: 14px !important;
+  }
+}

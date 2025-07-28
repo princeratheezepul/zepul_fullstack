@@ -1,0 +1,11 @@
+.standout{
+    background-color: var(--blue);
+    color:white;
+}
+.standout h2{
+    font-size:50px;
+}
+.standout h1{
+    font-size: 60px;
+
+}

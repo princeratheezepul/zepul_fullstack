@@ -1,0 +1,29 @@
+.MuiTabs-flexContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+
+}
+.Mui-selected {
+  color: #fff !important;
+  background: black !important;
+  border: 1px solid #000 !important;
+  border-radius: 8px !important;
+}
+.MuiTabs-indicator {
+  display: none !important;
+}
+.sign-in-button.tabs {
+  background-color: var(--blue);
+  color: white;
+padding:.5rem;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 8px;
+}
+.tab {
+  border: 1px solid #d6d6d6 !important;
+  color: black ;
+  border-radius: 8px !important;
+  font-weight:bold !important;
+}

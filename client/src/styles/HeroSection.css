@@ -1,0 +1,32 @@
+.hero-title {
+  font-size: var(--heading);
+  font-family: var(--font);
+}
+.hero-text {
+  font-size: 16px;
+  font-weight: 500;
+}
+.sign-in-button.hero {
+  background-color: var(--blue);
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 10px 20px;
+}
+.learn-more-button.hero {
+  background-color: white;
+  color: black;
+  width: 233px;
+  height: 64px;
+  font-size: 20px;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1px solid #d6d6d6;
+}
+.hero-img {
+  width: 100%;
+}
+.blue{
+  color:var(--blue)
+}
