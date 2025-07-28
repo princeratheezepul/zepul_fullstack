@@ -1,7 +1,7 @@
 import React from 'react'
-import { useEffect, useState } from 'react';
-import  RecruiterSignup  from '../../../components/RecruiterSignupByManager.jsx';
-import GetRecruitersByManager from '../../../components/GetRecruitresByManager.jsx';
+
+import  RecruiterSignup  from '../../../Components/RecruiterSignupByManager.jsx';
+import GetRecruitersByManager from '../../../Components/GetRecruitresByManager.jsx';
 const Myteam = () => {
   return (
     <div>
