@@ -1,5 +1,5 @@
 import React from 'react'
-import RecruiterDashboard from './RecruiterDashboard'
+import RecruiterDashboard from './RecruiterDashboard.jsx'
 
 function Recruiter() {
   return (
