@@ -49,7 +49,7 @@ export default function PasswordSecurity() {
 
   return (
     <div className="w-full max-w-3xl mx-auto pt-4">
-      <h1 className="text-3xl font-bold text-black mb-1">Password & Securities</h1>
+      <div className="text-3xl font-bold text-black mb-1">Password & Securities</div>
       <p className="text-base text-gray-500 mb-8 max-w-2xl">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque at velit, ipsum turpis scelerisque facilisi nisi. Arcu ullamcorper a in molestie et risus pulvinar orci vel.
       </p>

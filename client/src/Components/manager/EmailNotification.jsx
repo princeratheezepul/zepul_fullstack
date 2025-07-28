@@ -52,7 +52,7 @@ const EmailNotification = () => {
 
   return (
     <div className="w-full max-w-5xl pt-4">
-      <h1 className="text-3xl font-bold text-black mb-1">Email Notification</h1>
+      <div className="text-3xl font-bold text-black mb-1">Email Notification</div>
       <p className="text-base text-gray-500 mb-8 max-w-2xl">
         Customize your email notification preferences to stay informed about important recruitment activities and ensure you never miss critical updates that affect your team's workflow.
       </p>

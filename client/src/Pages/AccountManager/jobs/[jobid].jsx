@@ -144,7 +144,7 @@ const AccountManagerJobDetailPage = () => {
         <div className="w-full max-w-6xl bg-gray-50">
           {/* Back Button */}
           <div className="bg-gray-50 w-full px-4 md:px-0 pt-6 pb-2">
-            <button
+            <div
               onClick={() => navigate('/accountmanager')}
               className="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center gap-2 mb-4"
             >
@@ -152,17 +152,17 @@ const AccountManagerJobDetailPage = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
               Back to Dashboard
-            </button>
+            </div>
           </div>
           {/* Improved Header Row */}
           <div className="bg-gray-50 w-full px-4 md:px-0 pt-2 pb-4">
             <div className="flex items-center justify-between w-full mb-4">
               <div>
                 <div className="text-xs text-blue-600 font-semibold mb-1">JOB DETAILS</div>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{job.jobtitle}</h1>
+                <div className="text-2xl md:text-3xl font-bold text-gray-900">{job.jobtitle}</div>
               </div>
               <div className="flex flex-col gap-3">
-                <button 
+                <div 
                   className="bg-black hover:bg-gray-800 text-white font-semibold px-5 py-2 rounded-lg text-sm cursor-pointer flex items-center gap-2"
                   onClick={() => {
                     console.log('Candidate List button clicked');
@@ -174,7 +174,7 @@ const AccountManagerJobDetailPage = () => {
                   <svg xmlns='http://www.w3.org/2000/svg' className='inline ml-1' width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
                   </svg>
-                </button>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
@@ -208,21 +208,21 @@ const AccountManagerJobDetailPage = () => {
           <div className="flex flex-col lg:flex-row gap-8 w-full mt-8">
             {/* Left: Job Description Card */}
             <div className="flex-1 rounded-xl p-6 md:p-10 mb-6 lg:mb-0 bg-gray-50">
-              <h2 className="text-xl font-bold mb-4">Job Description:</h2>
+              <div className="text-xl font-bold mb-4">Job Description:</div>
               <p className="text-gray-700 mb-6 whitespace-pre-line">{job.description}</p>
-              <h3 className="text-lg font-semibold mb-2">Key Responsibilities:</h3>
+              <div className="text-lg font-semibold mb-2">Key Responsibilities:</div>
               <ul className="list-disc pl-6 mb-6 text-gray-700">
                 {job.responsibilities.map((item, idx) => (
                   <li key={idx}>{item}</li>
                 ))}
               </ul>
-              <h3 className="text-lg font-semibold mb-2">Required Skills & Experience:</h3>
+              <div className="text-lg font-semibold mb-2">Required Skills & Experience:</div>
               <ul className="list-disc pl-6 mb-6 text-gray-700">
                 {job.requiredSkills.map((item, idx) => (
                   <li key={idx}>{item}</li>
                 ))}
               </ul>
-              <h3 className="text-lg font-semibold mb-2">Preferred Qualifications (Nice to Have):</h3>
+              <div className="text-lg font-semibold mb-2">Preferred Qualifications (Nice to Have):</div>
               <ul className="list-disc pl-6 mb-6 text-gray-700">
                 {job.preferredQualifications.map((item, idx) => (
                   <li key={idx}>{item}</li>
@@ -231,16 +231,10 @@ const AccountManagerJobDetailPage = () => {
             </div>
                       {/* Right: Application Statistics */}
           <div className="w-full lg:w-80 flex-shrink-0 rounded-2xl p-6 flex flex-col items-center bg-gray-50" style={{ minWidth: 320 }}>
-            <h4 className="text-2xl font-bold mb-4 text-black">Application Statistics</h4>
+            <div className="text-2xl font-bold mb-4 text-black">Application Statistics</div>
             
-            {/* Candidate List Button */}
-            <button
-              onClick={() => setShowSavedResumes(true)}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold mb-6 flex items-center justify-center gap-2 transition-colors"
-            >
-              <Users size={20} />
-              View Candidate List
-            </button>
+    
+            
               {/* Donut Chart and Legend (replicated from dashboard, now with 4 segments) */}
               <div className="flex flex-col items-center w-full">
                 <div className="relative w-72 h-72 mb-4">

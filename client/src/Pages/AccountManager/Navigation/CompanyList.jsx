@@ -81,7 +81,7 @@ const CompanyList = () => {
   if (loading) {
     return (
       <div className="px-16 py-10 w-full min-h-screen">
-        <h1 className="text-3xl font-bold text-black mb-1">Company List</h1>
+        <div className="text-3xl font-bold text-black mb-1">Company List</div>
         <p className="text-base text-gray-500 mb-8">Manage and track all your job posting here</p>
         <div className="bg-white rounded-xl shadow border border-gray-200 p-8">
           <div className="flex items-center justify-center">
@@ -96,7 +96,7 @@ const CompanyList = () => {
   if (error) {
     return (
       <div className="px-16 py-10 w-full min-h-screen">
-        <h1 className="text-3xl font-bold text-black mb-1">Company List</h1>
+        <div className="text-3xl font-bold text-black mb-1">Company List</div>
         <p className="text-base text-gray-500 mb-8">Manage and track all your job posting here</p>
         <div className="bg-white rounded-xl shadow border border-gray-200 p-8">
           <div className="text-center text-red-600">
@@ -115,7 +115,7 @@ const CompanyList = () => {
 
   return (
     <div className="px-16 py-10 w-full min-h-screen">
-      <h1 className="text-3xl font-bold text-black mb-1">Company List</h1>
+      <div className="text-3xl font-bold text-black mb-1">Company List</div>
       <p className="text-base text-gray-500 mb-8">Manage and track all your job posting here</p>
       <div className="bg-white rounded-xl shadow border border-gray-200 overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
