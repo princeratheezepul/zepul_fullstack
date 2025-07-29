@@ -119,7 +119,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
   // Helper to determine match label and color
   const getMatchLabel = (score) => {
     if (score >= 80) return { label: 'Strong Match', color: 'text-green-600', bg: 'bg-green-50' };
-    if (score >= 60) return { label: 'Good Match', color: 'text-orange-500', bg: 'bg-orange-50' };
+    if (score >= 60) return { label: 'Good Match', color: 'text-green-500', bg: 'bg-green-50' };
     return { label: 'Less Match', color: 'text-red-600', bg: 'bg-red-50' };
   };
   const match = getMatchLabel(resumeData.overallScore);
@@ -900,6 +900,12 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  font-weight: 600 !important;
                }
                
+               .text-green-500 {
+                 color: #10b981 !important;
+                 font-size: 14px !important;
+                 font-weight: 600 !important;
+               }
+               
                /* Overall Score title */
                .text-xl.font-bold.text-gray-900 {
                  font-size: 20px !important;
@@ -1074,6 +1080,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                
                /* Match Label Styling */
                .text-orange-500 { color: #f97316 !important; font-weight: 600 !important; }
+               .text-green-500 { color: #10b981 !important; font-weight: 600 !important; }
                .text-green-600 { color: #059669 !important; font-weight: 600 !important; }
                .text-red-600 { color: #dc2626 !important; font-weight: 600 !important; }
                
@@ -1328,34 +1335,48 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                    margin-bottom: 8px !important;
                  }
                  
-                 /* Reduce gap between text and progress bars in AI Scorecard for PDF */
+                 /* Comprehensive AI Scorecard spacing reduction for PDF */
+                 
+                 /* Reduce gap between AI Scorecard heading and first item */
+                 .text-lg.font-bold.text-black.mb-8 {
+                   margin-bottom: 6px !important;
+                 }
+                 
+                 /* Reduce gap between text and progress bars in AI Scorecard */
                  .scorecard-item .flex.justify-between.items-center.mb-3 {
-                   margin-bottom: 4px !important;
+                   margin-bottom: 0px !important;
                  }
                  
-                 .scorecard-item {
-                   padding: 8px 0 !important;
-                   margin-bottom: 8px !important;
-                 }
-                 
-                 /* Reduce spacing between consecutive scorecard items in PDF */
-                 .space-y-6 > .scorecard-item + .scorecard-item {
-                   margin-top: 8px !important;
-                 }
-                 
-                 /* Override space-y-6 class for all scorecard containers in PDF */
-                 .text-lg.font-bold.text-black + .space-y-6 > * + * {
-                   margin-top: 8px !important;
-                 }
-                 
-                 /* More reliable override for any space-y-6 with scorecard items */
+                 /* Reduce gap between consecutive scorecard items */
                  div.space-y-6 > div.scorecard-item {
-                   margin-top: 8px !important;
+                   margin-top: 2px !important;
                  }
                  
                  div.space-y-6 > div.scorecard-item:first-child {
                    margin-top: 0 !important;
                  }
+                 
+                 /* Reduce scorecard item internal padding */
+                 .scorecard-item {
+                   padding: 2px 0 !important;
+                   margin-bottom: 2px !important;
+                 }
+                 
+                 /* Tighten the progress bar container */
+                 .scorecard-item .w-full.bg-gray-300.rounded-full.h-3.overflow-hidden {
+                   margin-top: 0px !important;
+                 }
+                 
+
+                 
+
+                 
+                 /* Override space-y-6 class for all scorecard containers in PDF */
+                 .text-lg.font-bold.text-black + .space-y-6 > * + * {
+                   margin-top: 2px !important;
+                 }
+                 
+
                  
                  /* Hide any action buttons or interactive elements */
                  .flex.justify-end.mb-2,
@@ -2068,7 +2089,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                 <div className="bg-gray-50 rounded-xl shadow-sm border p-4 md:p-6 space-y-6">
                     {/* Overall Score Section - Match Reference Image */}
                     <div className="text-center py-8">
-                        <div className="text-orange-500 text-sm font-semibold mb-3">{match.label}</div>
+                        <div className={`${match.color} text-sm font-semibold mb-3`}>{match.label}</div>
                         <div className="text-xl font-bold text-gray-900 mb-8">Overall Score</div>
                         <div className="flex justify-center mb-8">
                             <CircularProgress percentage={score} size={160} strokeWidth={14} />
