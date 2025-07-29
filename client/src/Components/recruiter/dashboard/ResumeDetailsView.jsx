@@ -184,7 +184,12 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                                 <HelpCircle size={18} className="text-gray-600" />
                             </div>
                             <div>
-                                <div className="font-bold text-gray-900 capitalize text-base mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                                <div className="font-bold text-gray-900 capitalize text-base mb-2">
+                                    {key === 'skillMatch' ? 'Skill Match' : 
+                                     key === 'competitiveFit' ? 'Competitive Fit & Market Prediction' : 
+                                     key === 'consistencyCheck' ? 'Consistency Check' :
+                                     key.replace(/([A-Z])/g, ' $1').trim()}
+                                </div>
                                 <p className="text-gray-700 text-sm leading-relaxed">{value}</p>
                             </div>
                         </div>
@@ -198,7 +203,13 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                     {Object.entries(resumeData.aiScorecard).map(([key, value]) => (
                         <div key={key}>
                             <div className="flex justify-between items-center mb-3">
-                                <div className="text-gray-800 capitalize font-semibold text-base">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                                <div className="text-gray-800 capitalize font-semibold text-base">
+                                    {key === 'technicalSkillMatch' ? 'Technical Skill Match' : 
+                                     key === 'competitiveFit' ? 'Competitive Fit & Market Prediction' : 
+                                     key === 'consistencyCheck' ? 'Consistency Check' :
+                                     key === 'teamLeadership' ? 'Team Leadership' :
+                                     key.replace(/([A-Z])/g, ' $1').trim()}
+                                </div>
                                 <span className="font-bold text-gray-900 text-base">{value}%</span>
                             </div>
                             <div className="w-full bg-gray-300 rounded-full h-3">
