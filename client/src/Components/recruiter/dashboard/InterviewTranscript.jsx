@@ -33,35 +33,35 @@ const InterviewTranscript = ({ interviewEvaluation }) => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80 mb-6 lg:col-span-2">
-      <h2 className="text-xl font-bold text-gray-800 mb-6">Interview Transcript</h2>
+    <div className="bg-gray-50 p-6 rounded-2xl shadow-sm border border-gray-200/80 mb-6 lg:col-span-2">
+      <div className="text-xl font-bold text-gray-800 mb-6">Interview Transcript</div>
       
       <div className="space-y-6">
         {interviewEvaluation.evaluationResults.map((result, index) => (
           <div key={index} className="border border-gray-200 rounded-xl p-6">
             {/* Question */}
             <div className="mb-4">
-              <h3 className="font-light text-gray-900 text-lg">
+              <div className="font-light text-gray-900 text-lg">
                 Q{index + 1}. {result.question}
-              </h3>
+              </div>
             </div>
 
             {/* Evaluation Summary */}
             <div className="mb-6">
               <p className="text-gray-700 leading-relaxed text-sm">
-                {result.reason}
+                {result.summary || result.reason}
               </p>
             </div>
 
             {/* Bottom Row - Confidence and Score */}
             <div className="flex justify-between items-center">
               {/* Confidence Level */}
-              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${getConfidenceColor(result.confidence)}`}>
+              {/* <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${getConfidenceColor(result.confidence)}`}>
                 <Circle size={12} className={getConfidenceIconColor(result.confidence)} fill="currentColor" />
                 <span className="text-sm font-medium">
                   {result.confidence} Confidence
                 </span>
-              </div>
+              </div> */}
 
               {/* Score */}
               <div className="bg-gray-900 text-white px-3 py-1.5 rounded-full">

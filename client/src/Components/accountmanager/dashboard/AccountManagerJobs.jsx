@@ -214,7 +214,7 @@ const AccountManagerJobs = () => {
       {/* Jobs List Header and Filters */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between pb-8 pt-8 border-b border-gray-200 mb-8 gap-4">
         <div className="flex flex-col justify-center">
-          <h1 className="text-3xl font-bold text-black mb-1">All Jobs</h1>
+          <div className="text-3xl font-bold text-black mb-1">All Jobs</div>
           <p className="text-base text-gray-500">View and manage all jobs in the system (Admin, Manager, and Account Manager created)</p>
         </div>
         <div className="flex-1 flex justify-center">

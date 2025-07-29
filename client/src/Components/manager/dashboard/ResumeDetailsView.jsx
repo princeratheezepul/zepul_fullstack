@@ -119,7 +119,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
   // Helper to determine match label and color
   const getMatchLabel = (score) => {
     if (score >= 80) return { label: 'Strong Match', color: 'text-green-600', bg: 'bg-green-50' };
-    if (score >= 60) return { label: 'Good Match', color: 'text-orange-500', bg: 'bg-orange-50' };
+    if (score >= 60) return { label: 'Good Match', color: 'text-green-500', bg: 'bg-green-50' };
     return { label: 'Less Match', color: 'text-red-600', bg: 'bg-red-50' };
   };
   const match = getMatchLabel(resumeData.overallScore);
@@ -282,6 +282,24 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
             <title>${resumeData.name || 'Candidate'} Scorecard</title>
             <meta charset="utf-8">
             <style>
+              /* Zepul Logo - Top Right */
+              .zepul-logo {
+                position: absolute !important;
+                top: 20px !important;
+                right: 20px !important;
+                width: 120px !important;
+                height: auto !important;
+                z-index: 1000 !important;
+                background-color: #ffffff !important;
+                padding: 8px !important;
+                border-radius: 8px !important;
+              }
+              
+              /* Ensure logo only shows on first page */
+              @page {
+                margin-top: 60px !important;
+              }
+              
               * {
                 margin: 0;
                 padding: 0;
@@ -479,8 +497,8 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                }
                
                /* Name and Title Styling */
-               .flex.items-center.gap-4 h1,
-               .flex.items-center.gap-6 h1 {
+               .flex.items-center.gap-4 div,
+               .flex.items-center.gap-6 div {
                  font-size: 24px !important;
                  font-weight: 700 !important;
                  color: #1f2937 !important;
@@ -746,6 +764,17 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  min-height: 120px !important;
                }
                
+               /* Screen view - always show added notes section regardless of content */
+               .added-notes-section.no-content,
+               .added-notes-section.has-content {
+                 display: block !important;
+               }
+               
+               /* Hide PDF-only content on screen */
+               .pdf-only-notes {
+                 display: none !important;
+               }
+               
                /* Add Note button styling */
                .bg-gray-900.text-white {
                  background-color: #111827 !important;
@@ -760,6 +789,50 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                /* Enhanced Application Details Section */
                .application-detail-item {
                  padding-bottom: 8px !important;
+               }
+               
+               /* Width and centering for Application Details and Interview Transcript */
+               .w-\\[80vw\\] {
+                 width: 80vw !important;
+                 max-width: 1200px !important;
+               }
+               
+               .mx-auto {
+                 margin-left: auto !important;
+                 margin-right: auto !important;
+               }
+               
+               /* Responsive adjustments for mobile */
+               @media (max-width: 768px) {
+                 .w-\\[80vw\\] {
+                   width: 95vw !important;
+                 }
+               }
+               
+               /* Enhanced styling for sections outside grid */
+               .bg-gray-50.border.rounded-xl {
+                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+                 border: 1px solid #e5e7eb !important;
+               }
+               
+               /* Ensure sections maintain proper layout inside PDF scope */
+               .w-\\[80vw\\].mx-auto.mt-8 {
+                 margin-top: 2rem !important;
+                 margin-bottom: 1rem !important;
+               }
+               
+               /* Interview Transcript with no top margin for tight spacing */
+               .w-\\[80vw\\].mx-auto:not(.mt-8) {
+                 margin-top: 0 !important;
+                 margin-bottom: 1rem !important;
+                 page-break-before: auto !important;
+                 break-before: auto !important;
+               }
+               
+               /* Force Interview Transcript to stay with Application Details */
+               div[class*="w-[80vw]"]:not([class*="mt-8"]) {
+                 page-break-before: avoid !important;
+                 break-before: avoid !important;
                }
                
                .application-detail-item span {
@@ -811,14 +884,14 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                }
                
                /* Section titles in Application Details */
-               h2.text-xl.font-bold.text-gray-900 {
+               div.text-xl.font-bold.text-gray-900 {
                  color: #111827 !important;
                  font-size: 20px !important;
                  font-weight: 700 !important;
                  margin-bottom: 24px !important;
                }
                
-               h3.text-lg.font-semibold.text-gray-900 {
+               div.text-lg.font-semibold.text-gray-900 {
                  color: #111827 !important;
                  font-size: 18px !important;
                  font-weight: 600 !important;
@@ -845,6 +918,12 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  font-weight: 600 !important;
                }
                
+               .text-green-500 {
+                 color: #10b981 !important;
+                 font-size: 14px !important;
+                 font-weight: 600 !important;
+               }
+               
                /* Overall Score title */
                .text-xl.font-bold.text-gray-900 {
                  font-size: 20px !important;
@@ -863,29 +942,110 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  font-weight: 500 !important;
                }
                
-               /* Hide question mark icons and improve layout */
-               .bg-gray-100.rounded-full.w-6.h-6,
-               .bg-gray-100.rounded-full.w-7.h-7 {
-                 display: none !important;
+               /* Style question mark icons properly for PDF */
+               .bg-gray-200.rounded-full.w-8.h-8 {
+                 display: inline-flex !important;
+                 align-items: center !important;
+                 justify-content: center !important;
+                 width: 20px !important;
+                 height: 20px !important;
+                 background-color: #e5e7eb !important;
+                 border-radius: 50% !important;
+                 margin-right: 8px !important;
+                 flex-shrink: 0 !important;
+                 vertical-align: middle !important;
                }
                
-               /* Improve AI Summary section layout */
-               .flex.gap-3.items-start,
-               .flex.gap-4.items-start {
-                 display: block !important;
+               /* Ensure question mark icon is properly sized */
+               .bg-gray-200.rounded-full.w-8.h-8 svg,
+               .bg-gray-200.rounded-full.w-8.h-8 .lucide {
+                 width: 12px !important;
+                 height: 12px !important;
+                 color: #6b7280 !important;
+               }
+               
+               /* Additional styling for question mark icons in PDF */
+               .bg-gray-200.rounded-full.w-8.h-8 {
+                 position: relative !important;
+                 z-index: 1 !important;
+               }
+               
+               /* Ensure proper spacing between icon and text */
+               .flex.gap-4.items-start > div:first-child {
+                 margin-right: 12px !important;
+                 flex-shrink: 0 !important;
+               }
+               
+               /* Style the text content next to question mark icons - ONLY for AI Summary section */
+               .bg-gray-50 .flex.gap-4.items-start > div:last-child {
+                 flex: 1 !important;
+                 min-width: 0 !important;
+               }
+               
+               /* Style the heading to align with the icon - ONLY for AI Summary section */
+               .bg-gray-50 .flex.gap-4.items-start > div:last-child > div:first-child {
+                 display: inline-block !important;
+                 font-weight: 600 !important;
+                 color: #111827 !important;
+                 font-size: 14px !important;
+                 margin-bottom: 8px !important;
+                 line-height: 20px !important;
+                 vertical-align: top !important;
+               }
+               
+               /* Reposition question mark icon to be inline with the heading - ONLY for AI Summary section */
+               .bg-gray-50 .flex.gap-4.items-start {
+                 position: relative !important;
+               }
+               
+               .bg-gray-50 .flex.gap-4.items-start > div:first-child {
+                 position: absolute !important;
+                 left: 0 !important;
+                 top: 0 !important;
+                 display: inline-flex !important;
+                 align-items: center !important;
+                 justify-content: center !important;
+                 width: 20px !important;
+                 height: 20px !important;
+                 background-color: #e5e7eb !important;
+                 border-radius: 50% !important;
+                 margin-right: 8px !important;
+                 flex-shrink: 0 !important;
+                 z-index: 2 !important;
+               }
+               
+               /* Adjust the text container to make space for the icon - ONLY for AI Summary section */
+               .bg-gray-50 .flex.gap-4.items-start > div:last-child {
+                 padding-left: 32px !important;
+                 position: relative !important;
+               }
+               
+               .bg-gray-50 .flex.gap-4.items-start > div:last-child > p {
+                 color: #6b7280 !important;
+                 font-size: 13px !important;
+                 line-height: 1.5 !important;
+                 margin: 0 !important;
+               }
+               
+               /* Improve AI Summary section layout - ONLY for AI Summary section */
+               .bg-gray-50 .flex.gap-3.items-start,
+               .bg-gray-50 .flex.gap-4.items-start {
+                 display: flex !important;
+                 align-items: flex-start !important;
+                 gap: 12px !important;
                  margin-bottom: 20px !important;
                }
                
                /* Section Headers */
-               h1, h2, h3 {
+               div, div, div {
                  font-weight: 700 !important;
                  color: #0f172a !important;
                  margin-bottom: 16px !important;
                }
                
-               h1 { font-size: 28px !important; }
-               h2 { font-size: 20px !important; }
-               h3 { font-size: 16px !important; }
+               div { font-size: 28px !important; }
+               div { font-size: 20px !important; }
+               div { font-size: 16px !important; }
                
                /* Progress Bar Container Styling */
                .w-full.bg-gray-200.rounded-full.h-1\\.5 {
@@ -938,6 +1098,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                
                /* Match Label Styling */
                .text-orange-500 { color: #f97316 !important; font-weight: 600 !important; }
+               .text-green-500 { color: #10b981 !important; font-weight: 600 !important; }
                .text-green-600 { color: #059669 !important; font-weight: 600 !important; }
                .text-red-600 { color: #dc2626 !important; font-weight: 600 !important; }
                
@@ -1003,8 +1164,9 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  }
                  
                  .added-notes-section {
-                   page-break-before: always !important;
-                   break-before: page !important;
+                   /* Removed page break to eliminate gap between potential concern and added notes */
+                   page-break-inside: avoid !important;
+                   break-inside: avoid !important;
                  }
                  
                  /* Keep AI Scorecard content together */
@@ -1014,13 +1176,13 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  }
                  
                  /* Ensure AI Resume Summary stays together on first page */
-                 h2:contains("AI Resume Summary") {
+                 div:contains("AI Resume Summary") {
                    page-break-before: avoid !important;
                    break-before: avoid !important;
                  }
                  
                  /* Prevent unwanted breaks in AI Resume Summary */
-                 h2:contains("AI Resume Summary") + div {
+                 div:contains("AI Resume Summary") + div {
                    page-break-before: avoid !important;
                    break-before: avoid !important;
                  }
@@ -1072,18 +1234,167 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  
                  /* Hide buttons and action elements in print */
                  .no-print,
-                 button,
-                 .bg-blue-600,
+                 button:not(.scorecard-item *),
                  .bg-green-600,
                  .bg-gray-600,
-                 .bg-gray-900.text-white,
-                 [class*="bg-blue-"][class*="button"],
+                 .bg-gray-900.text-white:not(.scorecard-item *),
+                 [class*="bg-blue-"][class*="button"]:not(.scorecard-item *),
                  [class*="bg-green-"][class*="button"],
                  [class*="bg-gray-"][class*="button"],
                  input[type="button"],
                  [role="button"] {
                    display: none !important;
                  }
+                 
+                 /* Ensure blue progress bars are visible in print */
+                 .scorecard-item .bg-blue-600 {
+                   display: block !important;
+                   background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%) !important;
+                   height: 8px !important;
+                   border-radius: 8px !important;
+                 }
+                 
+                 /* Added Notes conditional display for PDF */
+                 .added-notes-section > .text-lg.font-bold.text-gray-900:first-child,
+                 .added-notes-section > .mb-6,
+                 .added-notes-section textarea {
+                   display: none !important;
+                 }
+                 
+                 .pdf-only-notes {
+                   display: block !important;
+                 }
+                 
+                 /* Hide button and interactive elements in added notes section */
+                 .added-notes-section button {
+                   display: none !important;
+                 }
+                 
+                 /* Hide entire added notes section in PDF if no content */
+                 .added-notes-section.no-content {
+                   display: none !important;
+                 }
+                 
+                 /* Show added notes section in PDF only if it has content */
+                 .added-notes-section.has-content {
+                   display: block !important;
+                 }
+                 
+                 /* Capitalize first letter of AI Resume Summary headings in PDF */
+                 .font-bold.text-gray-900.capitalize.text-base.mb-2 {
+                   text-transform: capitalize !important;
+                 }
+                 
+                 /* More specific targeting for AI Resume Summary headings */
+                 div:contains("AI Resume Summary") + div .font-bold.text-gray-900.capitalize {
+                   text-transform: capitalize !important;
+                 }
+                 
+                 /* Make font weight lighter for Key Strength and Potential Concern points in PDF */
+                 .bg-green-50 li span:not(.text-green-600),
+                 .bg-red-50 li span:not(.text-red-600) {
+                   font-weight: 300 !important;
+                 }
+                 
+                 /* Remove red dots from Potential Concern section in PDF */
+                 .bg-red-50 li .text-red-600 {
+                   display: none !important;
+                 }
+                 
+                 /* Adjust gap for potential concern items without dots */
+                 .bg-red-50 li.flex.items-start.gap-2 {
+                   gap: 0 !important;
+                 }
+                 
+                 /* Make font weight lighter for added notes content in PDF */
+                 .pdf-only-notes .text-gray-700.text-sm.leading-relaxed {
+                   font-weight: 300 !important;
+                 }
+                 
+                 /* Reduce vertical gaps in header section for PDF */
+                 /* Top row - reduce gap between avatar, name and title */
+                 .flex.flex-col.items-center.text-center.gap-1.mb-0 {
+                   gap: 2px !important;
+                   margin-bottom: 8px !important;
+                 }
+                 
+                 /* Reduce gap between name and title */
+                 .text-2xl.font-bold.text-gray-900 + p {
+                   margin-top: -2px !important;
+                 }
+                 
+                 /* Bottom row - reduce gap between skills and contact */
+                 .flex.flex-col.lg\\:flex-row.items-start.lg\\:items-center.justify-between.gap-4 {
+                   gap: 8px !important;
+                   margin-top: -4px !important;
+                 }
+                 
+                 /* Further reduce gap between tagline and skills section */
+                 .text-gray-600.text-base {
+                   margin-bottom: 0px !important;
+                 }
+                 
+                 /* Reduce gap within skills section */
+                 .flex.flex-wrap.items-center.gap-2 {
+                   gap: 4px !important;
+                   margin-bottom: 4px !important;
+                 }
+                 
+                 /* Reduce gap within contact section and between contact info and horizontal line */
+                 .flex.flex-wrap.items-center.gap-4.text-sm.text-gray-600 {
+                   gap: 8px !important;
+                   margin-bottom: 0px !important;
+                 }
+                 
+                 /* Reduce overall header container padding */
+                 .border-b.border-gray-200.py-1.mb-2 {
+                   padding-top: 4px !important;
+                   padding-bottom: 2px !important;
+                   margin-bottom: 8px !important;
+                 }
+                 
+                 /* Comprehensive AI Scorecard spacing reduction for PDF */
+                 
+                 /* Reduce gap between AI Scorecard heading and first item */
+                 .text-lg.font-bold.text-black.mb-8 {
+                   margin-bottom: 6px !important;
+                 }
+                 
+                 /* Reduce gap between text and progress bars in AI Scorecard */
+                 .scorecard-item .flex.justify-between.items-center.mb-3 {
+                   margin-bottom: 0px !important;
+                 }
+                 
+                 /* Reduce gap between consecutive scorecard items */
+                 div.space-y-6 > div.scorecard-item {
+                   margin-top: 2px !important;
+                 }
+                 
+                 div.space-y-6 > div.scorecard-item:first-child {
+                   margin-top: 0 !important;
+                 }
+                 
+                 /* Reduce scorecard item internal padding */
+                 .scorecard-item {
+                   padding: 2px 0 !important;
+                   margin-bottom: 2px !important;
+                 }
+                 
+                 /* Tighten the progress bar container */
+                 .scorecard-item .w-full.bg-gray-300.rounded-full.h-3.overflow-hidden {
+                   margin-top: 0px !important;
+                 }
+                 
+
+                 
+
+                 
+                 /* Override space-y-6 class for all scorecard containers in PDF */
+                 .text-lg.font-bold.text-black + .space-y-6 > * + * {
+                   margin-top: 2px !important;
+                 }
+                 
+
                  
                  /* Hide any action buttons or interactive elements */
                  .flex.justify-end.mb-2,
@@ -1194,8 +1505,8 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  }
                  
                  /* Name and title for print */
-                 .flex.items-center.gap-4 h1,
-                 .flex.items-center.gap-6 h1 {
+                 .flex.items-center.gap-4 div,
+                 .flex.items-center.gap-6 div {
                    font-size: 20px !important;
                    font-weight: 700 !important;
                    color: #1f2937 !important;
@@ -1347,244 +1658,58 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                    margin-bottom: 4px !important;
                  }
                  
-                 /* Reduce grid gap for Application Details in print */
-                 .grid.grid-cols-1.sm\\:grid-cols-2.gap-x-8.gap-y-5 {
-                   gap: 8px 32px !important; /* Much smaller vertical gap */
-                 }
-                 
-                 /* Override Tailwind's block class spacing */
-                 .block.text-sm.font-semibold.text-gray-700 {
-                   display: block !important;
-                   margin-bottom: 0 !important;
-                   padding-bottom: 0 !important;
-                 }
-                 
-                 .application-detail-item span {
-                   color: #374151 !important;
-                   font-size: 12px !important;
-                   font-weight: 600 !important;
-                   margin-bottom: 0px !important;
-                   line-height: 1.2 !important;
-                 }
-                 
-                 .application-detail-item p {
-                   color: #111827 !important;
-                   font-size: 14px !important;
-                   font-weight: 500 !important;
-                   margin: 0 !important;
-                   margin-top: -2px !important;
-                   line-height: 1.3 !important;
-                   padding: 0 !important;
-                 }
-                 
-                 /* Remove any default spacing from block elements in application details */
-                 .application-detail-item * {
-                   padding-top: 0 !important;
-                   padding-bottom: 0 !important;
-                 }
-                 
-                 /* Refined skill tags for print */
-                 .skill-tag-refined {
-                   background-color: #f9fafb !important;
-                   color: #374151 !important;
-                   padding: 6px 10px !important;
-                   border-radius: 4px !important;
-                   font-size: 12px !important;
-                   font-weight: 500 !important;
+                /* Ensure proper width and centering in print mode */
+                .w-\\[80vw\\] {
+                  width: 80vw !important;
+                  max-width: 1200px !important;
+                }
+                
+                .mx-auto {
+                  margin-left: auto !important;
+                  margin-right: auto !important;
+                }
+                
+                /* Application Details and Interview Transcript in print */
+                .w-\\[80vw\\].mx-auto.mt-8 {
+                  width: 100% !important;
+                  margin-top: 1.5rem !important;
+                  margin-bottom: 1rem !important;
+                  page-break-inside: avoid !important;
+                }
+                
+                /* Interview Transcript with no top margin in print for tight spacing */
+                .w-\\[80vw\\].mx-auto:not(.mt-8) {
+                  width: 100% !important;
+                  margin-top: 0 !important;
+                  margin-bottom: 1rem !important;
+                  page-break-before: auto !important;
+                  page-break-inside: auto !important;
+                  break-before: auto !important;
+                  break-inside: auto !important;
+                }
+                
+                /* Force Interview Transcript to stay with Application Details in print */
+                div[class*="w-[80vw]"]:not([class*="mt-8"]) {
+                  page-break-before: avoid !important;
+                  break-before: avoid !important;
+                }
+                
+                /* Responsive adjustments for mobile */
+                @media (max-width: 768px) {
+                  .w-\\[80vw\\] {
+                    width: 95vw !important;
+                  }
+                }
+                
+                /* Enhanced styling for sections outside grid */
+                .bg-gray-50.border.rounded-xl {
+                  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
                    border: 1px solid #e5e7eb !important;
-                   margin: 1px !important;
-                   display: inline-block !important;
-                   line-height: 1.2 !important;
-                 }
-                 
-                 /* Legacy skill tags for print */
-                 .skill-tag {
-                   background-color: #f3f4f6 !important;
-                   color: #374151 !important;
-                   padding: 6px 12px !important;
-                   border-radius: 6px !important;
-                   font-size: 12px !important;
-                   font-weight: 500 !important;
-                   border: 1px solid #e5e7eb !important;
-                   margin: 2px !important;
-                   display: inline-block !important;
-                 }
-                 
-                 /* Application Details grid for print */
-                 .grid.grid-cols-1.sm\\:grid-cols-2 {
-                   gap: 16px 24px !important;
-                 }
-                 
-                 /* Section titles for print */
-                 h2.text-xl.font-bold.text-gray-900 {
-                   color: #111827 !important;
-                   font-size: 18px !important;
-                   font-weight: 700 !important;
-                   margin-bottom: 20px !important;
-                 }
-                 
-                 h3.text-lg.font-semibold.text-gray-900 {
-                   color: #111827 !important;
-                   font-size: 16px !important;
-                   font-weight: 600 !important;
-                   margin-bottom: 10px !important;
-                 }
-                 
-                 /* About text for print */
-                 .text-base.text-gray-700.leading-relaxed {
-                   color: #374151 !important;
-                   font-size: 14px !important;
-                   line-height: 1.5 !important;
-                 }
-                 
-                 /* Key Skills container for print */
-                 .flex.flex-wrap.gap-2 {
-                   gap: 6px !important;
-                   line-height: 1.3 !important;
-                 }
-                 
-                 /* Match label for print */
-                 .text-orange-500 {
-                   color: #f97316 !important;
-                   font-size: 11px !important;
-                   font-weight: 600 !important;
-                 }
-                 
-                 /* Overall Score title for print */
-                 .text-xl.font-bold.text-gray-900 {
-                   font-size: 16px !important;
-                   font-weight: 700 !important;
-                   color: #1f2937 !important;
-                   margin-bottom: 16px !important;
-                 }
-                 
-                 /* Consider button for print */
-                 .bg-blue-100.text-gray-700 {
-                   background-color: #dbeafe !important;
-                   color: #374151 !important;
-                   border: 1px solid #93c5fd !important;
-                   border-radius: 6px !important;
-                   padding: 8px 16px !important;
-                   font-size: 12px !important;
-                   font-weight: 500 !important;
-                 }
-                 
-                 /* Enhanced Progress bars for print - AI Scorecard */
-                 .scorecard-item .bg-gray-200 {
-                   background-color: #e5e7eb !important;
-                   height: 6px !important;
-                   border-radius: 6px !important;
-                   overflow: hidden !important;
-                 }
-                 
-                 .scorecard-item .bg-blue-600 {
-                   background: #3b82f6 !important;
-                   height: 6px !important;
-                   border-radius: 6px !important;
-                   box-shadow: none !important;
-                 }
-                 
-                 /* Scorecard items for print */
-                 .scorecard-item {
-                   padding: 8px 0 !important;
-                   border-bottom: 1px solid #f3f4f6 !important;
-                   margin-bottom: 8px !important;
-                 }
-                 
-                 .scorecard-item:last-child {
-                   border-bottom: none !important;
-                   margin-bottom: 0 !important;
-                 }
-                 
-                 /* Legacy support for other progress bars */
-                 .w-full.bg-gray-200.rounded-full.h-1\\.5 {
-                   background: #e5e7eb !important;
-                   height: 6px !important;
-                   border-radius: 6px !important;
-                 }
-                 
-                 .bg-blue-600.h-1\\.5.rounded-full {
-                   background: #3b82f6 !important;
-                   height: 6px !important;
-                   border-radius: 6px !important;
-                 }
-                 
-                 /* Typography Scale for Print */
-                 .text-5xl { font-size: 28px !important; font-weight: 800 !important; }
-                 .text-2xl { font-size: 18px !important; font-weight: 700 !important; }
-                 .text-xl { font-size: 16px !important; font-weight: 600 !important; }
-                 .text-lg { font-size: 15px !important; font-weight: 600 !important; }
-                 .text-base { font-size: 14px !important; font-weight: 500 !important; }
-                 .text-sm { font-size: 13px !important; font-weight: 500 !important; }
-                 
-                 /* Improve spacing for print */
-                 .space-y-4 > * + * { margin-top: 12px !important; }
-                 .space-y-5 > * + * { margin-top: 14px !important; }
-                 .space-y-6 > * + * { margin-top: 16px !important; }
-                 .mb-4 { margin-bottom: 12px !important; }
-                 .mb-6 { margin-bottom: 16px !important; }
-                 .mt-4 { margin-top: 12px !important; }
-                 .mt-6 { margin-top: 16px !important; }
-                 
-                 /* Better AI Scorecard section */
-                 .flex.justify-between.items-center.mb-2 h3 {
-                   font-size: 14px !important;
-                   font-weight: 600 !important;
-                   color: #374151 !important;
-                 }
-                 
-                 .flex.justify-between.items-center.mb-2 span {
-                   font-size: 14px !important;
-                   font-weight: 700 !important;
-                   color: #1f2937 !important;
-                 }
-                 
-                 /* Key Strength and Concern Cards */
-                 .bg-green-50 { 
-                   background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%) !important; 
-                   border: 2px solid #10b981 !important;
-                   border-radius: 12px !important;
-                   padding: 16px !important;
-                 }
-                 .bg-red-50 { 
-                   background: linear-gradient(135deg, #fef2f2 0%, #fef1f1 100%) !important; 
-                   border: 2px solid #ef4444 !important;
-                   border-radius: 12px !important;
-                   padding: 16px !important;
-                 }
-                 
-                 /* Skill Tags for Print */
-                 .bg-gray-100.text-gray-800 {
-                   background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important;
-                   color: #1e293b !important;
-                   padding: 6px 12px !important;
-                   border-radius: 16px !important;
-                   font-size: 12px !important;
-                   font-weight: 600 !important;
-                   border: 1px solid #cbd5e1 !important;
-                   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-                 }
-                 
-                 /* Avatar styling for print */
-                 img[src*="dicebear"] {
-                   width: 65px !important;
-                   height: 65px !important;
-                   border: 3px solid rgba(255, 255, 255, 0.5) !important;
-                   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2) !important;
-                 }
-                 
-
-                 
-                 /* Progress bars enhancement - ensure proper rendering */
-                 .bg-blue-600 { 
-                   background: #3b82f6 !important; 
-                   border-radius: 4px !important;
-                 }
-                 
-                 /* AI Scorecard progress bars for print */
-                 .scorecard-item .bg-blue-600 {
-                   background: #3b82f6 !important;
-                   display: block !important;
+                }
+                
+                /* Reduce grid gap for Application Details in print */
+                .grid.grid-cols-1.sm\\:grid-cols-2.gap-x-8.gap-y-5 {
+                  gap: 8px 32px !important; /* Much smaller vertical gap */
                  }
                }
                
@@ -1653,6 +1778,23 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  overflow: hidden !important;
                }
                
+               /* Remove top border and minimize vertical header spacing for PDF */
+               .border-b.border-gray-200 {
+                 border-top: none !important;
+                 border-left: none !important;
+                 border-right: none !important;
+                 border-bottom: 1px solid #e5e7eb !important;
+                 padding-top: 4px !important;
+                 padding-bottom: 4px !important;
+                 margin-bottom: 8px !important;
+               }
+               
+               /* Minimize vertical gaps in header section for PDF */
+               .flex.flex-col.items-center.text-center.gap-1.mb-0 {
+                 margin-bottom: 0 !important;
+                 gap: 2px !important;
+               }
+               
                /* Clean layout styling */
                .header-layout {
                  display: flex !important;
@@ -1684,6 +1826,8 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  </defs>
                </svg>
                <div class="scorecard-wrapper">
+                 <!-- Zepul Logo - Top Right -->
+                 <img src="/zepul_trademark.jpg" alt="Zepul Logo" class="zepul-logo" />
                  ${printContent}
                </div>
             <script>
@@ -1805,12 +1949,12 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
         {/* PDF EXPORT ROOT: Add inline style to force supported background color */}
         <div className="mt-1" ref={resumeContentRef} style={{ background: '#f9fafb' }}>
           {/* Header with Name, Title, Skills & Contact */}
-          <div className="border-y border-gray-200 py-3 mb-2">
+          <div className="border-b border-gray-200 py-1 mb-2">
             {/* Top Row: Avatar, Name & Title - Centered */}
-            <div className="flex flex-col items-center text-center gap-2 mb-3">
+            <div className="flex flex-col items-center text-center gap-1 mb-0">
               <img src={`https://api.dicebear.com/8.x/initials/svg?seed=${resumeData.name}`} alt={resumeData.name} className="w-20 h-20 rounded-full border-2 border-gray-200 bg-green-600" />
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{resumeData.name || 'Prince Rathi'}</h1>
+                <div className="text-2xl font-bold text-gray-900">{resumeData.name || 'Prince Rathi'}</div>
                 <p className="text-gray-600 text-base">{resumeData.title || 'FullStack Developer'}</p>
               </div>
             </div>
@@ -1868,17 +2012,17 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
             {/* Left & Middle Column */}
             <div className="xl:col-span-2 space-y-4 lg:space-y-6">
                 {/* AI Resume Summary */}
-                <div className="p-4 md:p-6 border rounded-xl bg-white">
-                    <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">AI Resume Summary</h2>
-                    <div className="space-y-4 md:space-y-6">
+                <div className="p-6 border rounded-xl bg-gray-50">
+                    <div className="text-sm font-semibold text-black mb-4">AI Resume Summary</div>
+                    <div className="space-y-8">
                         {resumeData.aiSummary && Object.entries(resumeData.aiSummary).map(([key, value]) => (
-                            <div key={key} className="flex gap-3 md:gap-4 items-start">
-                                <div className="bg-gray-100 rounded-full w-6 h-6 md:w-7 md:h-7 flex-shrink-0 flex items-center justify-center mt-1">
-                                    <HelpCircle size={14} className="text-gray-500" />
+                            <div key={key} className="flex gap-4 items-start">
+                                <div className="bg-gray-200 rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center mt-1">
+                                    <HelpCircle size={18} className="text-gray-600" />
                                 </div>
                                 <div>
-                                    <h3 className="font-semibold text-gray-900 capitalize text-sm md:text-base">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
-                                    <p className="text-gray-600 text-sm md:text-base">{value}</p>
+                                    <div className="font-bold text-gray-900 capitalize text-base mb-2">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                                    <p className="text-gray-700 text-sm leading-relaxed">{value}</p>
                                 </div>
                             </div>
                         ))}
@@ -1886,9 +2030,9 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                 </div>
 
                 {/* AI Scorecard - Separate Container */}
-                <div className="ai-scorecard-section p-4 md:p-6 border rounded-xl bg-white">
-                    <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">AI Scorecard</h2>
-                    <div className="space-y-4 md:space-y-5">
+                <div className=" p-6 border rounded-xl bg-gray-50">
+                    <div className="text-lg font-bold text-black mb-8">AI Scorecard</div>
+                    <div className="space-y-6">
                         {resumeData.aiScorecard && Object.keys(resumeData.aiScorecard).length > 0 ? 
                             Object.entries(resumeData.aiScorecard).map(([key, value]) => {
                                 const numericValue = parseInt(value) || 0;
@@ -1899,17 +2043,15 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                                 
                                 return (
                                     <div key={key} className="scorecard-item">
-                                        <div className="flex justify-between items-center mb-2">
-                                            <h3 className="text-gray-700 font-medium text-sm md:text-base">{displayName}</h3>
-                                            <span className="font-semibold text-gray-800 text-sm md:text-base">{numericValue}%</span>
+                                        <div className="flex justify-between items-center mb-3">
+                                            <div className="text-gray-800 font-semibold text-base">{displayName}</div>
+                                            <span className="font-bold text-gray-900 text-base">{numericValue}%</span>
                                         </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                        <div className="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
                                             <div 
-                                                className="bg-blue-600 h-2 rounded-full" 
+                                                className="bg-blue-600 h-3 rounded-full transition-all duration-500" 
                                                 style={{ 
-                                                    width: `${Math.min(Math.max(numericValue, 0), 100)}%`,
-                                                    backgroundColor: '#3b82f6',
-                                                    transition: 'width 0.8s ease-out'
+                                                    width: `${Math.min(Math.max(numericValue, 0), 100)}%`
                                                 }}
                                             ></div>
                                         </div>
@@ -1917,41 +2059,41 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                                 );
                             }) : (
                             // Fallback with sample data if no aiScorecard
-                            <div className="space-y-4">
+                            <div className="space-y-6">
                                 <div className="scorecard-item">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h3 className="text-gray-700 font-medium text-sm md:text-base">Technical Skill Match</h3>
-                                        <span className="font-semibold text-gray-800 text-sm md:text-base">85%</span>
+                                    <div className="flex justify-between items-center mb-3">
+                                        <div className="text-gray-800 font-semibold text-base">Technical Skill Match</div>
+                                        <span className="font-bold text-gray-900 text-base">85%</span>
                                     </div>
-                                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '85%', backgroundColor: '#3b82f6', transition: 'width 0.8s ease-out' }}></div>
+                                    <div className="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
+                                        <div className="bg-blue-600 h-3 rounded-full transition-all duration-500" style={{ width: '85%' }}></div>
                                     </div>
                                 </div>
                                 <div className="scorecard-item">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h3 className="text-gray-700 font-medium text-sm md:text-base">Communication</h3>
-                                        <span className="font-semibold text-gray-800 text-sm md:text-base">78%</span>
+                                    <div className="flex justify-between items-center mb-3">
+                                        <div className="text-gray-800 font-semibold text-base">Communication</div>
+                                        <span className="font-bold text-gray-900 text-base">78%</span>
                                     </div>
-                                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '78%', backgroundColor: '#3b82f6', transition: 'width 0.8s ease-out' }}></div>
-                                    </div>
-                                </div>
-                                <div className="scorecard-item">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h3 className="text-gray-700 font-medium text-sm md:text-base">Culture Fit</h3>
-                                        <span className="font-semibold text-gray-800 text-sm md:text-base">72%</span>
-                                    </div>
-                                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '72%', backgroundColor: '#3b82f6', transition: 'width 0.8s ease-out' }}></div>
+                                    <div className="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
+                                        <div className="bg-blue-600 h-3 rounded-full transition-all duration-500" style={{ width: '78%' }}></div>
                                     </div>
                                 </div>
                                 <div className="scorecard-item">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h3 className="text-gray-700 font-medium text-sm md:text-base">Team Leadership</h3>
-                                        <span className="font-semibold text-gray-800 text-sm md:text-base">65%</span>
+                                    <div className="flex justify-between items-center mb-3">
+                                        <div className="text-gray-800 font-semibold text-base">Culture Fit</div>
+                                        <span className="font-bold text-gray-900 text-base">72%</span>
                                     </div>
-                                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '65%', backgroundColor: '#3b82f6', transition: 'width 0.8s ease-out' }}></div>
+                                    <div className="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
+                                        <div className="bg-blue-600 h-3 rounded-full transition-all duration-500" style={{ width: '72%' }}></div>
+                                    </div>
+                                </div>
+                                <div className="scorecard-item">
+                                    <div className="flex justify-between items-center mb-3">
+                                        <div className="text-gray-800 font-semibold text-base">Team Leadership</div>
+                                        <span className="font-bold text-gray-900 text-base">65%</span>
+                                    </div>
+                                    <div className="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
+                                        <div className="bg-blue-600 h-3 rounded-full transition-all duration-500" style={{ width: '65%' }}></div>
                                     </div>
                                 </div>
                             </div>
@@ -1959,111 +2101,15 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                     </div>
                 </div>
 
-                {/* Application Details - Enhanced Design */}
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Application Details</h2>
-                    
-                    {/* Application Info Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 mb-8">
-                        <div className="application-detail-item">
-                            <span className="block text-sm font-semibold text-gray-700">Position Applied</span>
-                            <p className="text-base text-gray-900 font-medium">{resumeData.applicationDetails?.position || 'Test Job'}</p>
-                        </div>
-                        <div className="application-detail-item">
-                            <span className="block text-sm font-semibold text-gray-700">Application Date</span>
-                            <p className="text-base text-gray-900 font-medium">{resumeData.applicationDetails?.date || '7/21/2025'}</p>
-                        </div>
-                        <div className="application-detail-item">
-                            <span className="block text-sm font-semibold text-gray-700">Notice Period</span>
-                            <p className="text-base text-gray-900 font-medium">{resumeData.applicationDetails?.noticePeriod || 'N/A'}</p>
-                        </div>
-                        <div className="application-detail-item">
-                            <span className="block text-sm font-semibold text-gray-700">Application Source</span>
-                            <p className="text-base text-gray-900 font-medium">{resumeData.applicationDetails?.source || 'Website'}</p>
-                        </div>
-                    </div>
 
-                    {/* About Section */}
-                    <div className="mb-8">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-3">About</h3>
-                        <p className="text-base text-gray-700 leading-relaxed">
-                            {resumeData.about || 'Prince Rathi is a FullStack + Devops Developer with experience in building and deploying various projects. He has won several hackathons and showcases skills in various programming languages and frameworks.'}
-                        </p>
-                    </div>
-
-                    {/* Key Skills Section */}
-                    <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-4">Key Skills</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {resumeData.skills && resumeData.skills.length > 0 ? 
-                                resumeData.skills.map(skill => (
-                                    <span key={skill} className="skill-tag-refined bg-gray-50 text-gray-700 px-3 py-2 rounded-md text-sm font-medium border border-gray-200 hover:bg-gray-100 transition-colors">
-                                        {skill}
-                                    </span>
-                                )) : (
-                                // Fallback skills if none provided - matching reference order
-                                ['JavaScript', 'TypeScript', 'React.js', 'Node.js', 'MongoDB', 'Solidity', 'Express.js', 'Redux', 'Git', 'Hardhat'].map(skill => (
-                                    <span key={skill} className="skill-tag-refined bg-gray-50 text-gray-700 px-3 py-2 rounded-md text-sm font-medium border border-gray-200 hover:bg-gray-100 transition-colors">
-                                        {skill}
-                                    </span>
-                                ))
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Interview Transcript Section - Only show if transcript data exists */}
-                {resumeData.interviewEvaluation && resumeData.interviewEvaluation.evaluationResults && resumeData.interviewEvaluation.evaluationResults.length > 0 && (
-                    <div className="p-4 md:p-6 border rounded-xl bg-white">
-                        <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">Interview Transcript</h2>
-                        
-                        <div className="space-y-4 md:space-y-6">
-                            {resumeData.interviewEvaluation.evaluationResults.map((result, index) => (
-                                <div key={index} className="border border-gray-200 rounded-xl p-4 md:p-6">
-                                    {/* Question */}
-                                    <div className="mb-3 md:mb-4">
-                                        <h3 className="font-light text-gray-900 text-base md:text-lg">
-                                            Q{index + 1}. {result.question}
-                                        </h3>
-                                    </div>
-
-                                    {/* Evaluation Summary */}
-                                    <div className="mb-4 md:mb-6">
-                                        <p className="text-gray-700 leading-relaxed text-sm md:text-base">
-                                            {result.reason}
-                                        </p>
-                                    </div>
-
-                                    {/* Bottom Row - Confidence and Score */}
-                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                                        {/* Confidence Level */}
-                                        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${getConfidenceColor(result.confidence)}`}>
-                                            <Circle size={12} className={getConfidenceIconColor(result.confidence)} fill="currentColor" />
-                                            <span className="text-sm font-medium">
-                                                {result.confidence} Confidence
-                                            </span>
-                                        </div>
-
-                                        {/* Score */}
-                                        <div className="bg-gray-900 text-white px-3 py-1.5 rounded-full">
-                                            <span className="text-sm font-medium">
-                                                Score: {result.score}/10
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
             </div>
 
             {/* Right Column - Redesigned to match image */}
             <div className="xl:col-span-1">
-                <div className="bg-white rounded-xl shadow-sm border p-4 md:p-6 space-y-6">
+                <div className="bg-gray-50 rounded-xl shadow-sm border p-4 md:p-6 space-y-6">
                     {/* Overall Score Section - Match Reference Image */}
                     <div className="text-center py-8">
-                        <div className="text-orange-500 text-sm font-semibold mb-3">{match.label}</div>
+                        <div className={`${match.color} text-sm font-semibold mb-3`}>{match.label}</div>
                         <div className="text-xl font-bold text-gray-900 mb-8">Overall Score</div>
                         <div className="flex justify-center mb-8">
                             <CircularProgress percentage={score} size={160} strokeWidth={14} />
@@ -2075,7 +2121,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
                     {/* Key Strength Section */}
                     <div className="bg-green-50 rounded-lg p-4">
-                        <h3 className="font-bold text-gray-900 mb-3">Key Strength</h3>
+                        <div className="font-bold text-gray-900 mb-3">Key Strength</div>
                         <ul className="space-y-2">
                             {resumeData.keyStrength && resumeData.keyStrength.length > 0 ? (
                                 resumeData.keyStrength.map((strength, index) => (
@@ -2105,7 +2151,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
                     {/* Potential Concern Section */}
                     <div className="bg-red-50 rounded-lg p-4">
-                        <h3 className="font-bold text-gray-900 mb-3">Potential Concern</h3>
+                        <div className="font-bold text-gray-900 mb-3">Potential Concern</div>
                         <ul className="space-y-2">
                             {resumeData.potentialConcern && resumeData.potentialConcern.length > 0 ? (
                                 resumeData.potentialConcern.map((concern, index) => (
@@ -2132,10 +2178,9 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                             )}
                         </ul>
                     </div>
-
-                    {/* Added Notes Section - Enhanced Design */}
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 added-notes-section">
-                        <h3 className="text-lg font-bold text-gray-900 mb-4">Added Notes</h3>
+                    {/* Added Notes Section - Enhanced Design - Show always on screen, conditionally in PDF */}
+                    <div className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 added-notes-section ${note && note.trim() ? 'has-content' : 'no-content'}`}>
+                        <div className="text-lg font-bold text-gray-900 mb-4">Added Notes</div>
                         <div className="mb-6">
                             <textarea
                                 className="w-full border-0 bg-transparent text-gray-700 text-sm leading-relaxed min-h-[120px] resize-none focus:outline-none placeholder-gray-400"
@@ -2149,6 +2194,15 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                                 }}
                             ></textarea>
                         </div>
+                        {/* Hidden content for PDF - only shows if note has actual content */}
+                        {note && note.trim() && (
+                            <div className="pdf-only-notes" style={{ display: 'none' }}>
+                                <div className="text-lg font-bold text-gray-900 mb-4">Added Notes</div>
+                                <div className="text-gray-700 text-sm leading-relaxed">
+                                    {note}
+                                </div>
+                            </div>
+                        )}
                         <button
                             className={`bg-gray-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-black transition-colors flex items-center justify-center cursor-pointer text-sm no-print ${saving ? 'opacity-70 cursor-not-allowed' : ''}`}
                             onClick={handleSaveNote}
@@ -2172,6 +2226,104 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                 </div>
             </div>
           </div>
+
+          {/* Application Details - Enhanced Design - Outside Grid but Inside PDF Scope */}
+      <div className="w-[80vw] mx-auto mt-8 p-4 md:p-6 border rounded-xl bg-gray-50">
+        <div className="text-xl font-bold text-gray-900 mb-6">Application Details</div>
+        
+        {/* Application Info Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 mb-8">
+          <div className="application-detail-item">
+            <span className="block text-sm font-semibold text-gray-700">Position Applied</span>
+            <p className="text-base text-gray-900 font-medium">{resumeData.applicationDetails?.position || 'Test Job'}</p>
+        </div>
+          <div className="application-detail-item">
+            <span className="block text-sm font-semibold text-gray-700">Application Date</span>
+            <p className="text-base text-gray-900 font-medium">{resumeData.applicationDetails?.date || '7/21/2025'}</p>
+          </div>
+          <div className="application-detail-item">
+            <span className="block text-sm font-semibold text-gray-700">Notice Period</span>
+            <p className="text-base text-gray-900 font-medium">{resumeData.applicationDetails?.noticePeriod || 'N/A'}</p>
+          </div>
+          <div className="application-detail-item">
+            <span className="block text-sm font-semibold text-gray-700">Application Source</span>
+            <p className="text-base text-gray-900 font-medium">{resumeData.applicationDetails?.source || 'Website'}</p>
+          </div>
+        </div>
+
+        {/* About Section */}
+        <div className="mb-8">
+          <div className="text-lg font-semibold text-gray-900 mb-3">About</div>
+          <p className="text-base text-gray-700 leading-relaxed">
+            {resumeData.about || 'Prince Rathi is a FullStack + Devops Developer with experience in building and deploying various projects. He has won several hackathons and showcases skills in various programming languages and frameworks.'}
+          </p>
+        </div>
+
+        {/* Key Skills Section */}
+        <div>
+          <div className="text-lg font-semibold text-gray-900 mb-4">Key Skills</div>
+          <div className="flex flex-wrap gap-2">
+            {resumeData.skills && resumeData.skills.length > 0 ? 
+              resumeData.skills.map(skill => (
+                <span key={skill} className="skill-tag-refined bg-gray-50 text-gray-700 px-3 py-2 rounded-md text-sm font-medium border border-gray-200 hover:bg-gray-100 transition-colors">
+                  {skill}
+                </span>
+              )) : (
+              // Fallback skills if none provided - matching reference order
+              ['JavaScript', 'TypeScript', 'React.js', 'Node.js', 'MongoDB', 'Solidity', 'Express.js', 'Redux', 'Git', 'Hardhat'].map(skill => (
+                <span key={skill} className="skill-tag-refined bg-gray-50 text-gray-700 px-3 py-2 rounded-md text-sm font-medium border border-gray-200 hover:bg-gray-100 transition-colors">
+                  {skill}
+                </span>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Interview Transcript Section - Only show if transcript data exists - Outside Grid */}
+      {resumeData.interviewEvaluation && resumeData.interviewEvaluation.evaluationResults && resumeData.interviewEvaluation.evaluationResults.length > 0 && (
+        <div className="w-[80vw] mx-auto p-4 md:p-6 border rounded-xl bg-gray-50">
+          <div className="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">Interview Transcript</div>
+          
+          <div className="space-y-4 md:space-y-6">
+            {resumeData.interviewEvaluation.evaluationResults.map((result, index) => (
+              <div key={index} className="border border-gray-200 rounded-xl p-4 md:p-6">
+                {/* Question */}
+                <div className="mb-3 md:mb-4">
+                  <div className="font-light text-gray-900 text-base md:text-lg">
+                    Q{index + 1}. {result.question}
+                  </div>
+                </div>
+
+                {/* Evaluation Summary */}
+                <div className="mb-4 md:mb-6">
+                  <p className="text-gray-700 leading-relaxed text-sm md:text-base">
+                    {result.reason}
+                  </p>
+                </div>
+
+                {/* Bottom Row - Confidence and Score */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                  {/* Confidence Level */}
+                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${getConfidenceColor(result.confidence)}`}>
+                    <Circle size={12} className={getConfidenceIconColor(result.confidence)} fill="currentColor" />
+                    <span className="text-sm font-medium">
+                      {result.confidence} Confidence
+                    </span>
+                  </div>
+
+                  {/* Score */}
+                  <div className="bg-gray-900 text-white px-3 py-1.5 rounded-full">
+                    <span className="text-sm font-medium">
+                      Score: {result.score}/10
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
         </div>
       </div>
     </div>

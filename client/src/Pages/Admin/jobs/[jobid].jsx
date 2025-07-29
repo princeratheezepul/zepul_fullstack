@@ -84,6 +84,28 @@ const AdminJobDetailPage = () => {
     return date.toLocaleDateString('en-US', options);
   };
 
+  // Function to get company initials
+  const getCompanyInitials = (companyName) => {
+    if (!companyName) return 'C';
+    return companyName.split(' ').map(word => word.charAt(0)).join('').toUpperCase().slice(0, 2);
+  };
+
+  // Function to get company avatar background color
+  const getCompanyAvatarColor = (companyName) => {
+    const colors = [
+      'bg-blue-100 text-blue-700 border border-blue-200',
+      'bg-green-100 text-green-700 border border-green-200',
+      'bg-purple-100 text-purple-700 border border-purple-200',
+      'bg-orange-100 text-orange-700 border border-orange-200',
+      'bg-teal-100 text-teal-700 border border-teal-200',
+      'bg-indigo-100 text-indigo-700 border border-indigo-200',
+      'bg-pink-100 text-pink-700 border border-pink-200',
+      'bg-gray-100 text-gray-700 border border-gray-200'
+    ];
+    const index = companyName ? companyName.charCodeAt(0) % colors.length : 0;
+    return colors[index];
+  };
+
   // Job data with real-time statistics
   const job = {
     jobId: jobId, // Add the jobId from URL params
@@ -126,7 +148,7 @@ const AdminJobDetailPage = () => {
         <div className="w-full max-w-6xl bg-gray-50">
           {/* Back Button */}
           <div className="bg-gray-50 w-full px-4 md:px-0 pt-6 pb-2">
-            <button
+            <div
               onClick={() => navigate('/admin')}
               className="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center gap-2 mb-4"
             >
@@ -134,17 +156,17 @@ const AdminJobDetailPage = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
               Back to Dashboard
-            </button>
+            </div>
           </div>
           {/* Improved Header Row */}
           <div className="bg-gray-50 w-full px-4 md:px-0 pt-2 pb-4">
             <div className="flex items-center justify-between w-full mb-4">
               <div>
                 <div className="text-xs text-blue-600 font-semibold mb-1">JOB DETAILS</div>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{job.jobtitle}</h1>
+                <div className="text-2xl md:text-3xl font-bold text-gray-900">{job.jobtitle}</div>
               </div>
               <div className="flex flex-col gap-3">
-                <button 
+                <div 
                   className="bg-black hover:bg-gray-800 text-white font-semibold px-5 py-2 rounded-lg text-sm cursor-pointer flex items-center gap-2"
                   onClick={() => {
                     console.log('Candidate List button clicked');
@@ -156,12 +178,14 @@ const AdminJobDetailPage = () => {
                   <svg xmlns='http://www.w3.org/2000/svg' className='inline ml-1' width='18' height='18' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
                   </svg>
-                </button>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               <span className="flex items-center gap-1 text-sm text-gray-700 font-medium">
-                <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5 rounded-full" />
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold ${getCompanyAvatarColor(job.company)}`}>
+                  {getCompanyInitials(job.company)}
+                </div>
                 {job.company}
               </span>
               <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-sm font-medium text-gray-700">
@@ -190,21 +214,21 @@ const AdminJobDetailPage = () => {
           <div className="flex flex-col lg:flex-row gap-8 w-full mt-8">
             {/* Left: Job Description Card */}
             <div className="flex-1 rounded-xl p-6 md:p-10 mb-6 lg:mb-0 bg-gray-50">
-              <h2 className="text-xl font-bold mb-4">Job Description:</h2>
+              <div className="text-xl font-bold mb-4">Job Description:</div>
               <p className="text-gray-700 mb-6 whitespace-pre-line">{job.description}</p>
-              <h3 className="text-lg font-semibold mb-2">Key Responsibilities:</h3>
+              <div className="text-lg font-semibold mb-2">Key Responsibilities:</div>
               <ul className="list-disc pl-6 mb-6 text-gray-700">
                 {job.responsibilities.map((item, idx) => (
                   <li key={idx}>{item}</li>
                 ))}
               </ul>
-              <h3 className="text-lg font-semibold mb-2">Required Skills & Experience:</h3>
+              <div className="text-lg font-semibold mb-2">Required Skills & Experience:</div>
               <ul className="list-disc pl-6 mb-6 text-gray-700">
                 {job.requiredSkills.map((item, idx) => (
                   <li key={idx}>{item}</li>
                 ))}
               </ul>
-              <h3 className="text-lg font-semibold mb-2">Preferred Qualifications (Nice to Have):</h3>
+              <div className="text-lg font-semibold mb-2">Preferred Qualifications (Nice to Have):</div>
               <ul className="list-disc pl-6 mb-6 text-gray-700">
                 {job.preferredQualifications.map((item, idx) => (
                   <li key={idx}>{item}</li>
@@ -213,7 +237,7 @@ const AdminJobDetailPage = () => {
             </div>
             {/* Right: Application Statistics */}
             <div className="w-full lg:w-80 flex-shrink-0 rounded-2xl p-6 flex flex-col items-center bg-gray-50" style={{ minWidth: 320 }}>
-              <h4 className="text-2xl font-bold mb-4 text-black">Application Statistics</h4>
+              <div className="text-2xl font-bold mb-4 text-black">Application Statistics</div>
               {/* Donut Chart and Legend (replicated from dashboard, now with 4 segments) */}
               <div className="flex flex-col items-center w-full">
                 <div className="relative w-72 h-72 mb-4">

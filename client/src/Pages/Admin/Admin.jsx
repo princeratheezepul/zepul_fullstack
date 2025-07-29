@@ -170,7 +170,7 @@ const Admin = () => {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center px-4 md:px-8 py-4 md:py-6 bg-white gap-4">
             <div>
               <div className="text-xs text-blue-600 font-semibold">DASHBOARD</div>
-              <h1 className="text-xl md:text-2xl font-bold">Admin Overview</h1>
+              <div className="text-xl md:text-2xl font-bold">Admin Overview</div>
             </div>
           </div>
           {/* Separator Line */}
@@ -194,7 +194,7 @@ const Admin = () => {
                         <span className="text-blue-600 text-lg">{stat.icon}</span>
                       </div>
                       <div>
-                        <h3 className="text-gray-600 text-sm font-medium">{stat.label}</h3>
+                        <div className="text-gray-600 text-sm font-medium">{stat.label}</div>
                       </div>
                     </div>
                   </div>
@@ -295,8 +295,8 @@ const Admin = () => {
             <div className="bg-white rounded-2xl md:rounded-3xl shadow p-4 md:p-8 border">
               <div className="font-bold text-xl md:text-2xl mb-4 md:mb-6">User Account Overview</div>
               <div className="flex flex-col sm:flex-row justify-end gap-2 md:gap-4 mb-4">
-                <button className="bg-black text-white px-4 md:px-6 py-2 rounded-lg text-xs md:text-sm font-medium focus:outline-none">All Data <span className="ml-1">▼</span></button>
-                <button className="bg-black text-white px-4 md:px-6 py-2 rounded-lg text-xs md:text-sm font-medium focus:outline-none">2022 <span className="ml-1">▼</span></button>
+                <div className="bg-black text-white px-4 md:px-6 py-2 rounded-lg text-xs md:text-sm font-medium focus:outline-none">All Data <span className="ml-1">▼</span></div>
+                <div className="bg-black text-white px-4 md:px-6 py-2 rounded-lg text-xs md:text-sm font-medium focus:outline-none">2022 <span className="ml-1">▼</span></div>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
@@ -314,7 +314,7 @@ const Admin = () => {
                         <td className="py-3 md:py-5 pl-2 text-sm md:text-base font-normal">{user.name}</td>
                         <td className="py-3 md:py-5 text-sm md:text-base font-normal">{user.role}</td>
                         <td className="py-3 md:py-5 text-sm md:text-base font-normal">{user.status}</td>
-                        <td className="py-3 md:py-5 text-sm md:text-base font-normal"><button className="text-blue-500 hover:underline">Edit</button></td>
+                        <td className="py-3 md:py-5 text-sm md:text-base font-normal"><div className="text-blue-500 hover:underline">Edit</div></td>
                       </tr>
                     ))}
                   </tbody>
@@ -607,7 +607,7 @@ function AccountInfoPage({ onBack }) {
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-3 mt-6">
-                  <button
+                  <div
                     type="button"
                     className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
                     onClick={handleSaveChanges}
@@ -619,7 +619,7 @@ function AccountInfoPage({ onBack }) {
                       <FaSave className="text-sm" />
                     )}
                     {saveLoading ? 'Saving...' : 'Save Changes'}
-                  </button>
+                  </div>
                 </div>
               </form>
             )}
@@ -769,13 +769,13 @@ function PasswordSecuritiesForm() {
               onChange={(e) => handleInputChange('currentPassword', e.target.value)}
               placeholder="Enter your current password"
             />
-            <button
+            <div
               type="button"
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
               onClick={() => togglePasswordVisibility('current')}
             >
               {showPasswords.current ? '👁️' : '👁️‍🗨️'}
-            </button>
+            </div>
           </div>
         </div>
 
@@ -790,13 +790,13 @@ function PasswordSecuritiesForm() {
                 onChange={(e) => handleInputChange('newPassword', e.target.value)}
                 placeholder="Enter new password"
               />
-              <button
+              <div
                 type="button"
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 onClick={() => togglePasswordVisibility('new')}
               >
                 {showPasswords.new ? '👁️' : '👁️‍🗨️'}
-              </button>
+              </div>
             </div>
           </div>
           <div>
@@ -809,19 +809,19 @@ function PasswordSecuritiesForm() {
                 onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
                 placeholder="Confirm new password"
               />
-              <button
+              <div
                 type="button"
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 onClick={() => togglePasswordVisibility('confirm')}
               >
                 {showPasswords.confirm ? '👁️' : '👁️‍🗨️'}
-              </button>
+              </div>
             </div>
           </div>
         </div>
 
         <div className="flex items-center justify-end">
-          <button
+          <div
             type="button"
             className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleChangePassword}
@@ -833,7 +833,7 @@ function PasswordSecuritiesForm() {
               <FaSave className="text-sm" />
             )}
             {isLoading ? 'Updating...' : 'Update Password'}
-          </button>
+          </div>
         </div>
       </form>
     </div>
@@ -899,7 +899,7 @@ function EmailNotificationSettings() {
             <div className="flex items-center gap-6 w-full md:w-auto justify-between md:justify-end">
               {/* Toggle */}
               <div className="flex items-center gap-2">
-                <button
+                <div
                   type="button"
                   className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-200 focus:outline-none ${n.enabled ? 'bg-blue-600' : 'bg-gray-300'}`}
                   tabIndex="0"
@@ -907,7 +907,7 @@ function EmailNotificationSettings() {
                   <span
                     className={`inline-block w-5 h-5 transform bg-white rounded-full shadow transition-transform duration-200 ${n.enabled ? 'translate-x-6' : ''}`}
                   />
-                </button>
+                </div>
                 <span className={`text-xs font-semibold ${n.enabled ? 'text-blue-600' : 'text-gray-400'}`}>{n.enabled ? 'Yes' : 'NO'}</span>
               </div>
               {/* Right label */}
@@ -1173,22 +1173,22 @@ function CreateUserForm({ role, onBack }) {
           <p className="text-xs text-gray-400 mt-1">This field is automatically filled with your name</p>
         </div>
         <div className="flex gap-4">
-          <button
+          <div
             type="button"
             className="mt-4 bg-blue-600 text-white px-16 py-3 rounded-lg font-medium text-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleCreateUser}
             disabled={isLoading}
           >
             {isLoading ? 'Creating...' : 'Create'}
-          </button>
-          <button
+          </div>
+          <div
             type="button"
             className="mt-4 bg-gray-500 text-white px-8 py-3 rounded-lg font-medium text-lg hover:bg-gray-600 transition-colors"
             onClick={onBack}
             disabled={isLoading}
           >
             Back
-          </button>
+          </div>
         </div>
       </form>
     </div>
@@ -1262,11 +1262,11 @@ function CreateUserRoles({ onBack }) {
         {roles.map((role, idx) => (
           <div key={idx} className="bg-white border rounded-xl shadow p-0">
             <div className="flex flex-col md:flex-row items-center justify-between px-6 pt-6 pb-0 mb-2">
-              <button className="border border-blue-600 text-blue-600 rounded-lg px-8 py-2 font-medium mb-4 md:mb-0 md:mr-8 w-full md:w-auto focus:outline-none focus:ring-2 focus:ring-blue-500 transition mb-4 cursor-pointer" onClick={() => setShowForm(role.key)}>{role.title}</button>
-              <button className="bg-blue-600 text-white px-6 py-2 rounded-full font-medium flex items-center gap-2 w-full md:w-auto justify-center md:justify-end focus:outline-none mt-4 md:mt-0">
+              <div className="border border-blue-600 text-blue-600 rounded-lg px-8 py-2 font-medium mb-4 md:mb-0 md:mr-8 w-full md:w-auto focus:outline-none focus:ring-2 focus:ring-blue-500 transition mb-4 cursor-pointer" onClick={() => setShowForm(role.key)}>{role.title}</div>
+              <div className="bg-blue-600 text-white px-6 py-2 rounded-full font-medium flex items-center gap-2 w-full md:w-auto justify-center md:justify-end focus:outline-none mt-4 md:mt-0">
                 <span className="text-lg">👥</span>
                 {role.list}
-              </button>
+              </div>
             </div>
             <div className="bg-gray-100 rounded-b-xl px-6 py-4 flex items-center gap-3">
               <span className="text-2xl text-gray-400">💡</span>
@@ -1576,7 +1576,7 @@ function UserRoles() {
           <div className="text-gray-500 text-sm">Reviewing the roles list</div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <button
+          <div
             className={`px-4 md:px-5 py-2 rounded-lg font-medium cursor-pointer transition-colors ${activeFilter === 'all'
                 ? 'bg-black text-white'
                 : 'bg-gray-100 text-black hover:bg-gray-200'
@@ -1584,8 +1584,8 @@ function UserRoles() {
             onClick={() => handleFilterChange('all')}
           >
             All ({allUsers.length})
-          </button>
-          <button
+          </div>
+          <div
             className={`px-4 md:px-5 py-2 rounded-lg font-medium cursor-pointer transition-colors ${activeFilter === 'active'
                 ? 'bg-black text-white'
                 : 'bg-gray-100 text-black hover:bg-gray-200'
@@ -1593,8 +1593,8 @@ function UserRoles() {
             onClick={() => handleFilterChange('active')}
           >
             Active ({allUsers.filter(u => u.status === 'active').length})
-          </button>
-          <button
+          </div>
+          <div
             className={`px-4 md:px-5 py-2 rounded-lg font-medium cursor-pointer transition-colors ${activeFilter === 'disabled'
                 ? 'bg-black text-white'
                 : 'bg-gray-100 text-black hover:bg-gray-200'
@@ -1602,13 +1602,13 @@ function UserRoles() {
             onClick={() => handleFilterChange('disabled')}
           >
             Disabled ({allUsers.filter(u => u.status === 'disabled').length})
-          </button>
-          <button
+          </div>
+          <div
             className="px-4 md:px-5 py-2 rounded-lg border border-black text-black font-medium cursor-pointer hover:bg-gray-50 transition-colors"
             onClick={() => setShowCreate(true)}
           >
             Add +
-          </button>
+          </div>
         </div>
       </div>
       <div className="bg-gray-100 rounded-lg px-2 md:px-4 py-2 flex items-center mb-2">
@@ -1682,23 +1682,23 @@ function UserRoles() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-2 mt-6">
-          <button
+          <div
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
             className="px-3 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
           >
             Previous
-          </button>
+          </div>
           <span className="px-3 py-2">
             Page {currentPage} of {totalPages}
           </span>
-          <button
+          <div
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
             className="px-3 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
           >
             Next
-          </button>
+          </div>
         </div>
       )}
 
@@ -1710,21 +1710,21 @@ function UserRoles() {
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaTrash className="text-red-600 text-2xl" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Delete User</h3>
+              <div className="text-lg font-semibold text-gray-900 mb-2">Delete User</div>
               <p className="text-gray-600 mb-6">
                 Are you sure you want to delete <span className="font-semibold">{userToDelete?.fullname}</span>?
                 This action cannot be undone.
               </p>
 
               <div className="flex gap-3 justify-center">
-                <button
+                <div
                   onClick={handleDeleteCancel}
                   disabled={deleteLoading}
                   className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
                 >
                   Exit
-                </button>
-                <button
+                </div>
+                <div
                   onClick={handleDeleteConfirm}
                   disabled={deleteLoading}
                   className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center gap-2"
@@ -1737,7 +1737,7 @@ function UserRoles() {
                   ) : (
                     'Delete'
                   )}
-                </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1752,9 +1752,9 @@ function UserRoles() {
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FaEdit className="text-blue-600 text-2xl" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              <div className="text-lg font-semibold text-gray-900 mb-2">
                 {userToToggle?.status === 'active' ? 'Disable User' : 'Activate User'}
-              </h3>
+              </div>
               <p className="text-gray-600 mb-6">
                 Are you sure you want to{' '}
                 <span className="font-semibold">
@@ -1768,14 +1768,14 @@ function UserRoles() {
               </p>
 
               <div className="flex gap-3 justify-center">
-                <button
+                <div
                   onClick={handleToggleCancel}
                   disabled={toggleLoading}
                   className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50 cursor-pointer"
                 >
                   Exit
-                </button>
-                <button
+                </div>
+                <div
                   onClick={handleToggleConfirm}
                   disabled={toggleLoading}
                   className={`px-6 py-2 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2 cursor-pointer ${userToToggle?.status === 'active'
@@ -1791,7 +1791,7 @@ function UserRoles() {
                   ) : (
                     'Confirm'
                   )}
-                </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1953,8 +1953,8 @@ function CreateJob({ onBack }) {
   return (
     <div className="min-h-screen w-full flex flex-col bg-white">
       <div className="flex items-center px-8 pt-8">
-        <button onClick={onBack} className="mr-4 text-2xl text-gray-500 hover:text-blue-600 font-bold">←</button>
-        <h1 className="text-3xl font-bold">Create Job</h1>
+        <div onClick={onBack} className="mr-4 text-2xl text-gray-500 hover:text-blue-600 font-bold">←</div>
+        <div className="text-3xl font-bold">Create Job</div>
       </div>
       <form id="create-job-form" className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 pt-8 w-full flex-1" onSubmit={handleCreateJob}>
         <div className="flex flex-col gap-6">
@@ -1993,13 +1993,13 @@ function CreateJob({ onBack }) {
             <label className="block text-gray-500 text-sm mb-1">Required Skills & Expertise</label>
             <div className="flex gap-2 mb-2">
               <input type="text" className="flex-1 border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 bg-white text-base" placeholder="Add a skill point" value={skillInput} onChange={e => setSkillInput(e.target.value)} />
-              <button type="button" className="bg-blue-600 text-white px-3 py-2 rounded-lg" onClick={handleAddSkill}>+</button>
+              <div type="button" className="bg-blue-600 text-white px-3 py-2 rounded-lg" onClick={handleAddSkill}>+</div>
             </div>
             <ul className="list-disc pl-6">
               {skills.map((skill, idx) => (
                 <li key={idx} className="flex items-center justify-between mb-1">
                   <span>{skill}</span>
-                  <button type="button" className="text-red-400 ml-2" onClick={() => handleRemoveSkill(idx)}>×</button>
+                  <div type="button" className="text-red-400 ml-2" onClick={() => handleRemoveSkill(idx)}>×</div>
                 </li>
               ))}
             </ul>
@@ -2009,13 +2009,13 @@ function CreateJob({ onBack }) {
             <label className="block text-gray-500 text-sm mb-1">Key Responsibilities</label>
             <div className="flex gap-2 mb-2">
               <input type="text" className="flex-1 border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 bg-white text-base" placeholder="Add a responsibility" value={keyRespInput} onChange={e => setKeyRespInput(e.target.value)} />
-              <button type="button" className="bg-blue-600 text-white px-3 py-2 rounded-lg" onClick={handleAddKeyResp}>+</button>
+              <div type="button" className="bg-blue-600 text-white px-3 py-2 rounded-lg" onClick={handleAddKeyResp}>+</div>
             </div>
             <ul className="list-disc pl-6">
               {keyResponsibilities.map((resp, idx) => (
                 <li key={idx} className="flex items-center justify-between mb-1">
                   <span>{resp}</span>
-                  <button type="button" className="text-red-400 ml-2" onClick={() => handleRemoveKeyResp(idx)}>×</button>
+                  <div type="button" className="text-red-400 ml-2" onClick={() => handleRemoveKeyResp(idx)}>×</div>
                 </li>
               ))}
             </ul>
@@ -2025,13 +2025,13 @@ function CreateJob({ onBack }) {
             <label className="block text-gray-500 text-sm mb-1">Preferred Qualifications (Nice to Have)</label>
             <div className="flex gap-2 mb-2">
               <input type="text" className="flex-1 border border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-blue-500 bg-white text-base" placeholder="Add a qualification" value={prefQualInput} onChange={e => setPrefQualInput(e.target.value)} />
-              <button type="button" className="bg-blue-600 text-white px-3 py-2 rounded-lg" onClick={handleAddPrefQual}>+</button>
+              <div type="button" className="bg-blue-600 text-white px-3 py-2 rounded-lg" onClick={handleAddPrefQual}>+</div>
             </div>
             <ul className="list-disc pl-6">
               {preferredQualifications.map((qual, idx) => (
                 <li key={idx} className="flex items-center justify-between mb-1">
                   <span>{qual}</span>
-                  <button type="button" className="text-red-400 ml-2" onClick={() => handleRemovePrefQual(idx)}>×</button>
+                  <div type="button" className="text-red-400 ml-2" onClick={() => handleRemovePrefQual(idx)}>×</div>
                 </li>
               ))}
             </ul>
@@ -2083,7 +2083,7 @@ function CreateJob({ onBack }) {
         </div>
       </form>
       <div className="px-8 pt-4 pb-8">
-        <button
+        <div
           type="submit"
           form="create-job-form"
           className="bg-blue-600 hover:bg-blue-700 text-white px-12 py-3 rounded-lg font-semibold text-lg cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -2097,7 +2097,7 @@ function CreateJob({ onBack }) {
           ) : (
             "Create"
           )}
-        </button>
+        </div>
       </div>
     </div>
   );
@@ -2238,48 +2238,48 @@ function Jobs() {
     <div className="bg-gray-50 w-full px-2 sm:px-4 md:px-8 lg:px-16 py-0 min-h-screen">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between pb-8 pt-8 border-b border-gray-200 mb-8 gap-4">
         <div className="flex flex-col justify-center">
-          <h1 className="text-3xl font-bold text-black mb-1">Jobs</h1>
+          <div className="text-3xl font-bold text-black mb-1">Jobs</div>
           <p className="text-base text-gray-500">Manage and track all your job posting here</p>
         </div>
         <div className="flex-1 flex justify-center">
           <div className="flex gap-4 flex-wrap">
-            <button
+            <div
               className={`rounded-lg px-6 py-2 text-base font-semibold shadow border border-black cursor-pointer transition-colors ${activeFilter === 'all' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'
                 }`}
               onClick={() => handleFilterChange('all')}
             >
               All Jobs ({filterCounts.all})
-            </button>
-            <button
+            </div>
+            <div
               className={`rounded-lg px-6 py-2 text-base font-semibold border border-black cursor-pointer transition-colors ${activeFilter === 'opened' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'
                 }`}
               onClick={() => handleFilterChange('opened')}
             >
               Opened Jobs ({filterCounts.opened})
-            </button>
-            <button
+            </div>
+            <div
               className={`rounded-lg px-6 py-2 text-base font-semibold border border-black cursor-pointer transition-colors ${activeFilter === 'urgent' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'
                 }`}
               onClick={() => handleFilterChange('urgent')}
             >
               Urgent ({filterCounts.urgent})
-            </button>
-            <button
+            </div>
+            <div
               className={`rounded-lg px-6 py-2 text-base font-semibold border border-black cursor-pointer transition-colors ${activeFilter === 'closed' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-100'
                 }`}
               onClick={() => handleFilterChange('closed')}
             >
               Closed Jobs ({filterCounts.closed})
-            </button>
+            </div>
           </div>
         </div>
-        <button
+        <div
           className="ml-0 md:ml-8 px-10 py-2 rounded-xl border border-blue-500 text-lg font-semibold text-black bg-white hover:bg-blue-50 hover:text-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
           style={{ boxShadow: '0 0 0 2px #2563eb' }}
           onClick={() => setShowCreateJob(true)}
         >
           Create Job
-        </button>
+        </div>
       </div>
 
       {loading ? (
@@ -2297,23 +2297,23 @@ function Jobs() {
           {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex justify-center items-center gap-2 mt-6">
-              <button
+              <div
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 className="px-3 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 cursor-pointer"
               >
                 Previous
-              </button>
+              </div>
               <span className="px-3 py-2">
                 Page {currentPage} of {totalPages}
               </span>
-              <button
+              <div
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 className="px-3 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 cursor-pointer"
               >
                 Next
-              </button>
+              </div>
             </div>
           )}
         </>

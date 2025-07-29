@@ -75,7 +75,8 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
         ...analysis, 
         overallScore: Math.round(atsResult.ats_score),
         ats_score: atsResult.ats_score,
-        ats_reason: atsResult.ats_reason
+        ats_reason: atsResult.ats_reason,
+        ats_breakdown: atsResult.ats_breakdown
       };
 
       setLoadingMessage("Saving details...");
@@ -281,12 +282,15 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
           "technicalExperience": "A 1-2 sentence summary of their technical background.",
           "projectExperience": "A 1-2 sentence summary of their project work and accomplishments.",
           "education": "A 1-2 sentence summary of their educational qualifications.",
-          "keyAchievements": "A 1-2 sentence summary of their most impressive achievements."
+          "keyAchievements": "A 1-2 sentence summary of their most impressive achievements.",
+          "skillMatch": "A 1-2 sentence analysis of how well the candidate's technical skills, tools, and technologies align with the specific job requirements and responsibilities.",
+          "competitiveFit": "A 1-2 sentence assessment of the candidate's competitive position in the market for this role, considering their experience level, achievements, and market demand.",
+          "consistencyCheck": "A 1-2 sentence evaluation of the candidate's career consistency, job stability, progression patterns, and professional growth trajectory."
         },
         "aiScorecard": {
           "technicalSkillMatch": "Number (0-100) representing how well their skills match the job requirements.",
-          "communication": "Number (0-100) assessing clarity, and professionalism from the resume's language.",
-          "cultureFit": "Number (0-100) based on inferred soft skills, teamwork mentions, and alignment with typical corporate values.",
+          "competitiveFit": "Number (0-100) representing the candidate's competitive position in the market for this role.",
+          "consistencyCheck": "Number (0-100) representing the candidate's career consistency, job stability, and progression patterns.",
           "teamLeadership": "Number (0-100) based on any management or leadership roles, and mentorship experience mentioned."
         },
         "recommendation": "A short, decisive recommendation (e.g., 'Recommended for next round', 'Strong contender', 'Consider with caution').",
@@ -300,6 +304,13 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
             "source": "Website"
         }
       }
+
+      IMPORTANT: For the new fields in aiSummary:
+      - skillMatch: Analyze the candidate's technical skills against the job requirements and provide a clear assessment
+      - competitiveFit: Evaluate their market position and competitiveness for this specific role
+      - consistencyCheck: Assess their career stability, progression, and professional development patterns
+      
+      Make sure all fields in aiSummary contain meaningful, detailed content that provides valuable insights for the recruiter.
     `;
 
     const result = await model.generateContent(prompt);

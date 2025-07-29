@@ -39,6 +39,40 @@ const ResumeSchema = new mongoose.Schema(
     // AI Analysis Results
     ats_score: Number,
     ats_reason: String,
+    ats_breakdown: {
+      skill_match: {
+        score: Number,
+        reason: String
+      },
+      experience_relevance: {
+        score: Number,
+        reason: String
+      },
+      project_achievement: {
+        score: Number,
+        reason: String
+      },
+      ai_generated_detection: {
+        score: Number,
+        reason: String
+      },
+      consistency_check: {
+        score: Number,
+        reason: String
+      },
+      resume_quality: {
+        score: Number,
+        reason: String
+      },
+      interview_prediction: {
+        score: Number,
+        reason: String
+      },
+      competitive_fit: {
+        score: Number,
+        reason: String
+      }
+    },
     overallScore: Number,
     
     // AI Summary
@@ -46,14 +80,17 @@ const ResumeSchema = new mongoose.Schema(
       technicalExperience: String,
       projectExperience: String,
       education: String,
-      keyAchievements: String
+      keyAchievements: String,
+      skillMatch: String,
+      competitiveFit: String,
+      consistencyCheck: String
     },
     
     // AI Scorecard
     aiScorecard: {
       technicalSkillMatch: Number,
-      communication: Number,
-      cultureFit: Number,
+      competitiveFit: Number,
+      consistencyCheck: Number,
       teamLeadership: Number
     },
     
@@ -112,6 +149,7 @@ const ResumeSchema = new mongoose.Schema(
         answer: String,
         score: Number,
         reason: String,
+        summary: String,
         confidence: {
           type: String,
           enum: ['High', 'Medium', 'Low']

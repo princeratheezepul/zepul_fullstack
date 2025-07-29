@@ -70,7 +70,7 @@ const CandidateList = ({ job, onBack }) => {
       <div className="bg-white p-8 rounded-lg shadow-sm">
         <div className="flex justify-between items-start mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Candidate List</h1>
+            <div className="text-3xl font-bold text-gray-900">Candidate List</div>
             <p className="text-gray-600 mt-1">Managing candidate for Senior Frontend Developer</p>
           </div>
           <button onClick={onBack} className="text-blue-600 hover:underline">&larr; Back to job details</button>
@@ -143,7 +143,7 @@ const CandidateList = ({ job, onBack }) => {
           <div className="flex flex-col h-full">
             <div className="p-6 border-b border-gray-200">
               <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-gray-800">Add Notes for {selectedCandidate.name}</h2>
+                <div className="text-xl font-semibold text-gray-800">Add Notes for {selectedCandidate.name}</div>
                 <button onClick={handleCloseSidebar} className="text-gray-500 hover:text-gray-800">
                   <X size={24} />
                 </button>

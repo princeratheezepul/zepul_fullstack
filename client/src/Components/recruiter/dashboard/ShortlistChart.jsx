@@ -117,7 +117,7 @@ const ShortlistChart = () => {
         return (
             <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm h-full flex flex-col">
                 <div className="flex justify-between items-start">
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</h3>
+                    <div className="text-lg sm:text-xl font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</div>
                 </div>
                 <div className="flex-grow h-80 mt-4 flex items-center justify-center">
                     <div className="text-gray-500">Loading chart data...</div>
@@ -130,7 +130,7 @@ const ShortlistChart = () => {
         return (
             <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm h-full flex flex-col">
                 <div className="flex justify-between items-start">
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</h3>
+                    <div className="text-lg sm:text-xl font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</div>
                 </div>
                 <div className="flex-grow h-80 mt-4 flex items-center justify-center">
                     <div className="text-red-500">Error: {error}</div>
@@ -142,7 +142,7 @@ const ShortlistChart = () => {
     return (
         <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm h-full flex flex-col">
             <div className="flex justify-between items-start">
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</h3>
+                <div className="text-lg sm:text-xl font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</div>
                 <Legend content={<CustomLegend />} verticalAlign="top" align="right" />
             </div>
             <div className="flex-grow h-80 mt-4">

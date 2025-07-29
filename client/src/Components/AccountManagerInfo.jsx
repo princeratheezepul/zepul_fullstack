@@ -103,7 +103,7 @@ const AccountManagerInfo = () => {
   if (loading) {
     return (
       <div className="w-full flex flex-col">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Account Info</h1>
+        <div className="text-2xl sm:text-3xl font-bold mb-2">Account Info</div>
         <div className="flex items-center justify-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
@@ -114,7 +114,7 @@ const AccountManagerInfo = () => {
   if (error) {
     return (
       <div className="w-full flex flex-col">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2">Account Info</h1>
+        <div className="text-2xl sm:text-3xl font-bold mb-2">Account Info</div>
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <p className="text-red-600">Error: {error}</p>
           <button 
@@ -130,7 +130,7 @@ const AccountManagerInfo = () => {
 
   return (
     <>
-      <h1 className="text-2xl sm:text-3xl font-bold mb-2">Account Info</h1>
+      <div className="text-2xl sm:text-3xl font-bold mb-2">Account Info</div>
       <p className="text-gray-500 mb-6 text-sm sm:text-base">
         Update your personal information and account details. Your email and onboarded by information cannot be changed.
       </p>

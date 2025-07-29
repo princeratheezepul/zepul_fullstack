@@ -206,7 +206,7 @@ const AIInterviewQuestions = ({ onBack, jobDetails, resumeData }) => {
                 <ArrowLeft size={24} />
             </button>
             <div>
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">AI Powered Interview Question</h1>
+                <div className="text-2xl md:text-3xl font-bold text-gray-900">AI Powered Interview Question</div>
                 <p className="text-gray-600">AI Powered Interview Question for {jobDetails.position}</p>
             </div>
         </div>
@@ -214,9 +214,9 @@ const AIInterviewQuestions = ({ onBack, jobDetails, resumeData }) => {
         {/* AI Generated Questions Card */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80 mb-8">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-gray-800">
+                <div className="text-xl font-bold text-gray-800">
                   {interviewScheduled ? 'Interview Questions' : 'AI Generated Questions'}
-                </h2>
+                </div>
                 {!interviewScheduled && (
                   <button onClick={fetchAIQuestions} className="flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors">
                       <RefreshCw size={16} />
@@ -235,7 +235,7 @@ const AIInterviewQuestions = ({ onBack, jobDetails, resumeData }) => {
                         <div key={index} className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50/80">
                              <HelpCircle size={20} className="text-gray-400 mt-1 flex-shrink-0" />
                              <div className="flex-grow">
-                                <h3 className="font-semibold text-gray-800">{q.category}</h3>
+                                <div className="font-semibold text-gray-800">{q.category}</div>
                                 {interviewScheduled ? (
                                   <p className="text-gray-600">{q.text}</p>
                                 ) : (
@@ -276,7 +276,7 @@ const AIInterviewQuestions = ({ onBack, jobDetails, resumeData }) => {
 
         {/* Smart Questions for Today Card */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">Schedule Interview</h2>
+            <div className="text-xl font-bold text-gray-800 mb-6">Schedule Interview</div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 {interviewScheduled && selectedScheduleData ? (
                   // Show only the selected schedule after interview is scheduled

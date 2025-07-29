@@ -118,7 +118,7 @@ const AccountManagerJobCard = ({ job, onClick }) => {
         )}
       </div>
       <div className="pr-16">
-        <h3 className="text-xl font-bold text-gray-800">{job.jobtitle}</h3>
+        <div className="text-xl font-bold text-gray-800">{job.jobtitle}</div>
         <p className="text-gray-600 mt-2 text-sm max-w-2xl whitespace-pre-line" style={{ 
           display: '-webkit-box',
           WebkitLineClamp: 3,
@@ -168,7 +168,7 @@ const AccountManagerJobCard = ({ job, onClick }) => {
             <span>{job.assignedRecruiters?.length || 0} Recruiter{(job.assignedRecruiters?.length || 0) !== 1 ? 's' : ''} Assigned</span>
           </div>
           {!job.isClosed && !isDeadlinePassed() && (
-            <button 
+            <div 
               className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
               onClick={(e) => {
                 e.stopPropagation();
@@ -176,7 +176,7 @@ const AccountManagerJobCard = ({ job, onClick }) => {
               }}
             >
               View Job
-            </button>
+            </div>
           )}
         </div>
       </div>

@@ -1,0 +1,45 @@
+/* Email Notification Toggle Button Styles */
+.toggle-button {
+  position: relative;
+  display: inline-flex;
+  height: 24px;
+  width: 44px;
+  border: 2px solid transparent;
+  border-radius: 9999px !important;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+  background-color: #d1d5db;
+}
+
+.toggle-button.active {
+  background-color: #2563eb !important;
+}
+
+.toggle-button:focus {
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.toggle-button .toggle-slider {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  height: 16px;
+  width: 16px;
+  border-radius: 50% !important;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out;
+  transform: translateX(0);
+}
+
+.toggle-button.active .toggle-slider {
+  transform: translateX(20px);
+}
+
+/* Ensure no other styles override our rounded corners */
+.toggle-button,
+.toggle-button *,
+.toggle-slider {
+  border-radius: inherit !important;
+} 

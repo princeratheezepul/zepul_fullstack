@@ -267,8 +267,50 @@ const AccountManagerCandidateList = ({ job, onBack }) => {
   const capitalizeFirstLetter = (str) =>
     str ? str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : '';
 
-  const getAvatarColor = (name) => {
-    const colors = ['bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-red-500', 'bg-purple-500', 'bg-pink-500'];
+  const getAvatarBackgroundColor = (name) => {
+    // Soft, professional background colors
+    const colors = [
+      '#EBF8FF', // blue-50
+      '#F0FFF4', // green-50
+      '#FAF5FF', // purple-50
+      '#FFFBEB', // amber-50
+      '#F0FDFA', // teal-50
+      '#EEF2FF', // indigo-50
+      '#FDF2F8', // pink-50
+      '#F9FAFB'  // gray-50
+    ];
+    const index = name.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
+  const getAvatarTextColor = (name) => {
+    // Matching darker text colors
+    const colors = [
+      '#1D4ED8', // blue-700
+      '#15803D', // green-700
+      '#7C3AED', // purple-700
+      '#B45309', // amber-700
+      '#0F766E', // teal-700
+      '#4338CA', // indigo-700
+      '#BE185D', // pink-700
+      '#374151'  // gray-700
+    ];
+    const index = name.charCodeAt(0) % colors.length;
+    return colors[index];
+  };
+
+  const getAvatarBorderColor = (name) => {
+    // Subtle border colors
+    const colors = [
+      '#BFDBFE', // blue-200
+      '#BBF7D0', // green-200
+      '#DDD6FE', // purple-200
+      '#FED7AA', // amber-200
+      '#99F6E4', // teal-200
+      '#C7D2FE', // indigo-200
+      '#FBCFE8', // pink-200
+      '#E5E7EB'  // gray-200
+    ];
     const index = name.charCodeAt(0) % colors.length;
     return colors[index];
   };
@@ -323,7 +365,7 @@ const AccountManagerCandidateList = ({ job, onBack }) => {
               <div className="font-semibold text-lg">
                 {noteSidebar.resume?.addedNotes ? 'Edit Notes' : 'Add Notes'} for {noteSidebar.resume?.name}
               </div>
-              <button onClick={closeNoteSidebar} className="text-gray-400 hover:text-gray-700 cursor-pointer"><X size={22} /></button>
+              <div onClick={closeNoteSidebar} className="text-gray-400 hover:text-gray-700 cursor-pointer"><X size={22} /></div>
             </div>
             <div className="flex-1 p-6">
               <textarea
@@ -335,7 +377,7 @@ const AccountManagerCandidateList = ({ job, onBack }) => {
               ></textarea>
             </div>
             <div className="p-6 border-t border-gray-100">
-              <button
+              <div
                 className={`w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center cursor-pointer ${noteSaving ? 'opacity-70 cursor-not-allowed' : ''}`}
                 onClick={handleSaveNote}
                 disabled={noteSaving}
@@ -344,7 +386,7 @@ const AccountManagerCandidateList = ({ job, onBack }) => {
                   <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
                 ) : null}
                 {noteSaving ? 'Saving...' : (noteSidebar.resume?.addedNotes ? 'Save' : 'Add')}
-              </button>
+              </div>
               {noteMsg && <div className="text-green-600 text-sm mt-2 text-center">{noteMsg}</div>}
             </div>
           </div>
@@ -353,17 +395,17 @@ const AccountManagerCandidateList = ({ job, onBack }) => {
       <div className="w-full max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <button
+          <div
             onClick={onBack}
             className="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center gap-2"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
-          </button>
+          </div>
           <div className="w-px h-6 bg-gray-300"></div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Candidate List</h1>
+            <div className="text-2xl font-bold text-gray-900">Candidate List</div>
             <p className="text-gray-600">Managing candidate for {job.jobtitle}</p>
           </div>
         </div>
@@ -373,17 +415,17 @@ const AccountManagerCandidateList = ({ job, onBack }) => {
           {Object.entries(STATUS_LABELS).map(([key, label]) => {
             const count = key === 'all' ? filteredResumes.length : filteredResumes.filter(r => r.status === key).length;
             return (
-              <button
+              <div
                 key={key}
                 onClick={() => setFilter(key)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap cursor-pointer transition-colors ${
                   filter === key
                     ? 'bg-black text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
                 {label} ({count})
-              </button>
+              </div>
             );
           })}
         </div>
@@ -396,19 +438,19 @@ const AccountManagerCandidateList = ({ job, onBack }) => {
         ) : filteredResumes.length === 0 ? (
           <div className="text-center py-12">
             <Users size={48} className="mx-auto text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No candidates found</h3>
+            <div className="text-lg font-medium text-gray-900 mb-2">No candidates found</div>
             <p className="text-gray-600">No candidates match the current filter.</p>
           </div>
         ) : (
           <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             {/* Table Header */}
             <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
-              <div className="grid grid-cols-5 gap-4 text-xs font-semibold text-gray-700 uppercase tracking-wide">
-                <div>CANDIDATE</div>
-                <div>APPLIED DATE</div>
-                <div>SCORE</div>
-                <div>STATUS</div>
-                <div>NOTES</div>
+              <div className="grid grid-cols-12 gap-4 text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                <div className="col-span-4">CANDIDATE</div>
+                <div className="col-span-2">APPLIED DATE</div>
+                <div className="col-span-2">SCORE</div>
+                <div className="col-span-2">STATUS</div>
+                <div className="col-span-2">NOTES</div>
               </div>
             </div>
 
@@ -420,38 +462,49 @@ const AccountManagerCandidateList = ({ job, onBack }) => {
                   onClick={() => setSelectedResume(resume)}
                   className="px-6 py-4 hover:bg-gray-50 cursor-pointer transition-colors"
                 >
-                  <div className="grid grid-cols-5 gap-4 items-center">
+                  <div className="grid grid-cols-12 gap-4 items-center">
                     {/* CANDIDATE Column */}
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm ${getAvatarColor(resume.name)}`}>
+                    <div className="col-span-4 flex items-center gap-3">
+                      <div 
+                        className="w-11 h-11 rounded-full flex items-center justify-center font-medium text-sm shadow-sm flex-shrink-0"
+                        style={{
+                          backgroundColor: getAvatarBackgroundColor(resume.name),
+                          color: getAvatarTextColor(resume.name),
+                          border: `1px solid ${getAvatarBorderColor(resume.name)}`,
+                          minWidth: '44px',
+                          minHeight: '44px',
+                          width: '44px !important',
+                          height: '44px !important'
+                        }}
+                      >
                         {getInitials(resume.name)}
                       </div>
-                      <div className="flex flex-col">
-                        <span className="font-semibold text-gray-900">{capitalizeFirstLetter(resume.name)}</span>
-                        <span className="text-sm text-gray-600">{resume.email}</span>
+                      <div className="flex flex-col min-w-0">
+                        <span className="font-semibold text-gray-900 truncate">{capitalizeFirstLetter(resume.name)}</span>
+                        <span className="text-sm text-gray-600 truncate">{resume.email}</span>
                       </div>
                     </div>
 
                     {/* APPLIED DATE Column */}
-                    <div className="text-gray-900">
+                    <div className="col-span-2 text-gray-900 text-sm">
                       {formatDate(resume.createdAt)}
                     </div>
 
                     {/* SCORE Column */}
-                    <div className="text-gray-900">
+                    <div className="col-span-2 text-gray-900 text-sm">
                       {resume.overallScore ? `${resume.overallScore}%` : 'N/A'}
                     </div>
 
                     {/* STATUS Column */}
-                    <div>
+                    <div className="col-span-2">
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${STATUS_COLORS[resume.status] || 'bg-gray-100 text-gray-700'}`}>
                         {STATUS_LABELS[resume.status] || resume.status}
                       </span>
                     </div>
 
                     {/* NOTES Column */}
-                    <div>
-                      <button
+                    <div className="col-span-2">
+                      <div
                         onClick={(e) => {
                           e.stopPropagation();
                           openNoteSidebar(resume);
@@ -464,7 +517,7 @@ const AccountManagerCandidateList = ({ job, onBack }) => {
                         title={resume.addedNotes ? 'Edit existing notes' : 'Add notes'}
                       >
                         <MessageSquare size={16} className="text-white" />
-                      </button>
+                      </div>
                     </div>
                   </div>
                 </div>
