@@ -282,6 +282,24 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
             <title>${resumeData.name || 'Candidate'} Scorecard</title>
             <meta charset="utf-8">
             <style>
+              /* Zepul Logo - Top Right */
+              .zepul-logo {
+                position: absolute !important;
+                top: 20px !important;
+                right: 20px !important;
+                width: 120px !important;
+                height: auto !important;
+                z-index: 1000 !important;
+                background-color: #ffffff !important;
+                padding: 8px !important;
+                border-radius: 8px !important;
+              }
+              
+              /* Ensure logo only shows on first page */
+              @page {
+                margin-top: 60px !important;
+              }
+              
               * {
                 margin: 0;
                 padding: 0;
@@ -754,11 +772,6 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                
                /* Hide PDF-only content on screen */
                .pdf-only-notes {
-                 display: none !important;
-               }
-               
-               /* Hide branding on screen - only show in PDF */
-               .pdf-branding {
                  display: none !important;
                }
                
@@ -1381,24 +1394,6 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                    margin-top: 2px !important;
                  }
                  
-                 /* Branding (Logo + Company Name) styling for PDF only */
-                 .pdf-branding {
-                   display: flex !important;
-                   position: absolute !important;
-                   top: 10px !important;
-                   right: 10px !important;
-                   align-items: center !important;
-                   gap: 4px !important;
-                   z-index: 1000 !important;
-                 }
-                 
-                 .pdf-company-name {
-                   font-size: 18px !important;
-                   font-weight: 700 !important;
-                   color: #1f2937 !important;
-                   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-                 }
-                 
 
                  
                  /* Hide any action buttons or interactive elements */
@@ -1831,6 +1826,8 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  </defs>
                </svg>
                <div class="scorecard-wrapper">
+                 <!-- Zepul Logo - Top Right -->
+                 <img src="/zepul_trademark.jpg" alt="Zepul Logo" class="zepul-logo" />
                  ${printContent}
                </div>
             <script>
@@ -1951,35 +1948,6 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
         {/* Original Content - This remains visible on screen */}
         {/* PDF EXPORT ROOT: Add inline style to force supported background color */}
         <div className="mt-1" ref={resumeContentRef} style={{ background: '#f9fafb' }}>
-          {/* Logo and Company Name - Only visible in PDF at top right */}
-          <div className="pdf-branding" style={{ 
-            position: 'absolute', 
-            top: '10px', 
-            right: '10px', 
-            display: 'none',
-            zIndex: 1000,
-            alignItems: 'center',
-            gap: '4px'
-          }}>
-            <img 
-              src="/favicon.ico" 
-              alt="Zepul Logo" 
-              className="pdf-logo"
-              style={{ 
-                width: '40px', 
-                height: '40px'
-              }} 
-            />
-            <span className="pdf-company-name" style={{
-              fontSize: '18px',
-              fontWeight: '700',
-              color: '#1f2937',
-              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-            }}>
-              ZEPUL
-            </span>
-          </div>
-          
           {/* Header with Name, Title, Skills & Contact */}
           <div className="border-b border-gray-200 py-1 mb-2">
             {/* Top Row: Avatar, Name & Title - Centered */}
