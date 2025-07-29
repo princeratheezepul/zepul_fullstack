@@ -49,7 +49,7 @@ const InterviewTranscript = ({ interviewEvaluation }) => {
             {/* Evaluation Summary */}
             <div className="mb-6">
               <p className="text-gray-700 leading-relaxed text-sm">
-                {result.reason}
+                {result.summary || result.reason}
               </p>
             </div>
 

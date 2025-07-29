@@ -305,7 +305,8 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
         You are an expert interviewer evaluating candidate responses. Please analyze each answer and provide:
         1. A score out of 10
         2. A detailed reason for the score (explained in 2-3 lines)
-        3. A confidence level (High/Medium/Low) based on the quality and completeness of the answer
+        3. A 1-2 line summary of the candidate's answer
+        4. A confidence level (High/Medium/Low) based on the quality and completeness of the answer
 
         Job Position: ${jobDetails?.position || 'Senior Frontend Developer'}
         Candidate Name: ${resumeData?.name || 'Candidate'}
@@ -317,6 +318,7 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
             "answer": "Candidate's answer",
             "score": 8,
             "reason": "Provide a clear, detailed explanation of why this score was given. Explain the strengths and weaknesses of the answer in 2-3 concise lines. Focus on specific aspects like technical knowledge, problem-solving approach, communication clarity, and practical examples provided.",
+            "summary": "A concise 1-2 line summary of what the candidate said in their answer, capturing the main points and key insights.",
             "confidence": "High"
           }
         ]
@@ -333,11 +335,9 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
         - Medium: Good answer but could be more detailed
         - Low: Vague, incomplete, or unclear answer
 
-        Important: For the "reason" field, provide a comprehensive explanation in 2-3 lines that covers:
-        - What the candidate did well or poorly
-        - Specific examples or technical details mentioned
-        - Areas for improvement or strengths demonstrated
-        - How well the answer aligns with the job requirements
+        Important: 
+        - For the "reason" field, provide a comprehensive explanation in 2-3 lines that covers what the candidate did well or poorly, specific examples mentioned, areas for improvement, and how well the answer aligns with job requirements.
+        - For the "summary" field, provide a concise 1-2 line summary that captures the main points of what the candidate said, their key insights, and the essence of their response.
 
         Here are the answers to evaluate:
         ${JSON.stringify(answersData, null, 2)}
@@ -353,6 +353,7 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
         answer: item.answer,
         score: Math.floor(Math.random() * 4) + 7, // Random score between 7-10
         reason: `This is a test evaluation. The candidate provided a ${item.answer.length > 100 ? 'detailed' : 'brief'} answer to the question about ${item.category}. The response shows ${item.answer.length > 100 ? 'good understanding' : 'basic understanding'} of the topic.`,
+        summary: `The candidate discussed ${item.category.toLowerCase()} and provided ${item.answer.length > 100 ? 'comprehensive insights' : 'basic information'} about their experience and approach.`,
         confidence: item.answer.length > 100 ? 'High' : item.answer.length > 50 ? 'Medium' : 'Low'
       }));
       
@@ -387,6 +388,7 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
           answer: item.answer,
           score: Math.floor(Math.random() * 4) + 7, // Random score between 7-10
           reason: `This is a fallback evaluation. The candidate provided a ${item.answer.length > 100 ? 'detailed' : 'brief'} answer to the question about ${item.category}.`,
+          summary: `The candidate discussed ${item.category.toLowerCase()} and provided ${item.answer.length > 100 ? 'comprehensive insights' : 'basic information'} about their experience and approach.`,
           confidence: item.answer.length > 100 ? 'High' : item.answer.length > 50 ? 'Medium' : 'Low'
         }));
         
@@ -538,7 +540,7 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
             <ArrowLeft size={24} />
           </button>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Add Answers Page</h1>
+            <div className="text-2xl md:text-3xl font-bold text-gray-900">Add Answers Page</div>
             <p className="text-gray-600">Adding Answers for {jobDetails?.position || 'Senior Frontend Developer'}</p>
           </div>
         </div>
@@ -551,7 +553,7 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
               <div className="flex items-start gap-3 mb-4">
                 <HelpCircle size={20} className="text-gray-400 mt-1 flex-shrink-0" />
                 <div className="flex-grow">
-                  <h3 className="font-semibold text-gray-800 text-lg">{question.category}</h3>
+                  <div className="font-semibold text-gray-800 text-lg">{question.category}</div>
                   <p className="text-gray-600 mt-1">{question.text}</p>
                   <p className="text-sm text-gray-400 mt-2">Added on {format(new Date(), 'dd MMM yyyy')}</p>
                 </div>

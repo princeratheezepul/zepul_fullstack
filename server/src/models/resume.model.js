@@ -149,6 +149,7 @@ const ResumeSchema = new mongoose.Schema(
         answer: String,
         score: Number,
         reason: String,
+        summary: String,
         confidence: {
           type: String,
           enum: ['High', 'Medium', 'Low']

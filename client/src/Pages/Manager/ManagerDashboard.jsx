@@ -1361,9 +1361,24 @@ export default function ManagerDashboard() {
                     <thead>
                       <tr>
                         <th className="w-48 text-left text-xs text-gray-500 font-medium pb-4"></th>
-                        {stageLabels.map((label, idx) => (
-                          <th key={label} className={`text-xs text-gray-500 font-medium pb-4 ${label === 'Submitted' || label === 'Screened' || label === 'Shortlisted' || label === 'Offered' || label === 'Hired' ? 'text-left' : 'text-center'}`} style={label === 'Submitted' ? { transform: 'translateX(0px)' } : label === 'Screened' ? { transform: 'translateX(-30px)' } : label === 'Shortlisted' ? { transform: 'translateX(-65px)' } : label === 'Offered' ? { transform: 'translateX(-80px)' } : label === 'Hired' ? { transform: 'translateX(-95px)' } : {}}>{label}</th>
-                        ))}
+                        {stageLabels.map((label, idx) => {
+                          let transformClass = '';
+                          if (label === 'Screened') {
+                            transformClass = 'transform -translate-x-4 md:-translate-x-3 lg:-translate-x-2';
+                          } else if (label === 'Shortlisted') {
+                            transformClass = 'transform -translate-x-16 md:-translate-x-11 lg:-translate-x-6';
+                          } else if (label === 'Offered') {
+                            transformClass = 'transform -translate-x-20 sm:-translate-x-14 lg:-translate-x-10';
+                          } else if (label === 'Hired') {
+                            transformClass = 'transform -translate-x-24 md:-translate-x-20 lg:-translate-x-16';
+                          }
+                          
+                          return (
+                            <th key={label} className={`text-xs text-gray-500 font-medium pb-4 ${label === 'Submitted' || label === 'Screened' || label === 'Shortlisted' || label === 'Offered' || label === 'Hired' ? 'text-left' : 'text-center'} ${transformClass}`}>
+                              {label}
+                            </th>
+                          );
+                        })}
                       </tr>
                     </thead>
                     <tbody>
