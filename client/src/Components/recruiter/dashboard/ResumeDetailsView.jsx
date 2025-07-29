@@ -176,7 +176,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
         <div className="col-span-1 lg:col-span-2 space-y-8">
             {/* AI Summary & Scorecard */}
             <div className="p-6 border rounded-xl bg-gray-50">
-                <div className="text-lg font-bold text-gray-800 mb-8">AI Resume Summary</div>
+                <div className="text-lg font-bold text-black mb-8">AI Resume Summary</div>
                 <div className="space-y-8">
                     {Object.entries(resumeData.aiSummary).map(([key, value]) => (
                         <div key={key} className="flex gap-4 items-start">
@@ -198,7 +198,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
                 <hr className="my-10 border-t border-gray-300" />
                 
-                <div className="text-lg font-bold text-gray-800 mb-8">AI Scorecard</div>
+                <div className="text-lg font-bold text-black mb-8">AI Scorecard</div>
                 <div className="space-y-6">
                     {Object.entries(resumeData.aiScorecard).map(([key, value]) => (
                         <div key={key}>

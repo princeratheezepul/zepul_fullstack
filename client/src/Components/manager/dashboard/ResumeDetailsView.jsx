@@ -863,16 +863,97 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  font-weight: 500 !important;
                }
                
-               /* Hide question mark icons and improve layout */
-               .bg-gray-100.rounded-full.w-6.h-6,
-               .bg-gray-100.rounded-full.w-7.h-7 {
-                 display: none !important;
+               /* Style question mark icons properly for PDF */
+               .bg-gray-200.rounded-full.w-8.h-8 {
+                 display: inline-flex !important;
+                 align-items: center !important;
+                 justify-content: center !important;
+                 width: 20px !important;
+                 height: 20px !important;
+                 background-color: #e5e7eb !important;
+                 border-radius: 50% !important;
+                 margin-right: 8px !important;
+                 flex-shrink: 0 !important;
+                 vertical-align: middle !important;
                }
                
-               /* Improve AI Summary section layout */
-               .flex.gap-3.items-start,
-               .flex.gap-4.items-start {
-                 display: block !important;
+               /* Ensure question mark icon is properly sized */
+               .bg-gray-200.rounded-full.w-8.h-8 svg,
+               .bg-gray-200.rounded-full.w-8.h-8 .lucide {
+                 width: 12px !important;
+                 height: 12px !important;
+                 color: #6b7280 !important;
+               }
+               
+               /* Additional styling for question mark icons in PDF */
+               .bg-gray-200.rounded-full.w-8.h-8 {
+                 position: relative !important;
+                 z-index: 1 !important;
+               }
+               
+               /* Ensure proper spacing between icon and text */
+               .flex.gap-4.items-start > div:first-child {
+                 margin-right: 12px !important;
+                 flex-shrink: 0 !important;
+               }
+               
+               /* Style the text content next to question mark icons - ONLY for AI Summary section */
+               .bg-gray-50 .flex.gap-4.items-start > div:last-child {
+                 flex: 1 !important;
+                 min-width: 0 !important;
+               }
+               
+               /* Style the heading to align with the icon - ONLY for AI Summary section */
+               .bg-gray-50 .flex.gap-4.items-start > div:last-child > div:first-child {
+                 display: inline-block !important;
+                 font-weight: 600 !important;
+                 color: #111827 !important;
+                 font-size: 14px !important;
+                 margin-bottom: 8px !important;
+                 line-height: 20px !important;
+                 vertical-align: top !important;
+               }
+               
+               /* Reposition question mark icon to be inline with the heading - ONLY for AI Summary section */
+               .bg-gray-50 .flex.gap-4.items-start {
+                 position: relative !important;
+               }
+               
+               .bg-gray-50 .flex.gap-4.items-start > div:first-child {
+                 position: absolute !important;
+                 left: 0 !important;
+                 top: 0 !important;
+                 display: inline-flex !important;
+                 align-items: center !important;
+                 justify-content: center !important;
+                 width: 20px !important;
+                 height: 20px !important;
+                 background-color: #e5e7eb !important;
+                 border-radius: 50% !important;
+                 margin-right: 8px !important;
+                 flex-shrink: 0 !important;
+                 z-index: 2 !important;
+               }
+               
+               /* Adjust the text container to make space for the icon - ONLY for AI Summary section */
+               .bg-gray-50 .flex.gap-4.items-start > div:last-child {
+                 padding-left: 32px !important;
+                 position: relative !important;
+               }
+               
+               .bg-gray-50 .flex.gap-4.items-start > div:last-child > p {
+                 color: #6b7280 !important;
+                 font-size: 13px !important;
+                 line-height: 1.5 !important;
+                 margin: 0 !important;
+               }
+               
+               /* Improve AI Summary section layout - ONLY for AI Summary section */
+               .bg-gray-50 .flex.gap-3.items-start,
+               .bg-gray-50 .flex.gap-4.items-start {
+                 display: flex !important;
+                 align-items: flex-start !important;
+                 gap: 12px !important;
                  margin-bottom: 20px !important;
                }
                
@@ -1653,6 +1734,23 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  overflow: hidden !important;
                }
                
+               /* Remove top border and minimize vertical header spacing for PDF */
+               .border-b.border-gray-200 {
+                 border-top: none !important;
+                 border-left: none !important;
+                 border-right: none !important;
+                 border-bottom: 1px solid #e5e7eb !important;
+                 padding-top: 4px !important;
+                 padding-bottom: 4px !important;
+                 margin-bottom: 8px !important;
+               }
+               
+               /* Minimize vertical gaps in header section for PDF */
+               .flex.flex-col.items-center.text-center.gap-1.mb-0 {
+                 margin-bottom: 0 !important;
+                 gap: 2px !important;
+               }
+               
                /* Clean layout styling */
                .header-layout {
                  display: flex !important;
@@ -1805,9 +1903,9 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
         {/* PDF EXPORT ROOT: Add inline style to force supported background color */}
         <div className="mt-1" ref={resumeContentRef} style={{ background: '#f9fafb' }}>
           {/* Header with Name, Title, Skills & Contact */}
-          <div className="border-y border-gray-200 py-3 mb-2">
+          <div className="border-b border-gray-200 py-1 mb-2">
             {/* Top Row: Avatar, Name & Title - Centered */}
-            <div className="flex flex-col items-center text-center gap-2 mb-3">
+            <div className="flex flex-col items-center text-center gap-1 mb-0">
               <img src={`https://api.dicebear.com/8.x/initials/svg?seed=${resumeData.name}`} alt={resumeData.name} className="w-20 h-20 rounded-full border-2 border-gray-200 bg-green-600" />
               <div>
                 <div className="text-2xl font-bold text-gray-900">{resumeData.name || 'Prince Rathi'}</div>
@@ -1869,7 +1967,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
             <div className="xl:col-span-2 space-y-4 lg:space-y-6">
                 {/* AI Resume Summary */}
                 <div className="p-6 border rounded-xl bg-gray-50">
-                    <div className="text-sm font-semibold text-red-800 mb-4">AI Resume Summary</div>
+                    <div className="text-sm font-semibold text-black mb-4">AI Resume Summary</div>
                     <div className="space-y-8">
                         {resumeData.aiSummary && Object.entries(resumeData.aiSummary).map(([key, value]) => (
                             <div key={key} className="flex gap-4 items-start">
@@ -1887,7 +1985,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
 
                 {/* AI Scorecard - Separate Container */}
                 <div className=" p-6 border rounded-xl bg-gray-50">
-                    <div className="text-lg font-bold text-red-800 mb-8">AI Scorecard</div>
+                    <div className="text-lg font-bold text-black mb-8">AI Scorecard</div>
                     <div className="space-y-6">
                         {resumeData.aiScorecard && Object.keys(resumeData.aiScorecard).length > 0 ? 
                             Object.entries(resumeData.aiScorecard).map(([key, value]) => {

@@ -612,7 +612,7 @@ const AdminResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => {
             <div className="xl:col-span-2 space-y-6 lg:space-y-8">
                 {/* AI Summary & Scorecard */}
                 <div className="p-6 border rounded-xl bg-gray-50">
-                    <div className="text-lg font-bold text-gray-800 mb-8">AI Resume Summary</div>
+                    <div className="text-lg font-bold text-black mb-8">AI Resume Summary</div>
                     <div className="space-y-8">
                         {resume.aiSummary && Object.entries(resume.aiSummary).map(([key, value]) => (
                             <div key={key} className="flex gap-4 items-start">
@@ -629,7 +629,7 @@ const AdminResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => {
 
                     <hr className="my-10 border-t border-gray-300" />
                     
-                    <div className="text-lg font-bold text-gray-800 mb-8">AI Scorecard</div>
+                    <div className="text-lg font-bold text-black mb-8">AI Scorecard</div>
                     <div className="space-y-6">
                         {resume.aiScorecard && Object.entries(resume.aiScorecard).map(([key, value]) => (
                             <div key={key}>
