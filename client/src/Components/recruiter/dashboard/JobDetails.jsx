@@ -223,7 +223,13 @@ const JobDetails = ({ job, onBack, onJobUpdated, recruiters = [] }) => {
           </div>
           {/* Save Button */}
           <div>
-            <div type="submit" className="bg-blue-600 hover:bg-blue-700 text-white w-[12rem] rounded-lg px-8 py-2 font-semibold shadow-none cursor-pointer disabled:opacity-50" disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</div>
+            <button 
+              type="submit" 
+              className="bg-blue-600 hover:bg-blue-700 text-white w-[12rem] rounded-lg px-8 py-2 font-semibold shadow-none cursor-pointer disabled:opacity-50" 
+              disabled={saving}
+            >
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
           </div>
         </form>
           </div>
