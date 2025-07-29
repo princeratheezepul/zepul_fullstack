@@ -757,6 +757,11 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                  display: none !important;
                }
                
+               /* Hide branding on screen - only show in PDF */
+               .pdf-branding {
+                 display: none !important;
+               }
+               
                /* Add Note button styling */
                .bg-gray-900.text-white {
                  background-color: #111827 !important;
@@ -1376,6 +1381,24 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                    margin-top: 2px !important;
                  }
                  
+                 /* Branding (Logo + Company Name) styling for PDF only */
+                 .pdf-branding {
+                   display: flex !important;
+                   position: absolute !important;
+                   top: 10px !important;
+                   right: 10px !important;
+                   align-items: center !important;
+                   gap: 4px !important;
+                   z-index: 1000 !important;
+                 }
+                 
+                 .pdf-company-name {
+                   font-size: 18px !important;
+                   font-weight: 700 !important;
+                   color: #1f2937 !important;
+                   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+                 }
+                 
 
                  
                  /* Hide any action buttons or interactive elements */
@@ -1928,6 +1951,35 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
         {/* Original Content - This remains visible on screen */}
         {/* PDF EXPORT ROOT: Add inline style to force supported background color */}
         <div className="mt-1" ref={resumeContentRef} style={{ background: '#f9fafb' }}>
+          {/* Logo and Company Name - Only visible in PDF at top right */}
+          <div className="pdf-branding" style={{ 
+            position: 'absolute', 
+            top: '10px', 
+            right: '10px', 
+            display: 'none',
+            zIndex: 1000,
+            alignItems: 'center',
+            gap: '4px'
+          }}>
+            <img 
+              src="/favicon.ico" 
+              alt="Zepul Logo" 
+              className="pdf-logo"
+              style={{ 
+                width: '40px', 
+                height: '40px'
+              }} 
+            />
+            <span className="pdf-company-name" style={{
+              fontSize: '18px',
+              fontWeight: '700',
+              color: '#1f2937',
+              fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+            }}>
+              ZEPUL
+            </span>
+          </div>
+          
           {/* Header with Name, Title, Skills & Contact */}
           <div className="border-b border-gray-200 py-1 mb-2">
             {/* Top Row: Avatar, Name & Title - Centered */}
