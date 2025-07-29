@@ -27,7 +27,8 @@ const allowedOrigins = [
   ServerConfig.Frontend_URL,
   "http://localhost:5173",
   "https://zepulfullstack3.vercel.app",
-  "https://zepul-fullstack-9hgn.vercel.app"
+  "https://zepul-fullstack-9hgn.vercel.app",
+  "https://zepul.com"
 ].filter(Boolean); // Remove any undefined values
 
 console.log('CORS allowed origins:', allowedOrigins);

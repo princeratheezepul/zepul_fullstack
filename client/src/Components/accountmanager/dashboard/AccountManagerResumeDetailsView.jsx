@@ -544,21 +544,21 @@ const AccountManagerResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => 
               </div>
             )}
             
-            {/* Show status indicator if already shortlisted or rejected */}
+            {/* Show scorecard button for all candidates */}
+            <div
+              onClick={handleDownloadPDF}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 cursor-pointer"
+              type="button"
+            >
+              Scorecard
+            </div>
+            
+            {/* Show status indicators */}
             {currentStatus === 'shortlisted' && (
-              <>
-                <div
-                  onClick={handleDownloadPDF}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 cursor-pointer"
-                  type="button"
-                >
-                  Scorecard
-                </div>
-                <span className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium bg-green-100 text-green-800">
-                  <CheckCircle size={16} className="mr-2" />
-                  Shortlisted
-                </span>
-              </>
+              <span className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium bg-green-100 text-green-800">
+                <CheckCircle size={16} className="mr-2" />
+                Shortlisted
+              </span>
             )}
             
             {currentStatus === 'rejected' && (
