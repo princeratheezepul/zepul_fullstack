@@ -1905,28 +1905,28 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
               </button>
             )}
             
-            {/* Show status indicator if already shortlisted or rejected */}
+            {/* Show scorecard button for all candidates */}
+            <button
+              onClick={handleDownloadPDF}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 cursor-pointer"
+              type="button"
+              disabled={pdfLoading}
+            >
+              {pdfLoading ? (
+                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+              ) : null}
+              Scorecard
+            </button>
+            
+            {/* Show status indicators */}
             {currentStatus === 'shortlisted' && (
-              <>
-                <button
-                  onClick={handleDownloadPDF}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 cursor-pointer"
-                  type="button"
-                  disabled={pdfLoading}
-                >
-                  {pdfLoading ? (
-                    <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-                    </svg>
-                  ) : null}
-                  Scorecard
-                </button>
-                <span className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium bg-green-100 text-green-800">
-                  <CheckCircle size={16} className="mr-2" />
-                  Shortlisted
-                </span>
-              </>
+              <span className="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium bg-green-100 text-green-800">
+                <CheckCircle size={16} className="mr-2" />
+                Shortlisted
+              </span>
             )}
             
             {currentStatus === 'rejected' && (
