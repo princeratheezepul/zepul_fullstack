@@ -517,52 +517,52 @@ const sendInterviewEmail = async (toEmail, candidateName, interviewDay, intervie
 // @desc Schedule interview and save questions
 export const scheduleInterview = async (req, res) => {
   try {
-    const { resumeId } = req.params;
-    const { interviewDay, interviewDate, interviewTime, questions } = req.body;
+    // const { resumeId } = req.params;
+    // const { interviewDay, interviewDate, interviewTime, questions } = req.body;
 
-    // Validate required fields
-    if (!interviewDay || !interviewDate || !interviewTime || !questions) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
+    // // Validate required fields
+    // if (!interviewDay || !interviewDate || !interviewTime || !questions) {
+    //   return res.status(400).json({ message: "Missing required fields" });
+    // }
 
-    // Find the resume
-    const resume = await Resume.findById(resumeId);
-    if (!resume) {
-      return res.status(404).json({ message: "Resume not found" });
-    }
+    // // Find the resume
+    // const resume = await Resume.findById(resumeId);
+    // if (!resume) {
+    //   return res.status(404).json({ message: "Resume not found" });
+    // }
 
-    // Update resume with interview details
-    const updatedResume = await Resume.findByIdAndUpdate(
-      resumeId,
-      {
-        interviewScheduled: true,
-        interviewDay,
-        interviewDate,
-        interviewTime,
-        interviewQuestions: questions,
-        status: 'scheduled'
-      },
-      { new: true }
-    );
+    // // Update resume with interview details
+    // const updatedResume = await Resume.findByIdAndUpdate(
+    //   resumeId,
+    //   {
+    //     interviewScheduled: true,
+    //     interviewDay,
+    //     interviewDate,
+    //     interviewTime,
+    //     interviewQuestions: questions,
+    //     status: 'scheduled'
+    //   },
+    //   { new: true }
+    // );
 
-    // Increment shortlisted_number for the job
-    await Job.findByIdAndUpdate(resume.jobId, { $inc: { shortlisted_number: 1 } });
+    // // Increment shortlisted_number for the job
+    // await Job.findByIdAndUpdate(resume.jobId, { $inc: { shortlisted_number: 1 } });
 
-    // Send email to candidate
-    if (resume.email) {
-      await sendInterviewEmail(
-        resume.email,
-        resume.name,
-        interviewDay,
-        interviewDate,
-        interviewTime
-      );
-    }
+    // // Send email to candidate
+    // if (resume.email) {
+    //   await sendInterviewEmail(
+    //     resume.email,
+    //     resume.name,
+    //     interviewDay,
+    //     interviewDate,
+    //     interviewTime
+    //   );
+    // }
 
-    res.status(200).json({ 
-      message: "Interview scheduled successfully", 
-      resume: updatedResume 
-    });
+    // res.status(200).json({ 
+    //   message: "Interview scheduled successfully", 
+    //   resume: updatedResume 
+    // });
   } catch (error) {
     console.error("Error scheduling interview:", error);
     res.status(500).json({ message: "Failed to schedule interview", error: error.message });
