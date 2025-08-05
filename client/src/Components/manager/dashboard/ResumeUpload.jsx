@@ -175,7 +175,7 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
 
   const fetchATSScore = async (resumeText) => {
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
       const prompt = `
       You are an advanced, non-repetitive AI-based ATS evaluator designed to perform **accurate and diverse scoring** of resumes.
@@ -236,7 +236,7 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
 
   const analyzeResume = async (resumeText, job) => {
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
       const prompt = `
       Analyze this resume for the job position: ${job.jobtitle}

@@ -44,7 +44,7 @@ function ResumeDetail() {
   const fetchAIQuestions = async (skills) => {
     setLoadingQuestions(true);
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const prompt = `Generate five unique and realistic interview questions for the job role: Full Stack Developer, considering the following skills: ${skills.join(",")}.\nMake the questions relevant to real-world tasks and challenges.`;
 
       const result = await model.generateContent(prompt);
@@ -68,7 +68,7 @@ function ResumeDetail() {
     }
 
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const prompt = `
 Extract the top 5 most relevant technical skills from the following resume data for the job role "Full Stack Developer".
 Respond with a comma-separated list only:
@@ -124,7 +124,7 @@ ${JSON.stringify(resume)}
 
     try {
       setLoadingScore(true);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
       const skillPrompt = `
       Extract the top 5 most relevant technical skills from the following resume data for the job role "Full Stack Developer".

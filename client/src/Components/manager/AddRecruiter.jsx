@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useApi } from '../../hooks/useApi';
+import toast from 'react-hot-toast';
 
 export default function AddRecruiter({ onClose }) {
   const { user } = useAuth();
   const { post } = useApi();
   const [isLoading, setIsLoading] = useState(false);
+  const [managerProfile, setManagerProfile] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(true);
   const [form, setForm] = useState({
     fullname: "",
     dateOfBirth: "",
@@ -14,6 +17,56 @@ export default function AddRecruiter({ onClose }) {
     phone: "",
     onboardedBy: ""
   });
+
+  // Fetch manager profile data when component mounts
+  useEffect(() => {
+    fetchManagerProfile();
+  }, []);
+
+  const fetchManagerProfile = async () => {
+    try {
+      setProfileLoading(true);
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      const token = userInfo?.data?.accessToken;
+      
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/manager/profile`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch manager profile');
+      }
+
+      const data = await response.json();
+      if (data.manager) {
+        setManagerProfile(data.manager);
+        // Pre-fill the onboardedBy field with manager's full name
+        setForm(prev => ({
+          ...prev,
+          onboardedBy: data.manager.fullname || 'Manager'
+        }));
+      }
+    } catch (err) {
+      console.error('Error fetching manager profile:', err);
+      // Fallback to using userInfo from localStorage
+      const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+      const managerFullname = userInfo?.data?.user?.fullname || user?.fullname || 'Manager';
+      setForm(prev => ({
+        ...prev,
+        onboardedBy: managerFullname
+      }));
+    } finally {
+      setProfileLoading(false);
+    }
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -35,7 +88,8 @@ export default function AddRecruiter({ onClose }) {
     try {
       const userInfo = JSON.parse(localStorage.getItem("userInfo"));
       const managerId = userInfo?.data?.user?._id || user?.id;
-      const managerFullname = userInfo?.data?.user?.fullname || user?.fullname || 'Manager';
+      const managerFullname = managerProfile?.fullname || userInfo?.data?.user?.fullname || user?.fullname || 'Manager';
+      const token = userInfo?.data?.accessToken;
 
       const randomPassword = generateRandomPassword();
 
@@ -46,15 +100,24 @@ export default function AddRecruiter({ onClose }) {
         dateOfBirth: form.dateOfBirth,
         gender: form.gender,
         phone: form.phone,
-        onboardedBy: form.onboardedBy || 'Manager',
+        onboardedBy: form.onboardedBy || managerFullname,
         managerId: managerId
       };
 
-      const response = await post('/api/recruiter/create-by-manager', requestData);
+      // Use direct fetch with both cookies and Authorization header for better compatibility
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/recruiter/create-by-manager`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Add Authorization header as fallback
+        },
+        body: JSON.stringify(requestData)
+      });
 
       if (response.ok) {
         const data = await response.json();
-        alert(`Recruiter created successfully! Password reset link has been sent to ${form.email}`);
+        toast.success(`Recruiter created successfully! Password reset link has been sent to ${form.email}`);
         console.log('Password set URL:', data.data?.user?.resetPasswordToken ? 
           `${import.meta.env.VITE_FRONTEND_URL || 'http://localhost:5173'}/recruiter/set_password/${data.data.user._id}/${data.data.user.resetPasswordToken}` : 
           'URL not available in response');
@@ -72,11 +135,11 @@ export default function AddRecruiter({ onClose }) {
         if (onClose) onClose();
       } else {
         const data = await response.json();
-        alert(data.message || 'Failed to create recruiter');
+        toast.error(data.message || 'Failed to create recruiter');
       }
     } catch (err) {
       console.error('Error creating recruiter:', err);
-      alert('Failed to create recruiter. Please try again.');
+      toast.error('Failed to create recruiter. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -168,16 +231,16 @@ export default function AddRecruiter({ onClose }) {
               type="text"
               name="onboardedBy"
               value={form.onboardedBy}
-              onChange={handleChange}
-              className="border rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Manager Name"
+              disabled
+              className="border rounded-lg px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-100 cursor-not-allowed"
+              placeholder={profileLoading ? "Loading..." : "Manager Name"}
               required
             />
           </div>
           <div className="flex justify-start mt-2 w-full">
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || profileLoading}
               className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-lg px-8 py-3 rounded-lg font-semibold shadow-none w-full md:w-56"
             >
               {isLoading ? 'Creating...' : 'Send Email'}

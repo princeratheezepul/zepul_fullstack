@@ -707,7 +707,20 @@ export const createRecruiterByAdmin = async (req, res) => {
       return res.status(400).json({ message: "Recruiter with this email is already registered" });
     }
 
-    const username = fullname.replace(/\s+/g, '').toLowerCase();
+    // Generate unique username
+    const baseUsername = fullname.replace(/\s+/g, '').toLowerCase();
+    let username = baseUsername;
+    let counter = 1;
+    
+    // Check if username already exists and generate a unique one
+    while (true) {
+      const existingUsername = await User.findOne({ username });
+      if (!existingUsername) {
+        break;
+      }
+      username = `${baseUsername}${counter}`;
+      counter++;
+    }
     
     // Create user first
     const user = await User.create({
@@ -819,7 +832,20 @@ export const createRecruiterByManager = async (req, res) => {
       return res.status(400).json({ message: "Recruiter with this email is already registered" });
     }
 
-    const username = fullname.replace(/\s+/g, '').toLowerCase();
+    // Generate unique username
+    const baseUsername = fullname.replace(/\s+/g, '').toLowerCase();
+    let username = baseUsername;
+    let counter = 1;
+    
+    // Check if username already exists and generate a unique one
+    while (true) {
+      const existingUsername = await User.findOne({ username });
+      if (!existingUsername) {
+        break;
+      }
+      username = `${baseUsername}${counter}`;
+      counter++;
+    }
     
     // Create user first
     const user = await User.create({

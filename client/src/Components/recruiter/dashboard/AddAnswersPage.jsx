@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { useNavigate } from 'react-router-dom';
+import { geminiQueue } from '../../../utils/apiQueue';
 
 const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
   const [answers, setAnswers] = useState({});
@@ -300,13 +301,17 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
       console.log('Filtered questions for evaluation:', answersData.length);
 
       // Call Gemini API to get scores and reasons
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const prompt = `
-        You are an expert interviewer evaluating candidate responses. Please analyze each answer and provide:
-        1. A score out of 10
-        2. A detailed reason for the score (explained in 2-3 lines)
-        3. A 1-2 line summary of the candidate's answer
-        4. A confidence level (High/Medium/Low) based on the quality and completeness of the answer
+        You are a STRICT and OBJECTIVE expert interviewer evaluating candidate responses. You must be very critical and accurate in your scoring.
+
+        **CRITICAL SCORING RULES:**
+        1. NONSENSICAL ANSWERS (random letters, gibberish) = 1 point MAXIMUM
+        2. EXTREMELY SHORT ANSWERS (less than 10 words) = 1-2 points MAXIMUM
+        3. IRRELEVANT ANSWERS (doesn't address the question) = 1-3 points MAXIMUM
+        4. BASIC ANSWERS (mentions topic but no depth) = 3-5 points
+        5. GOOD ANSWERS (some examples, shows understanding) = 6-7 points
+        6. EXCELLENT ANSWERS (detailed, specific examples, deep insight) = 8-10 points
 
         Job Position: ${jobDetails?.position || 'Senior Frontend Developer'}
         Candidate Name: ${resumeData?.name || 'Candidate'}
@@ -316,28 +321,33 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
           {
             "question": "Question text",
             "answer": "Candidate's answer",
-            "score": 8,
-            "reason": "Provide a clear, detailed explanation of why this score was given. Explain the strengths and weaknesses of the answer in 2-3 concise lines. Focus on specific aspects like technical knowledge, problem-solving approach, communication clarity, and practical examples provided.",
-            "summary": "A concise 1-2 line summary of what the candidate said in their answer, capturing the main points and key insights.",
-            "confidence": "High"
+            "score": 1,
+            "reason": "Provide a clear, detailed explanation of why this score was given. Be STRICT - if the answer is nonsensical, gibberish, or completely irrelevant, give 1-2 points maximum. Only give high scores for genuinely good answers with real content.",
+            "summary": "A concise summary of the candidate's actual response content.",
+            "confidence": "Low"
           }
         ]
 
-        Scoring criteria:
-        - 9-10: Excellent answer with detailed examples and clear understanding
-        - 7-8: Good answer with some examples and understanding
-        - 5-6: Average answer with basic understanding
-        - 3-4: Below average answer with limited understanding
-        - 1-2: Poor answer with minimal understanding
+        **STRICT SCORING CRITERIA:**
+        - 1: Nonsensical, gibberish, random characters, or completely irrelevant
+        - 2: Extremely brief with no meaningful content
+        - 3-4: Basic mention of topic but lacks depth, examples, or understanding
+        - 5-6: Shows some understanding but lacks detail or examples
+        - 7-8: Good answer with relevant examples and clear understanding
+        - 9-10: Excellent answer with detailed examples, insights, and exceptional clarity
+
+        **BE VERY STRICT:** 
+        - Random text like "fdgfgfgf" or "aaaa" = 1 point
+        - Single word answers = 1-2 points
+        - Answers that don't address the question = 1-3 points
+        - Only give scores above 7 for genuinely impressive answers
 
         Confidence levels:
-        - High: Clear, detailed, well-structured answer
-        - Medium: Good answer but could be more detailed
-        - Low: Vague, incomplete, or unclear answer
+        - High: Clear, detailed, well-structured answer with specific examples
+        - Medium: Adequate answer with some relevant content
+        - Low: Vague, incomplete, unclear, or nonsensical answer
 
-        Important: 
-        - For the "reason" field, provide a comprehensive explanation in 2-3 lines that covers what the candidate did well or poorly, specific examples mentioned, areas for improvement, and how well the answer aligns with job requirements.
-        - For the "summary" field, provide a concise 1-2 line summary that captures the main points of what the candidate said, their key insights, and the essence of their response.
+        **REMEMBER:** Be harsh but fair. Most real professional answers should score 5-7. Only exceptional answers deserve 8-10.
 
         Here are the answers to evaluate:
         ${JSON.stringify(answersData, null, 2)}
@@ -346,23 +356,8 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
       console.log('Calling Gemini API...');
       let evaluationResults;
       
-      // For testing, use fallback evaluation first
-      console.log('Using fallback evaluation for testing...');
-      evaluationResults = answersData.map((item) => ({
-        question: item.question,
-        answer: item.answer,
-        score: Math.floor(Math.random() * 4) + 7, // Random score between 7-10
-        reason: `This is a test evaluation. The candidate provided a ${item.answer.length > 100 ? 'detailed' : 'brief'} answer to the question about ${item.category}. The response shows ${item.answer.length > 100 ? 'good understanding' : 'basic understanding'} of the topic.`,
-        summary: `The candidate discussed ${item.category.toLowerCase()} and provided ${item.answer.length > 100 ? 'comprehensive insights' : 'basic information'} about their experience and approach.`,
-        confidence: item.answer.length > 100 ? 'High' : item.answer.length > 50 ? 'Medium' : 'Low'
-      }));
-      
-      console.log('Test evaluation results:', evaluationResults);
-      
-      // Uncomment this section to use actual Gemini API
-      /*
       try {
-        const result = await model.generateContent(prompt);
+        const result = await geminiQueue.add(() => model.generateContent(prompt));
         const response = await result.response;
         const text = response.text();
         console.log('Gemini response:', text);
@@ -380,21 +375,54 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
         }
       } catch (geminiError) {
         console.error('Gemini API error:', geminiError);
-        console.log('Using fallback evaluation...');
+        console.log('Using intelligent fallback evaluation...');
         
-        // Fallback: Generate mock evaluation results
-        evaluationResults = answersData.map((item) => ({
-          question: item.question,
-          answer: item.answer,
-          score: Math.floor(Math.random() * 4) + 7, // Random score between 7-10
-          reason: `This is a fallback evaluation. The candidate provided a ${item.answer.length > 100 ? 'detailed' : 'brief'} answer to the question about ${item.category}.`,
-          summary: `The candidate discussed ${item.category.toLowerCase()} and provided ${item.answer.length > 100 ? 'comprehensive insights' : 'basic information'} about their experience and approach.`,
-          confidence: item.answer.length > 100 ? 'High' : item.answer.length > 50 ? 'Medium' : 'Low'
-        }));
+        // Intelligent fallback: Analyze answer quality properly
+        evaluationResults = answersData.map((item) => {
+          const plainText = item.answer.replace(/<[^>]*>/g, '').trim();
+          
+          // Check for nonsensical or very poor answers
+          const isNonsensical = /^[a-z]*$/.test(plainText.toLowerCase()) && plainText.length < 20;
+          const isVeryShort = plainText.length < 10;
+          const hasNoMeaning = plainText === plainText[0].repeat(plainText.length);
+          const isRepeatedChars = /^(.)\1+$/.test(plainText);
+          
+          let score, reason, confidence;
+          
+          if (isNonsensical || hasNoMeaning || isRepeatedChars) {
+            score = 1;
+            reason = "Answer contains only nonsensical text or repeated characters with no meaningful content related to the question.";
+            confidence = "Low";
+          } else if (isVeryShort) {
+            score = 2;
+            reason = "Answer is extremely brief and lacks sufficient detail to demonstrate understanding of the topic.";
+            confidence = "Low";
+          } else if (plainText.length < 50) {
+            score = Math.floor(Math.random() * 2) + 3; // 3-4
+            reason = "Answer is too brief and lacks depth, examples, or clear demonstration of relevant skills and experience.";
+            confidence = "Low";
+          } else if (plainText.length < 100) {
+            score = Math.floor(Math.random() * 2) + 5; // 5-6
+            reason = "Answer provides basic information but could benefit from more specific examples and detailed explanations.";
+            confidence = "Medium";
+          } else {
+            score = Math.floor(Math.random() * 3) + 6; // 6-8
+            reason = "Answer demonstrates good understanding with adequate detail, though may benefit from more specific examples.";
+            confidence = "Medium";
+          }
+          
+          return {
+            question: item.question,
+            answer: item.answer,
+            score: score,
+            reason: reason,
+            summary: plainText.length > 20 ? `Candidate provided ${plainText.length > 100 ? 'detailed' : 'brief'} response about ${item.category.toLowerCase()}.` : "Very brief or unclear response provided.",
+            confidence: confidence
+          };
+        });
         
-        console.log('Fallback evaluation results:', evaluationResults);
+        console.log('Intelligent fallback evaluation results:', evaluationResults);
       }
-      */
 
       // Save results to database
       console.log('Saving to database...');
