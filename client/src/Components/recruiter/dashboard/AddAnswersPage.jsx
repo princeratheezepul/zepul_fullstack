@@ -300,7 +300,7 @@ const AddAnswersPage = ({ onBack, questions, jobDetails, resumeData }) => {
       console.log('Filtered questions for evaluation:', answersData.length);
 
       // Call Gemini API to get scores and reasons
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const prompt = `
         You are an expert interviewer evaluating candidate responses. Please analyze each answer and provide:
         1. A score out of 10

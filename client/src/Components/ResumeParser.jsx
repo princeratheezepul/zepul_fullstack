@@ -8,6 +8,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import Tesseract from "tesseract.js";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useApi } from '../hooks/useApi';
+import { geminiQueue } from '../utils/apiQueue';
 GlobalWorkerOptions.workerSrc = workerUrl;
 
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API);
@@ -152,62 +153,85 @@ useEffect(() => {
 
   const fetchATSScore = async (resumeText) => {
     setAILoading(true);
-    try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    
+    const makeAPICall = async (attempt = 1, maxAttempts = 3) => {
+      try {
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-      const prompt = `
-      You are an advanced, non-repetitive AI-based ATS evaluator designed to perform **accurate and diverse scoring** of resumes.
-      
-      You must calculate the ATS score out of 100 using the following weighted criteria:
-      {
-        "Skill Match (Contextual)": 30,
-        "Experience Relevance & Depth": 25,
-        "Project & Achievement Validation": 15,
-        "AI-Generated Resume Detection": 5,
+        const prompt = `
+        You are an advanced, non-repetitive AI-based ATS evaluator designed to perform **accurate and diverse scoring** of resumes.
         
-        "Consistency Check": 15,
-        "Resume Quality Score": 5,
-        "Interview & Behavioral Prediction": 5,
-        "Competitive Fit & Market Standing": 5
-      }
-      
-      ### Strict Scoring Guidelines:
-      1. **Each component must be scored individually**, even if a section is missing.
-      2. **Avoid giving similar ATS scores across different resumes**. Add randomness based on realistic market variance and industry fit.
-      3. Provide **subtle deductions** for missing details or vague wording.
-      4. Do **not round up scores** unnecessarily; decimal values are encouraged (e.g., 82.5, 76.3).
-      5. Use **clear judgment** for vague or overly templated resumes – do not favor verbosity.
-      6. Your final score must **reflect real-world industry expectations** for 2025 job markets, tech/non-tech roles, and resume standards.
-      
-      Return ONLY a **JSON object** like this (no markdown, no code formatting):
-      {
-        "ats_score": number, // float with one decimal point (e.g., 76.8)
-        "reason": string // Reasoning with 1-2 lines referencing specific scoring areas
-      }
-      
-      Resume text:
-      ${resumeText}
-      `;
+        You must calculate the ATS score out of 100 using the following weighted criteria:
+        {
+          "Skill Match (Contextual)": 30,
+          "Experience Relevance & Depth": 25,
+          "Project & Achievement Validation": 15,
+          "AI-Generated Resume Detection": 5,
+          
+          "Consistency Check": 15,
+          "Resume Quality Score": 5,
+          "Interview & Behavioral Prediction": 5,
+          "Competitive Fit & Market Standing": 5
+        }
+        
+        ### Strict Scoring Guidelines:
+        1. **Each component must be scored individually**, even if a section is missing.
+        2. **Avoid giving similar ATS scores across different resumes**. Add randomness based on realistic market variance and industry fit.
+        3. Provide **subtle deductions** for missing details or vague wording.
+        4. Do **not round up scores** unnecessarily; decimal values are encouraged (e.g., 82.5, 76.3).
+        5. Use **clear judgment** for vague or overly templated resumes – do not favor verbosity.
+        6. Your final score must **reflect real-world industry expectations** for 2025 job markets, tech/non-tech roles, and resume standards.
+        
+        Return ONLY a **JSON object** like this (no markdown, no code formatting):
+        {
+          "ats_score": number, // float with one decimal point (e.g., 76.8)
+          "reason": string // Reasoning with 1-2 lines referencing specific scoring areas
+        }
+        
+        Resume text:
+        ${resumeText}
+        `;
 
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const aiText = await response.text();
-      const cleanedText = aiText.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(cleanedText);
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const aiText = await response.text();
+        const cleanedText = aiText.replace(/```json|```/g, "").trim();
+        const parsed = JSON.parse(cleanedText);
 
+        return {
+          ats_score: parsed.ats_score,
+          ats_reason: parsed.reason,
+        };
+      } catch (err) {
+        console.error(`ATS API attempt ${attempt} failed:`, err);
+        
+        // Check if it's a 503 (overloaded) error and retry
+        if (err.message.includes('503') || err.message.includes('overloaded')) {
+          if (attempt < maxAttempts) {
+            const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000; // Exponential backoff with jitter
+            console.log(`Retrying ATS call in ${delay}ms... (attempt ${attempt + 1}/${maxAttempts})`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return makeAPICall(attempt + 1, maxAttempts);
+          }
+        }
+        throw err;
+      }
+    };
+
+    try {
+      // Use queue for better rate limiting
+      const result = await geminiQueue.add(() => makeAPICall());
+      
       setAIResponse((prev) => ({
         ...prev,
-        ats_score: parsed.ats_score,
-        ats_reason: parsed.reason,
+        ats_score: result.ats_score,
+        ats_reason: result.ats_reason,
       }));
 
-      return {
-        ats_score: parsed.ats_score,
-        ats_reason: parsed.reason,
-      };
+      return result;
     } catch (err) {
-      console.error(err);
-      setAIResponse({ error: "Error retrieving ATS score." });
+      console.error('Final ATS API error:', err);
+      setAIResponse({ error: "Error retrieving ATS score. Please try again." });
       return null;
     } finally {
       setAILoading(false);
@@ -216,10 +240,12 @@ useEffect(() => {
 
   const fetchFullResumeData = async (resumeText, atsData = {}) => {
     setAILoading(true);
-    try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    
+    const makeAPICall = async (attempt = 1, maxAttempts = 3) => {
+      try {
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-      const prompt = `
+        const prompt = `
 You are an intelligent resume parser and analyzer.
 
 Parse the resume text below and return a JSON object in the following format (no markdown, no explanation, no code block):
@@ -251,12 +277,33 @@ Resume text:
 ${resumeText}
 `;
 
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      const aiText = await response.text();
-      const cleanedText = aiText.replace(/```json|```/g, "").trim();
-      const parsed = JSON.parse(cleanedText);
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const aiText = await response.text();
+        const cleanedText = aiText.replace(/```json|```/g, "").trim();
+        const parsed = JSON.parse(cleanedText);
 
+        return parsed;
+      } catch (err) {
+        console.error(`Resume parsing attempt ${attempt} failed:`, err);
+        
+        // Check if it's a 503 (overloaded) error and retry
+        if (err.message.includes('503') || err.message.includes('overloaded')) {
+          if (attempt < maxAttempts) {
+            const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000; // Exponential backoff with jitter
+            console.log(`Retrying resume parsing in ${delay}ms... (attempt ${attempt + 1}/${maxAttempts})`);
+            await new Promise(resolve => setTimeout(resolve, delay));
+            return makeAPICall(attempt + 1, maxAttempts);
+          }
+        }
+        throw err;
+      }
+    };
+
+    try {
+      // Use queue for better rate limiting
+      const parsed = await geminiQueue.add(() => makeAPICall());
+      
       const fullResumeData = {
         ...parsed,
         ...atsData, // ⬅️ inject ats_score and ats_reason
@@ -266,8 +313,8 @@ ${resumeText}
       setAIResponse((prev) => ({ ...prev, ...parsed, ...atsData }));
       await saveResumeToDB(fullResumeData);
     } catch (err) {
-      console.error(err);
-      setAIResponse({ error: "Error retrieving full resume analysis." });
+      console.error('Final resume parsing error:', err);
+      setAIResponse({ error: "Error retrieving full resume analysis. Please try again." });
     } finally {
       setAILoading(false);
     }

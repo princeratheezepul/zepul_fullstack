@@ -43,7 +43,7 @@ const AIInterviewQuestions = ({ onBack, jobDetails, resumeData }) => {
   const fetchAIQuestions = async () => {
     setLoading(true);
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
         const prompt = `
             Based on the following job and resume, generate 4 distinct interview questions.
             

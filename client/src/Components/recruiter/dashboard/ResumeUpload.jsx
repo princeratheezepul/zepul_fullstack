@@ -174,7 +174,7 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
 
   const fetchATSScore = async (resumeText) => {
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
       const prompt = `
       You are an advanced, non-repetitive AI-based ATS evaluator. Calculate the ATS score out of 100 using the following weighted criteria. For each, provide a score and a 1-line reason. At the end, provide the total score (sum, max 100) and a brief summary reason.
@@ -256,7 +256,7 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
   };
 
   const analyzeResume = async (resumeText, job) => {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     const prompt = `
       You are an expert AI recruiter analyzing a resume for a specific job.
       Job Details:
