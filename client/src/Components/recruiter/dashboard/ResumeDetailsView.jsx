@@ -240,7 +240,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
             )}
             
             {/* Scorecard button for all candidates */}
-            <button
+            {/* <button
               onClick={handleDownloadPDF}
               className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center gap-2 cursor-pointer"
               type="button"
@@ -253,7 +253,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                 </svg>
               ) : null}
               Scorecard
-            </button>
+            </button> */}
             
             <button 
               onClick={onBack}
