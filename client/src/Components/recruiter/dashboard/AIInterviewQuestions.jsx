@@ -19,6 +19,7 @@ const AIInterviewQuestions = ({ onBack, jobDetails, resumeData }) => {
   const [selectedDate, setSelectedDate] = useState(0);
   const [editingTime, setEditingTime] = useState(null);
   const [timeValue, setTimeValue] = useState("04:00 PM");
+  const [isEditing, setIsEditing] = useState(false);
 
   const newQuestionRef = useRef(null);
   const [newQuestionIndex, setNewQuestionIndex] = useState(null);
@@ -124,11 +125,73 @@ const AIInterviewQuestions = ({ onBack, jobDetails, resumeData }) => {
     setTimeValue(e.target.value);
   }
 
+  const formatTimeForDisplay = (timeString) => {
+    if (!timeString) return "04:00 PM";
+    
+    // If it's already in 12-hour format, return as is
+    if (timeString.includes('AM') || timeString.includes('PM')) {
+      return timeString;
+    }
+    
+    // Convert 24-hour format to 12-hour format
+    try {
+      const [hours, minutes] = timeString.split(':');
+      const hour = parseInt(hours);
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const displayHour = hour % 12 || 12;
+      return `${displayHour}:${minutes} ${ampm}`;
+    } catch (error) {
+      return "04:00 PM";
+    }
+  }
+
+  const convertTo24Hour = (timeString) => {
+    if (!timeString) return "16:00";
+    
+    // If it's already in 24-hour format, return as is
+    if (!timeString.includes('AM') && !timeString.includes('PM')) {
+      return timeString;
+    }
+    
+    // Convert 12-hour format to 24-hour format
+    try {
+      const match = timeString.match(/(\d+):(\d+)\s*(AM|PM)/i);
+      if (match) {
+        let [_, hours, minutes, ampm] = match;
+        let hour = parseInt(hours);
+        if (ampm.toUpperCase() === 'PM' && hour !== 12) {
+          hour += 12;
+        } else if (ampm.toUpperCase() === 'AM' && hour === 12) {
+          hour = 0;
+        }
+        return `${hour.toString().padStart(2, '0')}:${minutes}`;
+      }
+      return "16:00";
+    } catch (error) {
+      return "16:00";
+    }
+  }
+
   const saveTime = (index) => {
     const updatedSchedule = [...schedule];
-    updatedSchedule[index].time = timeValue;
+    // Convert 24-hour format to 12-hour format for display
+    updatedSchedule[index].time = formatTimeForDisplay(timeValue);
     setSchedule(updatedSchedule);
     setEditingTime(null);
+    setIsEditing(false);
+  }
+
+  const cancelEdit = () => {
+    setEditingTime(null);
+    setIsEditing(false);
+    setTimeValue("04:00 PM");
+  }
+
+  const startEdit = (index, currentTime) => {
+    setEditingTime(index);
+    // Convert 12-hour format to 24-hour format for the time input
+    setTimeValue(convertTo24Hour(currentTime));
+    setIsEditing(true);
   }
 
   const handleScheduleInterview = async () => {
@@ -254,11 +317,7 @@ const AIInterviewQuestions = ({ onBack, jobDetails, resumeData }) => {
                                   />
                                 )}
                              </div>
-                             {!interviewScheduled && (
-                               <button className="text-gray-400 hover:text-gray-600">
-                                  <Edit2 size={16} />
-                               </button>
-                             )}
+                             
                         </div>
                     ))}
                 </div>
@@ -301,18 +360,43 @@ const AIInterviewQuestions = ({ onBack, jobDetails, resumeData }) => {
                         <p className={`text-sm ${selectedDate === day.date.toISOString() ? 'text-blue-200' : 'text-gray-500'}`}>{day.dateOfMonth}</p>
                        
                         {editingTime === index ? (
-                             <input type="text" value={timeValue} onChange={handleTimeChange} onBlur={() => saveTime(index)} autoFocus className="w-20 bg-gray-700 text-white rounded mt-2 text-center" />
+                          <div className="mt-2 flex flex-col items-center">
+                            <input 
+                              type="time" 
+                              value={timeValue} 
+                              onChange={handleTimeChange} 
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  e.preventDefault();
+                                  saveTime(index);
+                                } else if (e.key === 'Escape') {
+                                  e.preventDefault();
+                                  cancelEdit();
+                                }
+                              }}
+                              onBlur={() => saveTime(index)}
+                              autoFocus 
+                              className="w-28 bg-white text-gray-800 rounded text-center text-sm px-2 py-1 border-2 border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-blue-500" 
+                            />
+                          </div>
                         ) : (
-                             <p className="font-semibold mt-2">{day.time}</p>
+                          <div className="flex items-center justify-center mt-2">
+                            <p className="font-semibold">{day.time}</p>
+                          </div>
                         )}
                         
-                        <button onClick={(e) => { 
-                          e.stopPropagation();
-                          setEditingTime(index); 
-                          setTimeValue(day.time); 
-                        }} className="absolute top-2 right-2 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Edit2 size={14} />
-                        </button>
+                        {!interviewScheduled && (
+                          <button 
+                            onClick={(e) => { 
+                              e.stopPropagation();
+                              startEdit(index, day.time); 
+                            }} 
+                            className="absolute top-2 right-2 text-gray-400 opacity-30 hover:opacity-100 group-hover:opacity-100 transition-all duration-200 hover:text-blue-600 p-1 rounded hover:bg-gray-200 hover:bg-opacity-50 z-10"
+                            title="Edit time"
+                          >
+                            <Edit2 size={16} />
+                          </button>
+                        )}
                     </div>
                   ))
                 )}
