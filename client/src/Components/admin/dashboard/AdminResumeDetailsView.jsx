@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Phone, MapPin, Briefcase, Plus, CheckCircle, XCircle, HelpCircle, Circle } from 'lucide-react';
+import { Mail, Phone, MapPin, Briefcase, Plus, CheckCircle, XCircle, HelpCircle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { usePDF } from 'react-to-pdf';
 
@@ -86,32 +86,7 @@ const AdminResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => {
   };
   const match = getMatchLabel(resume.overallScore);
 
-  // Helper functions for transcript confidence colors
-  const getConfidenceColor = (confidence) => {
-    switch (confidence) {
-      case 'High':
-        return 'bg-green-100 text-green-700 border-green-200';
-      case 'Medium':
-        return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      case 'Low':
-        return 'bg-red-100 text-red-700 border-red-200';
-      default:
-        return 'bg-gray-100 text-gray-700 border-gray-200';
-    }
-  };
 
-  const getConfidenceIconColor = (confidence) => {
-    switch (confidence) {
-      case 'High':
-        return 'text-green-600';
-      case 'Medium':
-        return 'text-yellow-600';
-      case 'Low':
-        return 'text-red-600';
-      default:
-        return 'text-gray-600';
-    }
-  };
 
   // Handle shortlist action
   const handleShortlist = async () => {
@@ -452,13 +427,7 @@ const AdminResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => {
                   <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
                     <div style="font-size: 14px; margin-bottom: 8px; color: #000;">Q${index + 1}. ${result.question}</div>
                     <p style="color: #666; margin-bottom: 10px;">${result.reason}</p>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                      <span style="padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; 
-                        ${result.confidence === 'High' ? 'background: #d4edda; color: #155724;' :
-                          result.confidence === 'Medium' ? 'background: #fff3cd; color: #856404;' :
-                          'background: #f8d7da; color: #721c24;'}">
-                        ${result.confidence} Confidence
-                      </span>
+                    <div style="display: flex; justify-content: flex-end;">
                       <span style="background: #333; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
                         Score: ${result.score}/10
                       </span>
@@ -688,16 +657,8 @@ const AdminResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => {
                                         </p>
                                     </div>
 
-                                    {/* Bottom Row - Confidence and Score */}
-                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                                        {/* Confidence Level */}
-                                        {/* <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${getConfidenceColor(result.confidence)}`}>
-                                            <Circle size={12} className={getConfidenceIconColor(result.confidence)} fill="currentColor" />
-                                            <span className="text-sm font-medium">
-                                                {result.confidence} Confidence
-                                            </span>
-                                        </div> */}
-
+                                    {/* Bottom Row - Score only */}
+                                    <div className="flex justify-end">
                                         {/* Score */}
                                         <div className="bg-gray-900 text-white px-3 py-1.5 rounded-full">
                                             <span className="text-sm font-medium">

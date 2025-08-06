@@ -8,14 +8,15 @@ const getCircularProgressSVG = (percentage, size = 160, strokeWidth = 14) => {
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return `
-    <div class="relative flex items-center justify-center" style="width: ${size}px; height: ${size}px;">
+    <div class="relative flex items-center justify-center" style="width: ${size}px; height: ${size}px; margin: 0 auto;">
       <svg 
         width="${size}" 
         height="${size}" 
         viewBox="0 0 ${size} ${size}"
         class="absolute top-0 left-0"
-        style="transform: rotate(-90deg); transform-origin: center;"
+        style="transform: rotate(-90deg); transform-origin: center; display: block;"
       >
+        <!-- Background circle -->
         <circle
           cx="${size / 2}"
           cy="${size / 2}"
@@ -26,6 +27,7 @@ const getCircularProgressSVG = (percentage, size = 160, strokeWidth = 14) => {
           stroke-linecap="round"
           opacity="1"
         />
+        <!-- Progress circle -->
         <circle
           cx="${size / 2}"
           cy="${size / 2}"
@@ -37,13 +39,12 @@ const getCircularProgressSVG = (percentage, size = 160, strokeWidth = 14) => {
           stroke-dashoffset="${strokeDashoffset}"
           stroke-linecap="round"
           opacity="1"
-          style="transition: stroke-dashoffset 0.8s ease-in-out;"
         />
       </svg>
-      <div class="absolute inset-0 flex items-center justify-center z-10">
+      <div class="absolute inset-0 flex items-center justify-center z-10" style="pointer-events: none;">
         <span 
           class="font-bold text-gray-900" 
-          style="font-size: 32px; line-height: 1; text-align: center;"
+          style="font-size: 32px; line-height: 1; text-align: center; display: block; margin: 0; padding: 0;"
         >
           ${percentage}%
         </span>
@@ -59,31 +60,7 @@ const getMatchLabel = (score) => {
   return { label: 'Less Match', color: 'text-red-600', bg: 'bg-red-50' };
 };
 
-const getConfidenceColor = (confidence) => {
-  switch (confidence) {
-    case 'High':
-      return 'bg-green-100 text-green-700 border-green-200';
-    case 'Medium':
-      return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-    case 'Low':
-      return 'bg-red-100 text-red-700 border-red-200';
-    default:
-      return 'bg-gray-100 text-gray-700 border-gray-200';
-  }
-};
 
-const getConfidenceIconColor = (confidence) => {
-  switch (confidence) {
-    case 'High':
-      return 'text-green-600';
-    case 'Medium':
-      return 'text-yellow-600';
-    case 'Low':
-      return 'text-red-600';
-    default:
-      return 'text-gray-600';
-  }
-};
 
 // Generate the complete PDF content
 const generatePDFContent = (resumeData, note = '') => {
@@ -94,7 +71,7 @@ const generatePDFContent = (resumeData, note = '') => {
   const aiSummaryHTML = resumeData.aiSummary && Object.keys(resumeData.aiSummary).length > 0 
     ? Object.entries(resumeData.aiSummary).map(([key, value]) => `
         <div class="flex gap-4 items-start">
-          <div class="bg-gray-200 rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center mt-1">
+          <div class="bg-white rounded-full w-8 h-8 flex-shrink-0 flex items-center justify-center mt-1">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-600">
               <circle cx="12" cy="12" r="10"></circle>
               <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
@@ -102,7 +79,7 @@ const generatePDFContent = (resumeData, note = '') => {
             </svg>
           </div>
           <div>
-            <div class="font-bold text-gray-900 capitalize text-base mb-2">${key.replace(/([A-Z])/g, ' $1').trim()}</div>
+            <div class="font-bold text-gray-900 text-base mb-2">${key.replace(/([A-Z])/g, ' $1').trim().replace(/^\w/, c => c.toUpperCase())}</div>
             <p class="text-gray-700 text-sm leading-relaxed">${value}</p>
           </div>
         </div>
@@ -123,8 +100,8 @@ const generatePDFContent = (resumeData, note = '') => {
               <div class="text-gray-800 font-semibold text-base">${displayName}</div>
               <span class="font-bold text-gray-900 text-base">${numericValue}%</span>
             </div>
-            <div class="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
-              <div class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: ${Math.min(Math.max(numericValue, 0), 100)}%"></div>
+            <div class="w-full bg-gray-300 rounded-full h-2 overflow-hidden">
+              <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: ${Math.min(Math.max(numericValue, 0), 100)}%"></div>
             </div>
           </div>
         `;
@@ -135,36 +112,36 @@ const generatePDFContent = (resumeData, note = '') => {
             <div class="text-gray-800 font-semibold text-base">Technical Skill Match</div>
             <span class="font-bold text-gray-900 text-base">85%</span>
           </div>
-          <div class="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
-            <div class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: 85%"></div>
-          </div>
+                              <div class="w-full bg-gray-300 rounded-full h-2 overflow-hidden">
+                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 85%"></div>
+                    </div>
         </div>
         <div class="scorecard-item">
           <div class="flex justify-between items-center mb-3">
             <div class="text-gray-800 font-semibold text-base">Communication</div>
             <span class="font-bold text-gray-900 text-base">78%</span>
           </div>
-          <div class="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
-            <div class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: 78%"></div>
-          </div>
+                              <div class="w-full bg-gray-300 rounded-full h-2 overflow-hidden">
+                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 78%"></div>
+                    </div>
         </div>
         <div class="scorecard-item">
           <div class="flex justify-between items-center mb-3">
             <div class="text-gray-800 font-semibold text-base">Culture Fit</div>
             <span class="font-bold text-gray-900 text-base">72%</span>
           </div>
-          <div class="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
-            <div class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: 72%"></div>
-          </div>
+                              <div class="w-full bg-gray-300 rounded-full h-2 overflow-hidden">
+                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 72%"></div>
+                    </div>
         </div>
         <div class="scorecard-item">
           <div class="flex justify-between items-center mb-3">
             <div class="text-gray-800 font-semibold text-base">Team Leadership</div>
             <span class="font-bold text-gray-900 text-base">65%</span>
           </div>
-          <div class="w-full bg-gray-300 rounded-full h-3 overflow-hidden">
-            <div class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: 65%"></div>
-          </div>
+                              <div class="w-full bg-gray-300 rounded-full h-2 overflow-hidden">
+                        <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 65%"></div>
+                    </div>
         </div>
       </div>`;
 
@@ -199,7 +176,7 @@ const generatePDFContent = (resumeData, note = '') => {
 
   // Interview Transcript section
   const interviewTranscriptHTML = resumeData.interviewEvaluation && resumeData.interviewEvaluation.evaluationResults && resumeData.interviewEvaluation.evaluationResults.length > 0
-    ? `<div class="w-[80vw] mx-auto p-4 md:p-6 border rounded-xl bg-gray-50">
+          ? `<div class="w-[80vw] mx-auto p-4 md:p-6 border rounded-xl bg-white">
         <div class="text-lg md:text-xl font-bold text-gray-800 mb-4 md:mb-6">Interview Transcript</div>
         <div class="space-y-4 md:space-y-6">
           ${resumeData.interviewEvaluation.evaluationResults.map((result, index) => `
@@ -210,11 +187,7 @@ const generatePDFContent = (resumeData, note = '') => {
               <div class="mb-4 md:mb-6">
                 <p class="text-gray-700 leading-relaxed text-sm md:text-base">${result.reason}</p>
               </div>
-              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full border ${getConfidenceColor(result.confidence)}">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" class="${getConfidenceIconColor(result.confidence)}"><circle cx="12" cy="12" r="10" /></svg>
-                  <span class="text-sm font-medium">${result.confidence} Confidence</span>
-                </div>
+              <div class="flex justify-end">
                 <div class="bg-gray-900 text-white px-3 py-1.5 rounded-full">
                   <span class="text-sm font-medium">Score: ${result.score}/10</span>
                 </div>
@@ -227,7 +200,7 @@ const generatePDFContent = (resumeData, note = '') => {
 
   // Application Details section
   const applicationDetailsHTML = `
-    <div class="w-[80vw] mx-auto mt-8 p-4 md:p-6 border rounded-xl bg-gray-50">
+          <div class="w-[80vw] mx-auto mt-8 p-4 md:p-6 border rounded-xl bg-white">
       <div class="text-xl font-bold text-gray-900 mb-6">Application Details</div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 mb-8">
         <div class="application-detail-item">
@@ -267,7 +240,7 @@ const generatePDFContent = (resumeData, note = '') => {
     : '';
 
   return `
-    <div class="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
+    <div class="bg-white p-4 md:p-6 lg:p-8">
       <div class="max-w-7xl mx-auto">
         <div class="border-b border-gray-200 py-1 mb-2">
           <div class="flex flex-col items-center text-center gap-1 mb-0">
@@ -277,33 +250,35 @@ const generatePDFContent = (resumeData, note = '') => {
               <p class="text-gray-600 text-base">${resumeData.title || 'FullStack Developer'}</p>
             </div>
           </div>
-          <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-            <div class="flex flex-wrap items-center gap-2">
+          <div class="flex flex-col items-center text-center gap-4">
+            <!-- Skills Section -->
+            <div class="flex flex-wrap items-center justify-center gap-2">
               ${resumeData.skills && resumeData.skills.slice(0, 4).map(skill => `<span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">${skill}</span>`).join('')}
               ${resumeData.skills && resumeData.skills.length > 4 ? `<span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">+${resumeData.skills.length - 4}</span>` : ''}
               ${(!resumeData.skills || resumeData.skills.length === 0) ? `<span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">JavaScript</span><span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">TypeScript</span><span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">React.js</span><span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">Node.js</span><span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">+6</span>` : ''}
             </div>
-            <div class="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-              <span class="flex items-center gap-2"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg> ${resumeData.email || 'rathi.prince2@gmail.com'}</span>
-              <span class="flex items-center gap-2"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9a3 3 0 0 1-6 0"/></svg> ${resumeData.phone || '9690389156'}</span>
-              <span class="flex items-center gap-2"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4"/><path d="M8 3v4"/></svg> ${resumeData.experience || 'Less than 1 year'}</span>
-              <span class="flex items-center gap-2"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${resumeData.location || 'Himachal Pradesh, India'}</span>
+            <!-- Contact Information -->
+            <div class="flex flex-wrap items-center justify-center gap-4 text-sm text-gray-600">
+              <span class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg> ${resumeData.email || 'rathi.prince2@gmail.com'}</span>
+              <span class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> ${resumeData.phone || '9690389156'}</span>
+              <span class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> ${resumeData.experience || 'Less than 1 year'}</span>
+              <span class="flex items-center gap-2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${resumeData.location || 'Himachal Pradesh, India'}</span>
             </div>
           </div>
         </div>
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 lg:gap-6">
           <div class="xl:col-span-2 space-y-4 lg:space-y-6">
-            <div class="p-6 border rounded-xl bg-gray-50">
+            <div class="p-6 border rounded-xl bg-white">
               <div class="text-sm font-semibold text-black mb-4">AI Resume Summary</div>
               <div class="space-y-8">${aiSummaryHTML}</div>
             </div>
-            <div class="p-6 border rounded-xl bg-gray-50">
+            <div class="p-6 border rounded-xl bg-white">
               <div class="text-lg font-bold text-black mb-8">AI Scorecard</div>
               <div class="space-y-6">${aiScorecardHTML}</div>
             </div>
           </div>
           <div class="xl:col-span-1">
-            <div class="bg-gray-50 rounded-xl shadow-sm border p-4 md:p-6 space-y-6">
+                         <div class="bg-white rounded-xl shadow-sm border p-4 md:p-6 space-y-6">
               <div class="text-center py-8">
                 <div class="${match.color} text-sm font-semibold mb-3">${match.label}</div>
                 <div class="text-xl font-bold text-gray-900 mb-8">Overall Score</div>
@@ -375,7 +350,7 @@ export const generateScorecardPDF = async (resumeData, note = '') => {
     `);
     
     printWindow.document.close();
-    toast.success('Print dialog opened! Save as PDF from the print dialog.');
+    toast.success('Print dialog opened! Make sure to uncheck "Headers and footers" in print options for a clean PDF.');
     
   } catch (err) {
     console.error('PDF Generation Error:', err);
@@ -399,9 +374,23 @@ const getComprehensiveCSS = () => `
     border-radius: 8px !important;
   }
   
-  /* Ensure logo only shows on first page */
+  /* Remove default print headers/footers and set proper margins */
   @page {
-    margin-top: 60px !important;
+    margin: 0.5in !important;
+    size: A4 !important;
+  }
+  
+  /* Hide default print headers and footers */
+  @media print {
+    body {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    
+    /* Remove default browser print headers */
+    @page {
+      margin: 0.5in !important;
+    }
   }
   
   * {
@@ -414,7 +403,7 @@ const getComprehensiveCSS = () => `
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
     color: #1f2937;
-    background: #f8fafc;
+    background: #ffffff;
     padding: 0;
     margin: 0;
     font-size: 14px;
@@ -422,13 +411,15 @@ const getComprehensiveCSS = () => `
   
   /* PDF specific styles */
   .bg-white { background-color: #ffffff !important; }
-  .bg-gray-50 { background-color: #f9fafb !important; }
+  .bg-gray-50 { background-color: #ffffff !important; }
   .bg-blue-50 { background-color: #eff6ff !important; }
   .bg-green-50 { background-color: #f0fdf4 !important; }
   .bg-red-50 { background-color: #fef2f2 !important; }
   .bg-gray-100 { background-color: #f3f4f6 !important; }
   .bg-gray-200 { background-color: #e5e7eb !important; }
+  .bg-gray-900 { background-color: #111827 !important; }
   .bg-blue-100 { background-color: #dbeafe !important; }
+  .bg-blue-400 { background-color: #60a5fa !important; }
   
   .text-gray-600 { color: #4b5563 !important; }
   .text-gray-700 { color: #374151 !important; }
@@ -440,6 +431,7 @@ const getComprehensiveCSS = () => `
   .text-green-500 { color: #22c55e !important; }
   .text-red-600 { color: #dc2626 !important; }
   .text-blue-900 { color: #1e3a8a !important; }
+  .text-white { color: #ffffff !important; }
   
   /* Container and layout styles */
   .p-4 { padding: 16px !important; }
@@ -447,6 +439,7 @@ const getComprehensiveCSS = () => `
   .p-8 { padding: 32px !important; }
   .px-3 { padding-left: 12px !important; padding-right: 12px !important; }
   .py-1 { padding-top: 4px !important; padding-bottom: 4px !important; }
+  .py-1\\.5 { padding-top: 6px !important; padding-bottom: 6px !important; }
   .py-2 { padding-top: 8px !important; padding-bottom: 8px !important; }
   .py-3 { padding-top: 12px !important; padding-bottom: 12px !important; }
   .py-8 { padding-top: 32px !important; padding-bottom: 32px !important; }
@@ -477,6 +470,15 @@ const getComprehensiveCSS = () => `
   .items-start { align-items: flex-start !important; }
   .justify-between { justify-content: space-between !important; }
   .justify-center { justify-content: center !important; }
+  .justify-end { justify-content: flex-end !important; }
+  
+  /* Positioning classes */
+  .relative { position: relative !important; }
+  .absolute { position: absolute !important; }
+  .inset-0 { top: 0 !important; right: 0 !important; bottom: 0 !important; left: 0 !important; }
+  .top-0 { top: 0 !important; }
+  .left-0 { left: 0 !important; }
+  .z-10 { z-index: 10 !important; }
   .text-center { text-align: center !important; }
   .space-y-2 > * + * { margin-top: 8px !important; }
   .space-y-4 > * + * { margin-top: 16px !important; }
@@ -513,6 +515,7 @@ const getComprehensiveCSS = () => `
   .w-8 { width: 32px !important; }
   .w-20 { width: 80px !important; }
   .w-\\[80vw\\] { width: 80vw !important; }
+  .h-2 { height: 8px !important; }
   .h-3 { height: 12px !important; }
   .h-8 { height: 32px !important; }
   .h-20 { height: 80px !important; }
@@ -564,16 +567,21 @@ const getComprehensiveCSS = () => `
     display: none !important;
   }
   
-  /* Page break rules */
-  .xl\\:col-span-2, .xl\\:col-span-1, .w-\\[80vw\\] {
+  /* Page break rules - Allow content to flow naturally */
+  .scorecard-item {
     page-break-inside: avoid !important;
+  }
+  
+  /* Allow sections to break if needed */
+  .xl\\:col-span-2, .xl\\:col-span-1 {
+    page-break-inside: auto !important;
   }
   
   /* Overall layout improvements */
   .scorecard-wrapper {
     max-width: 100% !important;
     overflow: hidden !important;
-    background: #f9fafb !important;
+    background: #ffffff !important;
     padding: 24px !important;
   }
   
@@ -593,9 +601,24 @@ const getComprehensiveCSS = () => `
       font-size: 12px !important;
     }
     
+    /* Reduce spacing in print to keep content together */
+    .mb-2 { margin-bottom: 4px !important; }
+    .mb-4 { margin-bottom: 8px !important; }
+    .mb-6 { margin-bottom: 12px !important; }
+    .mb-8 { margin-bottom: 16px !important; }
+    .mt-8 { margin-top: 16px !important; }
+    .gap-4 { gap: 8px !important; }
+    .gap-6 { gap: 12px !important; }
+    .py-8 { padding-top: 16px !important; padding-bottom: 16px !important; }
+    
     .xl\\:grid-cols-3 {
       grid-template-columns: 1.8fr 1fr !important;
-      gap: 24px !important;
+      gap: 16px !important;
+    }
+    
+    /* Ensure content flows naturally */
+    .grid {
+      page-break-inside: auto !important;
     }
   }
 `;
