@@ -159,33 +159,64 @@ useEffect(() => {
         const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         const prompt = `
-        You are an advanced, non-repetitive AI-based ATS evaluator designed to perform **accurate and diverse scoring** of resumes.
-        
-        You must calculate the ATS score out of 100 using the following weighted criteria:
+        You are a strict, realistic ATS evaluator. Calculate ATS score out of 100 using weighted criteria below. BE CONSERVATIVE with scoring - most resumes should score 60-80, with only exceptional candidates scoring 85+.
+
+        Weighted criteria and STRICT scoring guidelines:
         {
-          "Skill Match (Contextual)": 30,
-          "Experience Relevance & Depth": 25,
-          "Project & Achievement Validation": 15,
-          "AI-Generated Resume Detection": 5,
-          
-          "Consistency Check": 15,
-          "Resume Quality Score": 5,
-          "Interview & Behavioral Prediction": 5,
-          "Competitive Fit & Market Standing": 5
+          "Skill Match": 30 // Without job context, score based on skill diversity and relevance
+          // 25-30: Diverse, in-demand technical skills, clear expertise
+          // 20-24: Good technical skills, some specialization
+          // 15-19: Basic technical skills, limited depth
+          // 10-14: Few relevant skills, mostly generic
+          // 0-9: Poor/outdated skills, no clear technical focus
+
+          "Experience Quality & Depth": 25
+          // 22-25: Senior level, clear progression, impressive roles
+          // 18-21: Mid-level, good progression, relevant roles
+          // 14-17: Entry-mid level, some progression
+          // 10-13: Entry level or limited progression
+          // 0-9: No relevant experience or major gaps
+
+          "Project & Achievement Validation": 15
+          // 13-15: Quantified achievements, impressive projects
+          // 10-12: Some quantified results, good projects
+          // 7-9: Basic project mentions, few metrics
+          // 4-6: Vague projects, no quantification
+          // 0-3: No meaningful projects/achievements
+
+          "Consistency & Career Progression": 15
+          // 13-15: Stable career, logical upward progression
+          // 10-12: Mostly stable, 1-2 short tenures
+          // 7-9: Some job hopping, minor gaps
+          // 4-6: Frequent changes, employment gaps
+          // 0-3: Major inconsistencies, many gaps
+
+          "Resume Quality & Authenticity": 10 (combined AI detection + quality)
+          // 9-10: Excellent format, clearly human-written, professional
+          // 7-8: Good format, authentic content
+          // 5-6: Average format, some templated sections
+          // 3-4: Poor format, heavily templated
+          // 0-2: Very poor quality or obviously AI-generated
+
+          "Professional Communication": 5
+          // 5: Excellent communication indicators, leadership examples
+          // 3-4: Good professional presentation
+          // 1-2: Basic professional indicators
+          // 0: Poor communication indicators
         }
-        
-        ### Strict Scoring Guidelines:
-        1. **Each component must be scored individually**, even if a section is missing.
-        2. **Avoid giving similar ATS scores across different resumes**. Add randomness based on realistic market variance and industry fit.
-        3. Provide **subtle deductions** for missing details or vague wording.
-        4. Do **not round up scores** unnecessarily; decimal values are encouraged (e.g., 82.5, 76.3).
-        5. Use **clear judgment** for vague or overly templated resumes – do not favor verbosity.
-        6. Your final score must **reflect real-world industry expectations** for 2025 job markets, tech/non-tech roles, and resume standards.
-        
-        Return ONLY a **JSON object** like this (no markdown, no code formatting):
+
+        CRITICAL SCORING RULES:
+        - Most resumes should score 60-75 total (industry reality)
+        - Scores of 85+ should be RARE (top 10% of candidates)
+        - Scores of 90+ should be EXTREMELY RARE (top 2-3%)
+        - Be harsh on: missing achievements, generic content, poor formatting, skill-experience mismatches
+        - Heavily penalize: employment gaps, job hopping, vague descriptions
+        - Without job context, focus on overall resume strength and marketability
+
+        Return ONLY a JSON object like this (no markdown, no code formatting):
         {
-          "ats_score": number, // float with one decimal point (e.g., 76.8)
-          "reason": string // Reasoning with 1-2 lines referencing specific scoring areas
+          "ats_score": number, // decimal value (e.g., 67.5, 73.2)
+          "reason": string // 1-2 lines explaining the score with specific weaknesses/strengths
         }
         
         Resume text:
