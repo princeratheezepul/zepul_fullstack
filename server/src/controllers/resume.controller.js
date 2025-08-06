@@ -563,6 +563,11 @@ export const scheduleInterview = async (req, res) => {
     //   message: "Interview scheduled successfully", 
     //   resume: updatedResume 
     // });
+    res.status(200).json({ 
+      message: "Interview scheduled successfully", 
+       
+    });
+
   } catch (error) {
     console.error("Error scheduling interview:", error);
     res.status(500).json({ message: "Failed to schedule interview", error: error.message });
