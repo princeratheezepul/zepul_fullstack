@@ -178,34 +178,64 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
       const prompt = `
-      You are an advanced, non-repetitive AI-based ATS evaluator designed to perform **accurate and diverse scoring** of resumes.
-      
-      You must calculate the ATS score out of 100 using the following weighted criteria:
+      You are a strict, realistic ATS evaluator. Calculate ATS score out of 100 using weighted criteria below. BE CONSERVATIVE with scoring - most resumes should score 60-80, with only exceptional candidates scoring 85+.
+
+      Weighted criteria and STRICT scoring guidelines:
       {
-        "Skill Match (Contextual)": 30,
-        "Experience Relevance & Depth": 25,
-        "Project & Achievement Validation": 15,
-        "AI-Generated Resume Detection": 5,
-        "Cultural & Soft Skills Fit": 10,
-        "Consistency Check": 15,
-        "Resume Quality Score": 5,
-        "Interview & Behavioral Prediction": 5,
-        "Competitive Fit & Market Standing": 5
+        "Skill Match & Technical Competency": 30
+        // 25-30: Diverse, in-demand technical skills, clear expertise
+        // 20-24: Good technical skills, some specialization
+        // 15-19: Basic technical skills, limited depth
+        // 10-14: Few relevant skills, mostly generic
+        // 0-9: Poor/outdated skills, no clear technical focus
+
+        "Experience Quality & Depth": 25
+        // 22-25: Senior level, clear progression, impressive roles
+        // 18-21: Mid-level, good progression, relevant roles
+        // 14-17: Entry-mid level, some progression
+        // 10-13: Entry level or limited progression
+        // 0-9: No relevant experience or major gaps
+
+        "Project & Achievement Validation": 15
+        // 13-15: Quantified achievements, impressive projects
+        // 10-12: Some quantified results, good projects
+        // 7-9: Basic project mentions, few metrics
+        // 4-6: Vague projects, no quantification
+        // 0-3: No meaningful projects/achievements
+
+        "Consistency & Career Progression": 15
+        // 13-15: Stable career, logical upward progression
+        // 10-12: Mostly stable, 1-2 short tenures
+        // 7-9: Some job hopping, minor gaps
+        // 4-6: Frequent changes, employment gaps
+        // 0-3: Major inconsistencies, many gaps
+
+        "Resume Quality & Professional Presentation": 10
+        // 9-10: Excellent format, clear structure, professional
+        // 7-8: Good format, well-organized
+        // 5-6: Average format, some unclear sections
+        // 3-4: Poor format, hard to follow
+        // 0-2: Very poor quality, unprofessional
+
+        "Communication & Leadership Indicators": 5
+        // 5: Strong leadership examples, excellent communication
+        // 3-4: Good professional indicators
+        // 1-2: Basic communication skills evident
+        // 0: Poor or no communication indicators
       }
-      
-      ### Strict Scoring Guidelines:
-      1. **Each component must be scored individually**, even if a section is missing.
-      2. **Avoid giving similar ATS scores across different resumes**. Add randomness based on realistic market variance and industry fit.
-      3. Provide **subtle deductions** for missing details or vague wording.
-      4. Do **not round up scores** unnecessarily; decimal values are encouraged (e.g., 82.5, 76.3).
-      5. **Consider industry standards** and market competitiveness.
-      6. **Evaluate based on real-world hiring criteria**.
-      
-      ### Response Format:
+
+      CRITICAL SCORING RULES:
+      - Most resumes should score 60-75 total (industry reality)
+      - Scores of 85+ should be RARE (top 10% of candidates)
+      - Scores of 90+ should be EXTREMELY RARE (top 2-3%)
+      - Be harsh on: missing achievements, generic content, poor formatting, employment gaps
+      - Heavily penalize: job hopping, vague descriptions, skill-experience mismatches
+      - Focus on overall resume strength and professional presentation
+
       Return ONLY a JSON object with this exact structure:
       {
-        "ats_score": [number between 0-100],
-        "ats_reason": "[Brief explanation of the score]"
+        "ats_score": number, // decimal value (e.g., 67.5, 73.2)
+        "ats_reason": string // 1-2 lines explaining the score with specific weaknesses/strengths
       }
       
       ### Resume Text to Evaluate:

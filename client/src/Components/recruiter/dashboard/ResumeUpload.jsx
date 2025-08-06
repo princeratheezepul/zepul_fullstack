@@ -177,26 +177,70 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
       const prompt = `
-      You are an advanced, non-repetitive AI-based ATS evaluator. Calculate the ATS score out of 100 using the following weighted criteria. For each, provide a score and a 1-line reason. At the end, provide the total score (sum, max 100) and a brief summary reason.
+      You are a strict, realistic ATS evaluator. Calculate ATS score out of 100 using weighted criteria below. BE CONSERVATIVE with scoring - most resumes should score 60-80, with only exceptional candidates scoring 85+.
 
-      Criteria and weights:
+      Criteria, weights, and STRICT scoring guidelines:
       {
-        "Skill Match (Contextual)": 30,
-        "Experience Relevance & Depth": 25,
-        "Project & Achievement Validation": 15,
-        "AI-Generated Resume Detection": 5,
-        "Consistency Check": 15,
-        "Resume Quality Score": 5,
-        "Interview & Behavioral Prediction": 5,
-        "Competitive Fit & Market Standing": 5
+        "Skill Match (Contextual)": 30 // 0-30 points
+        // 25-30: Perfect skill alignment (90%+ match)
+        // 20-24: Strong match (70-89% skills present)
+        // 15-19: Moderate match (50-69% skills present)
+        // 10-14: Basic match (30-49% skills present)
+        // 0-9: Poor/no match (<30% skills present)
+
+        "Experience Relevance & Depth": 25 // 0-25 points
+        // 22-25: Highly relevant exp, exceeds requirements
+        // 18-21: Relevant exp, meets requirements well
+        // 14-17: Somewhat relevant, meets basic requirements
+        // 10-13: Limited relevance, below requirements
+        // 0-9: Irrelevant or insufficient experience
+
+        "Project & Achievement Validation": 15 // 0-15 points
+        // 13-15: Quantified achievements, impressive projects
+        // 10-12: Some quantified results, good projects
+        // 7-9: Basic project mentions, few metrics
+        // 4-6: Vague projects, no quantification
+        // 0-3: No meaningful projects/achievements
+
+        "Consistency Check": 15 // 0-15 points
+        // 13-15: Stable career, logical progression
+        // 10-12: Mostly stable, 1-2 short tenures
+        // 7-9: Some job hopping, gaps explained
+        // 4-6: Frequent job changes, some gaps
+        // 0-3: Major inconsistencies, many gaps
+
+        "AI-Generated Resume Detection": 5 // 0-5 points (PENALTY category)
+        // 5: Clearly human-written, authentic
+        // 3-4: Mostly authentic, some templated sections
+        // 1-2: Heavily templated, possibly AI-generated
+        // 0: Obviously AI-generated or completely generic
+
+        "Resume Quality Score": 5 // 0-5 points
+        // 5: Excellent formatting, clear, professional
+        // 3-4: Good formatting, mostly clear
+        // 1-2: Poor formatting, unclear sections
+        // 0: Very poor quality, hard to read
+
+        "Interview & Behavioral Prediction": 5 // 0-5 points
+        // 5: Strong communication indicators, leadership
+        // 3-4: Good indicators of soft skills
+        // 1-2: Basic indicators present
+        // 0: Poor communication indicators
+
+        "Competitive Fit & Market Standing": 5 // 0-5 points
+        // 5: Top 10% candidate for this role
+        // 3-4: Top 25% candidate
+        // 1-2: Average candidate
+        // 0: Below average candidate
       }
 
-      - For Skill Match, Experience Relevance & Depth, Project & Achievement Validation, and Competitive Fit, compare the resume to the job details below.
-      - For Consistency Check, score only based on the resume: penalize frequent job changes, reward longer tenures.
-      - For Competitive Fit, judge if the candidate could stand out for this job compared to typical market applicants.
-      - For AI-Generated Resume Detection, penalize if the resume seems overly generic or AI-written.
-      - For Resume Quality, judge formatting, clarity, and professionalism.
-      - For Interview & Behavioral Prediction, estimate how well the candidate might perform in interviews based on the resume.
+      CRITICAL SCORING RULES:
+      - NO component should exceed its maximum weight
+      - Most candidates should score 60-75 total (industry average)
+      - Only truly exceptional candidates score 85+
+      - Scores of 90+ should be EXTREMELY rare (top 2% of candidates)
+      - Be harsh on missing information, generic content, and poor formatting
+      - Heavily penalize mismatched experience levels and skill gaps
 
       Return ONLY a JSON object like this (no markdown, no code formatting):
       {
