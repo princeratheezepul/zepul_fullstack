@@ -439,13 +439,7 @@ const AccountManagerResumeDetailsView = ({ resume, onBack, onStatusUpdate }) => 
                   <div style="border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 15px;">
                     <div style="font-size: 14px; margin-bottom: 8px; color: #000;">Q${index + 1}. ${result.question}</div>
                     <p style="color: #666; margin-bottom: 10px;">${result.reason}</p>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                      <span style="padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; 
-                        ${result.confidence === 'High' ? 'background: #d4edda; color: #155724;' :
-                          result.confidence === 'Medium' ? 'background: #fff3cd; color: #856404;' :
-                          'background: #f8d7da; color: #721c24;'}">
-                        ${result.confidence} Confidence
-                      </span>
+                    <div style="display: flex; justify-content: flex-end;">
                       <span style="background: #333; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
                         Score: ${result.score}/10
                       </span>

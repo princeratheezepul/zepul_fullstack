@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Phone, MapPin, Briefcase, Plus, CheckCircle, XCircle, HelpCircle, Circle } from 'lucide-react';
+import { Mail, Phone, MapPin, Briefcase, Plus, CheckCircle, XCircle, HelpCircle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { generateScorecardPDF } from '../../../utils/pdfGenerator';
 
@@ -120,32 +120,7 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
   };
   const match = getMatchLabel(resumeData.overallScore);
 
-  // Helper functions for transcript confidence colors
-  const getConfidenceColor = (confidence) => {
-    switch (confidence) {
-      case 'High':
-        return 'bg-green-100 text-green-700 border-green-200';
-      case 'Medium':
-        return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      case 'Low':
-        return 'bg-red-100 text-red-700 border-red-200';
-      default:
-        return 'bg-gray-100 text-gray-700 border-gray-200';
-    }
-  };
 
-  const getConfidenceIconColor = (confidence) => {
-    switch (confidence) {
-      case 'High':
-        return 'text-green-600';
-      case 'Medium':
-        return 'text-yellow-600';
-      case 'Low':
-        return 'text-red-600';
-      default:
-        return 'text-gray-600';
-    }
-  };
 
   // Handle shortlist action
   const handleShortlist = async () => {
@@ -719,16 +694,8 @@ const ResumeDetailsView = ({ resumeData, onBack }) => {
                   </p>
                 </div>
 
-                {/* Bottom Row - Confidence and Score */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                  {/* Confidence Level */}
-                  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${getConfidenceColor(result.confidence)}`}>
-                    <Circle size={12} className={getConfidenceIconColor(result.confidence)} fill="currentColor" />
-                    <span className="text-sm font-medium">
-                      {result.confidence} Confidence
-                    </span>
-                  </div>
-
+                {/* Bottom Row - Score only */}
+                <div className="flex justify-end">
                   {/* Score */}
                   <div className="bg-gray-900 text-white px-3 py-1.5 rounded-full">
                     <span className="text-sm font-medium">
