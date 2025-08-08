@@ -92,11 +92,11 @@ const StatsGroup = () => {
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-4 lg:gap-6 mb-3 md:mb-4 lg:mb-6">
         {Array(6).fill(0).map((_, index) => (
-          <div key={index} className="bg-white p-6 rounded-xl shadow animate-pulse">
-            <div className="h-4 bg-gray-200 rounded mb-2"></div>
-            <div className="h-8 bg-gray-200 rounded"></div>
+          <div key={index} className="bg-white p-4 md:p-6 rounded-xl shadow animate-pulse">
+            <div className="h-3 md:h-4 bg-gray-200 rounded mb-2"></div>
+            <div className="h-6 md:h-8 bg-gray-200 rounded"></div>
           </div>
         ))}
       </div>
@@ -104,7 +104,7 @@ const StatsGroup = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-6">
+    <div className="grid grid-cols-3 md:grid-cols-6 gap-1 md:gap-2 h-[12vh] md:h-[14vh]">
       {stats.map((stat, index) => (
         <StatCard
           key={index}

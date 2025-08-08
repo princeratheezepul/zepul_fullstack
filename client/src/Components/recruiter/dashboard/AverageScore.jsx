@@ -60,9 +60,9 @@ const AverageScore = () => {
 
   if (loading) {
     return (
-      <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm flex flex-col h-full">
-        <div className="text-lg sm:text-xl font-semibold text-gray-800">Average Score</div>
-        <div className="flex-grow flex items-center justify-center my-4">
+      <div className="bg-white p-3 md:p-4 lg:p-6 rounded-2xl shadow-sm flex flex-col h-full">
+        <div className="text-base md:text-lg lg:text-xl font-semibold text-gray-800">Average Score</div>
+        <div className="flex-grow flex items-center justify-center my-3 md:my-4">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       </div>
@@ -71,9 +71,9 @@ const AverageScore = () => {
 
   if (error) {
     return (
-      <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm flex flex-col h-full">
-        <div className="text-lg sm:text-xl font-semibold text-gray-800">Average Score</div>
-        <div className="flex-grow flex items-center justify-center my-4">
+      <div className="bg-white p-3 md:p-4 lg:p-6 rounded-2xl shadow-sm flex flex-col h-full">
+        <div className="text-base md:text-lg lg:text-xl font-semibold text-gray-800">Average Score</div>
+        <div className="flex-grow flex items-center justify-center my-3 md:my-4">
           <div className="text-center">
             <p className="text-red-500 mb-2">Error loading data</p>
             <button 
@@ -89,11 +89,11 @@ const AverageScore = () => {
   }
 
   return (
-    <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm flex flex-col h-full">
-      <div className="text-lg sm:text-xl font-semibold text-gray-800">Average Score</div>
+    <div className="bg-white p-2 md:p-3 rounded-lg shadow-sm flex flex-col h-full">
+      <div className="text-xs md:text-sm font-semibold text-gray-800 mb-2">Average Score</div>
       
-      <div className="flex-grow flex items-center justify-center my-4">
-        <div className="relative w-40 h-40 sm:w-48 sm:h-48">
+      <div className="flex-grow flex items-center justify-center">
+        <div className="relative w-full h-full max-w-[85%] md:max-w-[95%]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -124,16 +124,16 @@ const AverageScore = () => {
             </PieChart>
           </ResponsiveContainer>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-4xl sm:text-5xl font-bold text-gray-900">{percentage}%</span>
+            <span className="text-2xl md:text-xl lg:text-2xl font-bold text-gray-900">{percentage}%</span>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-center sm:items-end text-center sm:text-left mt-2 sm:mt-4">
-        <p className="text-xs sm:text-sm text-gray-500 mb-2 sm:mb-0 max-w-[200px]">
+      <div className="flex flex-col sm:flex-row justify-between items-center sm:items-end text-center sm:text-left mt-2 md:mt-4">
+        <p className="text-xs md:text-sm text-gray-500 mb-2 sm:mb-0 max-w-[200px]">
           Reflects average score across submitted candidates
         </p>
-        <span className="bg-gray-900 text-white text-xs font-semibold py-1 px-3 rounded-md">
+        <span className="bg-gray-900 text-white text-xs font-semibold py-1 px-2 md:px-3 rounded-md">
           Score: {scoreData.totalScore}/{scoreData.totalTotalScore}
         </span>
       </div>
