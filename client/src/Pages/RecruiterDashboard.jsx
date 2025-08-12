@@ -19,20 +19,28 @@ const RecruiterDashboard = () => {
       {activeComponent === 'Settings' ? (
         <Settings />
       ) : (
-        <main className="flex-1 ml-20 p-6">
+        <main className="flex-1 ml-20 p-4 md:p-2 pt-2 md:pt-1">
           {activeComponent === 'Dashboard' && (
-            <div className="flex flex-col">
-              <Header />
-              <StatsGroup />
-              <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 mt-6">
-                <CandidateSubmissionChart />
-                <TotalApplicationsChart />
+            <div className="flex flex-col space-y-3 md:space-y-6 md:h-[calc(100vh-16px)]">
+              <div className="md:h-[5vh]">
+                <Header />
               </div>
-              <div className="flex flex-col md:flex-row gap-6 mt-6">
-                <div className="md:w-1/3">
+              <div className="md:h-[16vh]">
+                <StatsGroup />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-4 md:gap-2 md:h-[38vh]">
+                <div className="h-[300px] md:h-full">
+                  <CandidateSubmissionChart />
+                </div>
+                <div className="h-[300px] md:h-full">
+                  <TotalApplicationsChart />
+                </div>
+              </div>
+              <div className="flex flex-col md:flex-row gap-4 md:gap-2 md:h-[35vh]">
+                <div className="h-[250px] md:h-full md:w-1/3">
                   <AverageScore />
                 </div>
-                <div className="md:w-2/3">
+                <div className="h-[250px] md:h-full md:w-2/3">
                   <ShortlistChart />
                 </div>
               </div>

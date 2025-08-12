@@ -83,9 +83,9 @@ const CandidateSubmissionChart = () => {
 
   if (loading) {
     return (
-      <div className="bg-white p-6 rounded-2xl shadow-md px-8">
-        <div className="text-xl font-bold text-gray-800 mb-4">Candidate Submission</div>
-        <div className="flex items-center justify-center h-80">
+      <div className="bg-white p-4 md:p-6 rounded-2xl shadow-md px-4 md:px-8">
+        <div className="text-lg md:text-xl font-bold text-gray-800 mb-3 md:mb-4">Candidate Submission</div>
+        <div className="flex items-center justify-center h-60 md:h-80">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       </div>
@@ -94,9 +94,9 @@ const CandidateSubmissionChart = () => {
 
   if (error) {
     return (
-      <div className="bg-white p-6 rounded-2xl shadow-md px-8">
-        <div className="text-xl font-bold text-gray-800 mb-4">Candidate Submission</div>
-        <div className="flex items-center justify-center h-80">
+      <div className="bg-white p-4 md:p-6 rounded-2xl shadow-md px-4 md:px-8">
+        <div className="text-lg md:text-xl font-bold text-gray-800 mb-3 md:mb-4">Candidate Submission</div>
+        <div className="flex items-center justify-center h-60 md:h-80">
           <div className="text-center">
             <p className="text-red-500 mb-2">Error loading data</p>
             <button 
@@ -115,9 +115,9 @@ const CandidateSubmissionChart = () => {
   const maxValue = Math.max(...data.map(item => item.uv), 10); // Minimum of 10 for better visualization
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-md px-8">
-      <div className="text-xl font-bold text-gray-800 mb-4">Candidate Submission</div>
-      <ResponsiveContainer width="100%" height={400}>
+    <div className="bg-white p-2 rounded-lg shadow-md h-full">
+      <div className="text-xs md:text-sm font-bold text-gray-800 mb-1">Candidate Submission</div>
+      <ResponsiveContainer width="100%" height="90%">
         <AreaChart
           data={data}
           margin={{

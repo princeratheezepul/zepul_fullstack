@@ -108,9 +108,9 @@ const TotalApplicationsChart = () => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg p-6 shadow-md font-sans">
-        <div className="text-xl font-semibold mb-6">Total Applications</div>
-        <div className="flex items-center justify-center h-64">
+      <div className="bg-white rounded-lg p-4 md:p-6 shadow-md font-sans">
+        <div className="text-lg md:text-xl font-semibold mb-4 md:mb-6">Total Applications</div>
+        <div className="flex items-center justify-center h-48 md:h-64">
           <div className="text-gray-500">Loading applications...</div>
         </div>
       </div>
@@ -119,9 +119,9 @@ const TotalApplicationsChart = () => {
 
   if (error) {
     return (
-      <div className="bg-white rounded-lg p-6 shadow-md font-sans">
-        <div className="text-xl font-semibold mb-6">Total Applications</div>
-        <div className="flex items-center justify-center h-64">
+      <div className="bg-white rounded-lg p-4 md:p-6 shadow-md font-sans">
+        <div className="text-lg md:text-xl font-semibold mb-4 md:mb-6">Total Applications</div>
+        <div className="flex items-center justify-center h-48 md:h-64">
           <div className="text-red-500">Error: {error}</div>
         </div>
       </div>
@@ -129,18 +129,18 @@ const TotalApplicationsChart = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-md font-sans">
-      <div className="text-xl font-semibold mb-6">Total Applications</div>
-      <div className="flex items-center gap-8">
-        <div className="relative w-64 h-64">
+    <div className="bg-white rounded-lg p-2 shadow-md font-sans h-full">
+      <div className="text-xs md:text-sm font-semibold mb-1">Total Applications</div>
+      <div className="flex items-center gap-2 h-[calc(100%-24px)]">
+        <div className="relative w-full h-full max-w-[45%]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={chartData}
                 cx="50%"
                 cy="50%"
-                innerRadius={85}
-                outerRadius={110}
+                innerRadius={70}
+                outerRadius={90}
                 fill="#8884d8"
                 paddingAngle={4}
                 dataKey="value"
@@ -158,19 +158,19 @@ const TotalApplicationsChart = () => {
             </PieChart>
           </ResponsiveContainer>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-            <div className="text-5xl font-bold leading-none">{chartTotal}</div>
-            <div className="text-gray-500 text-base">Total Applications</div>
+            <div className="text-3xl md:text-2xl lg:text-3xl font-bold leading-none">{chartTotal}</div>
+            <div className="text-gray-500 text-sm md:text-xs lg:text-sm">Total Applications</div>
           </div>
         </div>
-        <ul className="list-none p-0 m-0 flex flex-col gap-4">
+        <ul className="list-none p-0 m-0 flex flex-col gap-1 md:gap-2">
             {legendData.map((entry, index) => (
-                <li key={`item-${index}`} className="flex items-center gap-3">
+                <li key={`item-${index}`} className="flex items-center gap-2">
                     <span 
-                      className="w-3 h-3 rounded-full" 
+                      className="w-2 h-2 rounded-full" 
                       style={{ backgroundColor: COLORS[index % COLORS.length] }}
                     ></span>
-                    <span className="flex-grow text-base text-gray-700">{entry.name}</span>
-                    <span className="bg-gray-800 text-white py-1 px-3 rounded-2xl text-sm font-medium">{entry.value}</span>
+                    <span className="flex-grow text-xs text-gray-700 truncate">{entry.name}</span>
+                    <span className="bg-gray-800 text-white py-0.5 px-1.5 rounded-xl text-[10px] font-medium min-w-[24px] text-center">{entry.value}</span>
                 </li>
             ))}
         </ul>

@@ -115,11 +115,11 @@ const ShortlistChart = () => {
 
     if (loading) {
         return (
-            <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm h-full flex flex-col">
+            <div className="bg-white p-3 md:p-4 lg:p-6 rounded-2xl shadow-sm h-full flex flex-col">
                 <div className="flex justify-between items-start">
-                    <div className="text-lg sm:text-xl font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</div>
+                    <div className="text-base md:text-lg lg:text-xl font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</div>
                 </div>
-                <div className="flex-grow h-80 mt-4 flex items-center justify-center">
+                <div className="flex-grow h-60 md:h-80 mt-3 md:mt-4 flex items-center justify-center">
                     <div className="text-gray-500">Loading chart data...</div>
                 </div>
             </div>
@@ -128,11 +128,11 @@ const ShortlistChart = () => {
 
     if (error) {
         return (
-            <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm h-full flex flex-col">
+            <div className="bg-white p-3 md:p-4 lg:p-6 rounded-2xl shadow-sm h-full flex flex-col">
                 <div className="flex justify-between items-start">
-                    <div className="text-lg sm:text-xl font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</div>
+                    <div className="text-base md:text-lg lg:text-xl font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</div>
                 </div>
-                <div className="flex-grow h-80 mt-4 flex items-center justify-center">
+                <div className="flex-grow h-60 md:h-80 mt-3 md:mt-4 flex items-center justify-center">
                     <div className="text-red-500">Error: {error}</div>
                 </div>
             </div>
@@ -140,17 +140,17 @@ const ShortlistChart = () => {
     }
 
     return (
-        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm h-full flex flex-col">
-            <div className="flex justify-between items-start">
-                <div className="text-lg sm:text-xl font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</div>
-                <Legend content={<CustomLegend />} verticalAlign="top" align="right" />
-            </div>
-            <div className="flex-grow h-80 mt-4">
+            <div className="bg-white p-2 md:p-3 rounded-lg shadow-sm h-full flex flex-col">
+      <div className="flex justify-between items-start mb-2">
+        <div className="text-xs md:text-sm font-semibold text-gray-800">Candidate Shortlist VS Not Shortlist</div>
+        <Legend content={<CustomLegend />} verticalAlign="top" align="right" />
+      </div>
+      <div className="flex-grow -mt-2">
                 <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                     data={data}
                     margin={{
-                        top: 40,
+                        top: 30,
                         right: 10,
                         left: -20,
                         bottom: 10,
@@ -176,10 +176,10 @@ const ShortlistChart = () => {
                     <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: '#6B7280' }} />
                     <Tooltip cursor={false} content={<></>} />
                     
-                    <Bar dataKey="Shortlist" fill="#2563EB" barSize={35} shape={(props) => <CustomBar {...props} hovered={hoveredMonth === props.payload.name} />}>
+                    <Bar dataKey="Shortlist" fill="#2563EB" barSize={30} shape={(props) => <CustomBar {...props} hovered={hoveredMonth === props.payload.name} />}>
                         <LabelList dataKey="Shortlist" content={(props) => renderCustomizedLabel({ ...props, hoveredMonth })} />
                     </Bar>
-                    <Bar dataKey="Not Shortlist" fill="#9CA3AF" barSize={35} shape={(props) => <CustomBar {...props} hovered={hoveredMonth === props.payload.name} />}>
+                    <Bar dataKey="Not Shortlist" fill="#9CA3AF" barSize={30} shape={(props) => <CustomBar {...props} hovered={hoveredMonth === props.payload.name} />}>
                         <LabelList dataKey="Not Shortlist" content={(props) => renderCustomizedLabel({ ...props, hoveredMonth })} />
                     </Bar>
                 </BarChart>
