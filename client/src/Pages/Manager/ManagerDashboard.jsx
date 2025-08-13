@@ -573,7 +573,7 @@ function RecruiterPerformance({ recruiter, onClose }) {
   };
 
   return (
-    <div className="bg-[#F7F8FA] min-h-screen p-6">
+    <div className="min-h-screen p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -1275,7 +1275,7 @@ export default function ManagerDashboard() {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[#F7F8FA]">
       {/* Sidebar */}
       <aside className="flex flex-col justify-between items-center bg-black w-20 py-6 fixed md:sticky top-0 left-0 h-screen z-20">
         <div className="flex flex-col items-center w-full gap-6">
@@ -1304,9 +1304,9 @@ export default function ManagerDashboard() {
         </div>
       </aside>
       {/* Main Content */}
-      <main className="flex-1 ml-20">
+      <main className="flex-1 ml-20 bg-[#F7F8FA] min-h-screen">
         {showAccountInfo ? (
-          <div className="bg-[#F7F8FA] min-h-screen flex items-start">
+          <div className="min-h-screen flex items-start">
             <div className="w-full max-w-[90vw]">
               <ManagerAccountSettings />
             </div>
@@ -1314,11 +1314,11 @@ export default function ManagerDashboard() {
         ) : selectedSidebar === 1 ? (
           <MyRecruiters selectedRecruiter={selectedRecruiter} setSelectedRecruiter={setSelectedRecruiter} />
         ) : selectedSidebar === 2 ? (
-          <div className="bg-[#F7F8FA] min-h-screen p-2 md:p-6">
+          <div className="min-h-screen p-2 md:p-6">
             <Jobs />
           </div>
         ) : (
-          <div className="bg-[#F7F8FA] min-h-screen p-2 md:p-6">
+          <div className="min-h-screen p-2 md:p-6">
             {/* Header */}
             <div className="bg-transparent">
               <div className="flex items-start justify-between">
