@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { UploadCloud, ArrowLeft, Loader2 } from 'lucide-react';
+import { UploadCloud, ArrowLeft, Loader2, Upload } from 'lucide-react';
+import BulkUploadModal from './BulkUploadModal';
 import * as pdfjsLib from "pdfjs-dist";
 import { GlobalWorkerOptions } from "pdfjs-dist/build/pdf";
 import workerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
@@ -20,6 +21,7 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const [parsedData, setParsedData] = useState(null);
+  const [showBulkUpload, setShowBulkUpload] = useState(false);
   const { user, isAuthenticated } = useAuth();
   const { post } = useApi();
 
@@ -380,9 +382,17 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
 
   return (
     <div className="min-h-screen w-screen flex flex-col items-center justify-center bg-white p-4 overflow-x-hidden">
-      <div className="flex items-center gap-4 mb-8 w-full max-w-5xl">
+      <div className="flex items-center justify-between gap-4 mb-8 w-full max-w-5xl">
         <button onClick={onBack} className="text-gray-500 hover:text-gray-800" disabled={loading}>
           <ArrowLeft size={24} />
+        </button>
+        <button
+          onClick={() => setShowBulkUpload(true)}
+          className="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
+          disabled={loading}
+        >
+          <Upload size={16} />
+          Bulk Upload
         </button>
       </div>
       <div className="flex-grow w-full flex items-center justify-center">
@@ -415,6 +425,13 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
           }
         </div>
       </div>
+      
+      {showBulkUpload && (
+        <BulkUploadModal 
+          onClose={() => setShowBulkUpload(false)}
+          jobDetails={jobDetails}
+        />
+      )}
     </div>
   );
 };
