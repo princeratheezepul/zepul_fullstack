@@ -16,11 +16,16 @@ const bulkUploadJobSchema = new mongoose.Schema({
   },
   uploadMethod: {
     type: String,
-    enum: ['folder', 'drive'],
+    enum: ['folder', 'drive', 'sheets'],
     required: true
   },
   driveLink: {
     type: String
+  },
+  uploadedFile: {
+    originalName: String,
+    mimetype: String,
+    size: Number
   },
   status: {
     type: String,

@@ -1,14 +1,15 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { UploadCloud, Link, Folder, X, Loader2, CheckCircle, AlertCircle, HelpCircle } from 'lucide-react';
+import { UploadCloud, Link, Folder, X, Loader2, CheckCircle, AlertCircle, HelpCircle, FileSpreadsheet } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import GoogleDriveHelper from './GoogleDriveHelper';
 
 const BulkUploadModal = ({ onClose, jobDetails }) => {
-  const [uploadMethod, setUploadMethod] = useState(''); // 'folder' or 'drive'
+  const [uploadMethod, setUploadMethod] = useState(''); // 'folder', 'drive', or 'sheets'
   const [driveLink, setDriveLink] = useState('');
+  const [sheetsFile, setSheetsFile] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(null);
   const [results, setResults] = useState(null);
@@ -202,6 +203,12 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
     }
   };
 
+  const handleSheetsDrop = (acceptedFiles) => {
+    if (acceptedFiles.length > 0) {
+      setSheetsFile(acceptedFiles[0]);
+    }
+  };
+
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleFolderUpload,
     accept: {
@@ -212,6 +219,18 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
     disabled: isProcessing
   });
 
+  const { getRootProps: getSheetsRootProps, getInputProps: getSheetsInputProps } = useDropzone({
+    onDrop: handleSheetsDrop,
+    accept: {
+      'text/csv': ['.csv'],
+      'application/vnd.ms-excel': ['.xls'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+      'text/plain': ['.txt']
+    },
+    multiple: false,
+    disabled: isProcessing
+  });
+
   const handleFolderSelect = (event) => {
     const files = Array.from(event.target.files);
     if (files.length > 0) {
@@ -219,9 +238,59 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
     }
   };
 
+  const handleSheetsUpload = async () => {
+    if (!sheetsFile) {
+      toast.error('Please select a file first');
+      return;
+    }
+
+    setIsProcessing(true);
+    setProgress({ current: 0, total: 1, message: 'Starting Google Sheets processing...' });
+
+    try {
+      const formData = new FormData();
+      formData.append('file', sheetsFile);
+      formData.append('uploadMethod', 'sheets');
+
+      const authToken = localStorage.getItem('authToken');
+      const response = await fetch(
+        `/api/resumes/bulk-upload/${jobDetails.jobId}/sheets`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+          },
+          credentials: 'include',
+          body: formData
+        }
+      );
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          handleAuthError();
+          return;
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      toast.success('Google Sheets processing started successfully!');
+      
+      // Start polling for progress
+      pollProgress(data.jobId);
+
+    } catch (error) {
+      console.error('Error uploading Google Sheets:', error);
+      toast.error('Failed to upload Google Sheets: ' + error.message);
+      setIsProcessing(false);
+      setProgress(null);
+    }
+  };
+
   const resetModal = () => {
     setUploadMethod('');
     setDriveLink('');
+    setSheetsFile(null);
     setIsProcessing(false);
     setProgress(null);
     setResults(null);
@@ -378,7 +447,7 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
                 Choose how you want to upload multiple resumes
               </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Folder Upload */}
                 <div 
                   className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
@@ -400,6 +469,18 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Google Drive Link</h3>
                   <p className="text-sm text-gray-600">
                     Provide a Google Drive folder link containing resumes
+                  </p>
+                </div>
+
+                {/* Google Sheets Upload */}
+                <div 
+                  className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-all"
+                  onClick={() => setUploadMethod('sheets')}
+                >
+                  <FileSpreadsheet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Google Sheets</h3>
+                  <p className="text-sm text-gray-600">
+                    Upload CSV/Excel file with resume links
                   </p>
                 </div>
               </div>
@@ -451,7 +532,7 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
                 </div>
               </div>
             </div>
-          ) : (
+          ) : uploadMethod === 'drive' ? (
             <div className="space-y-6">
               <button
                 onClick={() => setUploadMethod('')}
@@ -480,11 +561,57 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
                     Process Drive Folder
                   </button>
                 </div>
-
-
               </div>
             </div>
-          )}
+          ) : uploadMethod === 'sheets' ? (
+            <div className="space-y-6">
+              <button
+                onClick={() => setUploadMethod('')}
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                ← Back to options
+              </button>
+              
+              <div className="text-center">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Google Sheets Upload</h3>
+                
+                <div className="max-w-md mx-auto space-y-4">
+                  <div 
+                    {...getSheetsRootProps()}
+                    className="border-2 border-dashed border-gray-300 rounded-xl p-8 cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-all"
+                  >
+                    <input {...getSheetsInputProps()} />
+                    <FileSpreadsheet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-lg font-semibold text-gray-900 mb-2">
+                      Upload CSV/Excel file
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      File should contain Google Drive/Docs resume links
+                    </p>
+                  </div>
+                  
+                  {sheetsFile && (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <div className="flex items-center">
+                        <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+                        <span className="text-sm text-green-800">
+                          {sheetsFile.name} selected
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <button
+                    onClick={handleSheetsUpload}
+                    disabled={!sheetsFile || isProcessing}
+                    className="w-full bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {isProcessing ? "Processing..." : "Process Google Sheets"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
       

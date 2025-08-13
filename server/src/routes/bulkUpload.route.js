@@ -12,6 +12,8 @@ const router = express.Router();
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
+
+// Multer for resume files (PDF/DOCX)
 const upload = multer({ 
   storage: storage,
   limits: {
@@ -29,8 +31,29 @@ const upload = multer({
   }
 });
 
+// Multer for Google Sheets files (CSV/Excel/TXT)
+const uploadSheets = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB per file
+    files: 1 // Only one file
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept CSV, Excel, and text files
+    if (file.mimetype === 'text/csv' || 
+        file.mimetype === 'application/vnd.ms-excel' ||
+        file.mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+        file.mimetype === 'text/plain') {
+      cb(null, true);
+    } else {
+      cb(new Error('Only CSV, Excel, and text files are allowed'), false);
+    }
+  }
+});
+
 // Routes
 router.post('/:jobId', multiAuthMiddleware, upload.array('files', 100), startBulkUpload);
+router.post('/:jobId/sheets', multiAuthMiddleware, uploadSheets.single('file'), startBulkUpload);
 router.get('/:jobId/status', multiAuthMiddleware, getBulkUploadStatus);
 router.get('/:jobId/results', multiAuthMiddleware, getBulkUploadResults);
 router.delete('/:jobId', multiAuthMiddleware, cancelBulkUpload);

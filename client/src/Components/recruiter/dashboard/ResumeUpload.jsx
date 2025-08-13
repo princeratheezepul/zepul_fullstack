@@ -388,7 +388,7 @@ const ResumeUpload = ({ onBack, jobDetails }) => {
         </button>
         <button
           onClick={() => setShowBulkUpload(true)}
-          className="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center gap-2"
+          className="bg-blue-800 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-900 transition-colors flex items-center gap-2"
           disabled={loading}
         >
           <Upload size={16} />

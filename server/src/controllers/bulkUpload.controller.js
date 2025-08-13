@@ -13,6 +13,9 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { createRequire } from 'module';
 import axios from 'axios';
+import XLSX from 'xlsx';
+import csv from 'csv-parser';
+import { Readable } from 'stream';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -98,6 +101,15 @@ export const startBulkUpload = async (req, res) => {
       bulkJobData.driveLink = driveLink;
     }
 
+    // Add uploaded file information if provided
+    if (uploadMethod === 'sheets' && req.file) {
+      bulkJobData.uploadedFile = {
+        originalName: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size
+      };
+    }
+
     const bulkJob = new BulkUploadJob(bulkJobData);
     await bulkJob.save();
 
@@ -110,6 +122,9 @@ export const startBulkUpload = async (req, res) => {
     } else if (uploadMethod === 'drive' && driveLink) {
       // Process Google Drive files (with or without API credentials)
       await processDriveFiles(bulkJob._id, driveLink, job);
+    } else if (uploadMethod === 'sheets' && req.file) {
+      // Process Google Sheets file
+      await processGoogleSheets(bulkJob._id, req.file, job);
     } else {
       return res.status(400).json({ message: "Invalid upload method or missing files" });
     }
@@ -349,6 +364,85 @@ const processUploadedFiles = async (bulkJobId, files, job) => {
   }
 };
 
+// Process Google Sheets files
+const processGoogleSheets = async (bulkJobId, file, job) => {
+  try {
+    console.log('Processing Google Sheets file:', file.originalname);
+    
+    // Parse the file to extract URLs
+    const urls = await parseGoogleSheets(file.buffer, file.mimetype);
+    
+    if (!urls || urls.length === 0) {
+      throw new Error('No valid Google Drive/Docs URLs found in the file');
+    }
+    
+    console.log(`Found ${urls.length} valid URLs in Google Sheets file`);
+    
+    const bulkJob = await BulkUploadJob.findById(bulkJobId);
+    bulkJob.totalFiles = urls.length;
+    await bulkJob.save();
+    
+    console.log(`Processing ${urls.length} files from Google Sheets for bulk job ${bulkJobId}`);
+    
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      
+      try {
+        bulkJob.currentFile = `URL ${i + 1}: ${url.substring(0, 50)}...`;
+        await bulkJob.save();
+        
+        // Download file from Google URL
+        const buffer = await downloadFromGoogleUrl(url);
+        
+        // Determine file type
+        let mimeType = 'application/pdf';
+        if (url.includes('/document/')) {
+          mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        }
+        
+        // Process the file
+        const result = await processResumeBuffer(buffer, `resume_${i + 1}`, mimeType, job, bulkJob);
+        
+        // Save result
+        bulkJob.results.push({
+          fileName: `resume_${i + 1}`,
+          status: 'success',
+          resumeId: result._id,
+          url: url
+        });
+        bulkJob.successfulFiles++;
+        
+      } catch (error) {
+        console.error(`Error processing URL ${i + 1}:`, error);
+        
+        bulkJob.results.push({
+          fileName: `resume_${i + 1}`,
+          status: 'failed',
+          error: error.message,
+          url: url
+        });
+        bulkJob.failedFiles++;
+      }
+      
+      bulkJob.processedFiles++;
+      await bulkJob.save();
+    }
+    
+    bulkJob.status = 'completed';
+    bulkJob.currentFile = null;
+    await bulkJob.save();
+    
+    console.log(`Bulk job ${bulkJobId} completed: ${bulkJob.successfulFiles} successful, ${bulkJob.failedFiles} failed`);
+    
+  } catch (error) {
+    console.error('Error in processGoogleSheets:', error);
+    const bulkJob = await BulkUploadJob.findById(bulkJobId);
+    bulkJob.status = 'failed';
+    bulkJob.error = error.message;
+    await bulkJob.save();
+  }
+};
+
 // Process Google Drive files
 const processDriveFiles = async (bulkJobId, driveLink, job) => {
   try {
@@ -496,23 +590,23 @@ const extractTextFromPDF = async (buffer) => {
     console.log('PDF extraction - Buffer type:', typeof buffer);
     console.log('PDF extraction - Buffer length:', buffer?.length);
     console.log('PDF extraction - Is Buffer:', Buffer.isBuffer(buffer));
-    
+
     if (!buffer || buffer.length === 0) {
       throw new Error("PDF buffer is empty or invalid");
     }
-    
+
     console.log('PDF extraction - Loading pdfjs-dist using require');
     const pdfjsLib = require('pdfjs-dist/legacy/build/pdf.js');
-    
+
     console.log('PDF extraction - pdfjs-dist loaded successfully');
-    
+
     // Convert Buffer to Uint8Array as required by pdfjs-dist
     const uint8Array = new Uint8Array(buffer);
     console.log('PDF extraction - Converted to Uint8Array, length:', uint8Array.length);
-    
+
     const pdf = await pdfjsLib.getDocument({ data: uint8Array }).promise;
     console.log('PDF extraction - PDF loaded, pages:', pdf.numPages);
-    
+
     let fullText = "";
     for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
       const page = await pdf.getPage(pageNum);
@@ -520,17 +614,41 @@ const extractTextFromPDF = async (buffer) => {
       const pageText = content.items.map((item) => item.str).join(" ");
       fullText += pageText + " ";
     }
-    
+
     console.log('PDF extraction - Text extracted, length:', fullText.length);
-    
+
     if (fullText.trim().length === 0) {
       throw new Error("PDF contains no readable text");
     }
-    
+
     return fullText.trim();
   } catch (err) {
     console.error("PDF parsing error:", err.message);
     console.error("PDF parsing stack:", err.stack);
+    
+    // If pdfjs-dist fails, try alternative approach
+    if (err.message.includes('Cannot find module') || err.message.includes('pdfjs-dist')) {
+      console.log('PDF extraction - Falling back to alternative method');
+      try {
+        // Try using a different PDF parsing approach
+        const { PDFExtract } = require('pdf.js-extract');
+        const pdfExtract = new PDFExtract();
+        const options = {};
+        
+        const data = await pdfExtract.extractBuffer(buffer, options);
+        const text = data.pages.map(page => page.content.map(item => item.str).join(' ')).join(' ');
+        
+        if (text.trim().length === 0) {
+          throw new Error("PDF contains no readable text");
+        }
+        
+        return text.trim();
+      } catch (fallbackErr) {
+        console.error("PDF fallback parsing error:", fallbackErr.message);
+        throw new Error(`Failed to read PDF: ${err.message}`);
+      }
+    }
+    
     throw new Error(`Failed to read PDF: ${err.message}`);
   }
 };
@@ -885,6 +1003,169 @@ const saveResumeToDatabase = async (analysis, atsResult, job, rawText, bulkJobDa
 const extractFolderIdFromLink = (link) => {
   const match = link.match(/\/folders\/([a-zA-Z0-9-_]+)/);
   return match ? match[1] : null;
+};
+
+// Extract file ID from Google Drive/Docs link
+const extractFileIdFromLink = (link) => {
+  // Google Drive file
+  const driveMatch = link.match(/\/file\/d\/([a-zA-Z0-9-_]+)/);
+  if (driveMatch) return driveMatch[1];
+  
+  // Google Docs
+  const docsMatch = link.match(/\/document\/d\/([a-zA-Z0-9-_]+)/);
+  if (docsMatch) return docsMatch[1];
+  
+  return null;
+};
+
+// Validate if URL is a valid Google Drive/Docs link
+const isValidGoogleUrl = (url) => {
+  const validPatterns = [
+    /^https:\/\/drive\.google\.com\/file\/d\/[a-zA-Z0-9-_]+/,
+    /^https:\/\/docs\.google\.com\/document\/d\/[a-zA-Z0-9-_]+/,
+    /^https:\/\/drive\.google\.com\/open\?id=[a-zA-Z0-9-_]+/
+  ];
+  
+  return validPatterns.some(pattern => pattern.test(url));
+};
+
+// Parse Google Sheets file (CSV/Excel)
+const parseGoogleSheets = async (fileBuffer, fileType) => {
+  try {
+    let urls = [];
+    
+    if (fileType === 'text/csv' || fileType === 'application/vnd.ms-excel') {
+      // Parse CSV
+      return new Promise((resolve, reject) => {
+        const results = [];
+        const stream = Readable.from(fileBuffer);
+        
+        stream
+          .pipe(csv())
+          .on('data', (data) => {
+            // Extract URLs from all columns
+            Object.values(data).forEach(value => {
+              if (typeof value === 'string' && isValidGoogleUrl(value.trim())) {
+                results.push(value.trim());
+              }
+            });
+          })
+          .on('end', () => {
+            resolve(results);
+          })
+          .on('error', reject);
+      });
+    } else if (fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || 
+               fileType === 'application/vnd.ms-excel') {
+      // Parse Excel
+      const workbook = XLSX.read(fileBuffer, { type: 'buffer' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+      
+      // Extract URLs from all cells
+      data.forEach(row => {
+        if (Array.isArray(row)) {
+          row.forEach(cell => {
+            if (typeof cell === 'string' && isValidGoogleUrl(cell.trim())) {
+              urls.push(cell.trim());
+            }
+          });
+        }
+      });
+      
+      return urls;
+    } else {
+      // Parse as plain text (one URL per line)
+      const text = fileBuffer.toString('utf-8');
+      const lines = text.split('\n');
+      
+      lines.forEach(line => {
+        const trimmedLine = line.trim();
+        if (trimmedLine && isValidGoogleUrl(trimmedLine)) {
+          urls.push(trimmedLine);
+        }
+      });
+      
+      return urls;
+    }
+  } catch (error) {
+    console.error('Error parsing Google Sheets file:', error);
+    throw new Error(`Failed to parse file: ${error.message}`);
+  }
+};
+
+// Download file from Google Drive/Docs URL
+const downloadFromGoogleUrl = async (url) => {
+  try {
+    const fileId = extractFileIdFromLink(url);
+    if (!fileId) {
+      throw new Error('Invalid Google Drive/Docs URL');
+    }
+    
+    // Determine file type from URL
+    let mimeType = 'application/pdf'; // default
+    if (url.includes('/document/')) {
+      mimeType = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    }
+    
+    if (drive) {
+      // Use Google Drive API if available
+      try {
+        const response = await drive.files.get({
+          fileId: fileId,
+          alt: 'media'
+        }, {
+          responseType: 'stream'
+        });
+        
+        // Convert stream to buffer
+        const chunks = [];
+        return new Promise((resolve, reject) => {
+          response.data.on('data', chunk => chunks.push(chunk));
+          response.data.on('end', () => resolve(Buffer.concat(chunks)));
+          response.data.on('error', reject);
+        });
+      } catch (driveError) {
+        console.error('Google Drive API error:', driveError.message);
+        throw new Error(`Google Drive API error: ${driveError.message}`);
+      }
+    } else {
+      // Use direct download method with multiple fallbacks
+      const fallbackUrls = [
+        `https://drive.google.com/uc?export=download&id=${fileId}`,
+        `https://drive.google.com/file/d/${fileId}/preview`,
+        `https://docs.google.com/document/d/${fileId}/export?format=pdf`
+      ];
+      
+      for (const downloadUrl of fallbackUrls) {
+        try {
+          console.log(`Trying download URL: ${downloadUrl}`);
+          const response = await axios.get(downloadUrl, {
+            responseType: 'arraybuffer',
+            maxRedirects: 5,
+            timeout: 10000,
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+          });
+          
+          if (response.data && response.data.length > 0) {
+            console.log(`Successfully downloaded from: ${downloadUrl}`);
+            return Buffer.from(response.data);
+          }
+        } catch (urlError) {
+          console.log(`Failed to download from ${downloadUrl}:`, urlError.message);
+          continue;
+        }
+      }
+      
+      throw new Error('All download methods failed. File may be private or not accessible.');
+    }
+  } catch (error) {
+    console.error('Error downloading from Google URL:', error);
+    throw new Error(`Failed to download file: ${error.message}`);
+  }
 };
 
 // Download file from Google Drive
