@@ -274,14 +274,14 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
       }
 
       const data = await response.json();
-      toast.success('Google Sheets processing started successfully!');
+      toast.success('Excel Sheets processing started successfully!');
       
       // Start polling for progress
       pollProgress(data.jobId);
 
     } catch (error) {
-      console.error('Error uploading Google Sheets:', error);
-      toast.error('Failed to upload Google Sheets: ' + error.message);
+      console.error('Error uploading Excel Sheets:', error);
+      toast.error('Failed to upload Excel Sheets: ' + error.message);
       setIsProcessing(false);
       setProgress(null);
     }
@@ -472,13 +472,13 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
                   </p>
                 </div>
 
-                {/* Google Sheets Upload */}
+                {/* Excel Sheets Upload */}
                 <div 
                   className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-all"
                   onClick={() => setUploadMethod('sheets')}
                 >
                   <FileSpreadsheet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Google Sheets</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Excel Sheets</h3>
                   <p className="text-sm text-gray-600">
                     Upload CSV/Excel file with resume links
                   </p>
@@ -573,7 +573,7 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
               </button>
               
               <div className="text-center">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Google Sheets Upload</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">Excel Sheets Upload</h3>
                 
                 <div className="max-w-md mx-auto space-y-4">
                   <div 
@@ -606,7 +606,7 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
                     disabled={!sheetsFile || isProcessing}
                     className="w-full bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
                   >
-                    {isProcessing ? "Processing..." : "Process Google Sheets"}
+                    {isProcessing ? "Processing..." : "Process Excel Sheets"}
                   </button>
                 </div>
               </div>
