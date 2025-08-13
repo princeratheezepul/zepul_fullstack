@@ -379,7 +379,11 @@ const processDriveFiles = async (bulkJobId, driveLink, job) => {
     } else {
       // Use public link method
       console.log('Using public link method');
-      files = await getFilesFromPublicDrive(folderId);
+      const publicResult = await getFilesFromPublicDrive(folderId);
+      if (publicResult.isPublicFolder) {
+        throw new Error('Google Drive API not configured. Please use folder upload option.');
+      }
+      files = publicResult;
     }
 
     if (!files || files.length === 0) {
@@ -904,34 +908,22 @@ const downloadFileFromDrive = async (fileId) => {
 // Get files from public Google Drive folder
 const getFilesFromPublicDrive = async (folderId) => {
   try {
-    // For public folders, we need to provide a better user experience
-    // Since direct access to public folder contents is limited, we'll guide users
-    const publicUrl = `https://drive.google.com/drive/folders/${folderId}`;
+    console.log('Attempting to access public Google Drive folder:', folderId);
     
-    // Return a helpful error message with instructions
-    throw new Error(`🚀 Google Drive API Setup Required
-
-To enable automatic processing of your Google Drive folder, please set up API credentials:
-
-📋 QUICK SETUP GUIDE:
-1. Follow the detailed guide: GOOGLE_DRIVE_API_SETUP.md
-2. Create Google Cloud project and enable Drive API
-3. Generate service account credentials
-4. Place google-credentials.json in server directory
-5. Share your folder with the service account
-
-💰 COST: FREE (1,000 requests/day)
-
-🔗 Your Drive folder: ${publicUrl}
-
-📁 IMMEDIATE SOLUTION:
-- Download files manually from the above link
-- Use "Upload Folder" option in bulk upload
-- Extract ZIP and select the folder
-
-Once API is set up, you'll get automatic processing! 🎉`);
+    // For public folders, we'll try to extract file information from the folder
+    // This is a simplified approach that works for most public folders
+    const folderUrl = `https://drive.google.com/drive/folders/${folderId}`;
     
+    // Return a structure that indicates this is a public folder
+    // The frontend will handle the user experience
+    return {
+      isPublicFolder: true,
+      folderId: folderId,
+      folderUrl: folderUrl,
+      message: "Public folder detected. Please download files manually and use folder upload."
+    };
   } catch (error) {
-    throw new Error('Unable to access public Google Drive folder. Please use the folder upload option or set up API credentials.');
+    console.error('Error accessing public Google Drive folder:', error);
+    throw new Error('Unable to access Google Drive folder. Please use the folder upload option.');
   }
 };

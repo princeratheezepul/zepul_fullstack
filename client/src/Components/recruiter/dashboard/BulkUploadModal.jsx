@@ -475,27 +475,13 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
                   <button
                     onClick={handleDriveUpload}
                     disabled={!driveLink.trim()}
-                    className="w-full bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                    className="w-full bg-blue-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
                   >
                     Process Drive Folder
                   </button>
                 </div>
 
-                <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <div className="flex items-start justify-between">
-                    <p className="text-sm text-blue-800">
-                      <strong>Note:</strong> Google Drive integration requires API setup. For immediate use,
-                      download your files and use the "Upload Folder" option instead.
-                    </p>
-                    <button
-                      onClick={() => setShowDriveHelper(true)}
-                      className="ml-2 text-blue-600 hover:text-blue-800"
-                      title="Get help with Google Drive setup"
-                    >
-                      <HelpCircle size={16} />
-                    </button>
-                  </div>
-                </div>
+
               </div>
             </div>
           )}
