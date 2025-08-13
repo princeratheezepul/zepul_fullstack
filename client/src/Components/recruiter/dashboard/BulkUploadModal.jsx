@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { UploadCloud, Link, Folder, X, Loader2, CheckCircle, AlertCircle, HelpCircle, FileSpreadsheet } from 'lucide-react';
+import { UploadCloud, Link, X, Loader2, CheckCircle, AlertCircle, HelpCircle, FileSpreadsheet } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +14,6 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
   const [progress, setProgress] = useState(null);
   const [results, setResults] = useState(null);
   const [showDriveHelper, setShowDriveHelper] = useState(false);
-  const folderInputRef = useRef(null);
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -24,55 +23,7 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
     navigate('/recruiter/login');
   };
 
-  const handleFolderUpload = useCallback(async (files) => {
-    if (!files || files.length === 0) return;
 
-    setIsProcessing(true);
-    setProgress({ status: 'processing', totalFiles: files.length, processedFiles: 0, successfulFiles: 0, failedFiles: 0 });
-
-    try {
-      const formData = new FormData();
-      formData.append('uploadMethod', 'folder');
-
-      // Add all files to FormData
-      Array.from(files).forEach((file, index) => {
-        formData.append('files', file);
-      });
-
-      const authToken = localStorage.getItem('authToken');
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/resumes/bulk-upload/${jobDetails.jobId}`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${authToken}`,
-          },
-          credentials: 'include',
-          body: formData
-        }
-      );
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          handleAuthError();
-          return;
-        }
-        throw new Error('Failed to start bulk upload');
-      }
-
-      const data = await response.json();
-      const bulkJobId = data.jobId;
-
-      // Start polling for progress
-      pollProgress(bulkJobId);
-
-    } catch (error) {
-      console.error('Bulk upload error:', error);
-      toast.error('Failed to start bulk upload: ' + error.message);
-      setIsProcessing(false);
-      setProgress(null);
-    }
-  }, [jobDetails.jobId]);
 
   const handleDriveUpload = async () => {
     if (!driveLink.trim()) {
@@ -209,15 +160,7 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
     }
   };
 
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop: handleFolderUpload,
-    accept: {
-      'application/pdf': ['.pdf'],
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx']
-    },
-    multiple: true,
-    disabled: isProcessing
-  });
+
 
   const { getRootProps: getSheetsRootProps, getInputProps: getSheetsInputProps } = useDropzone({
     onDrop: handleSheetsDrop,
@@ -231,12 +174,7 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
     disabled: isProcessing
   });
 
-  const handleFolderSelect = (event) => {
-    const files = Array.from(event.target.files);
-    if (files.length > 0) {
-      handleFolderUpload(files);
-    }
-  };
+
 
   const handleSheetsUpload = async () => {
     if (!sheetsFile) {
@@ -447,92 +385,33 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
                 Choose how you want to upload multiple resumes
               </p>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Folder Upload */}
-                <div 
-                  className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
-                  onClick={() => setUploadMethod('folder')}
-                >
-                  <Folder className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Upload Folder</h3>
-                  <p className="text-sm text-gray-600">
-                    Select a folder containing PDF and DOCX resume files
-                  </p>
-                </div>
+                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                 {/* Google Drive Link */}
+                 <div 
+                   className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
+                   onClick={() => setUploadMethod('drive')}
+                 >
+                   <Link className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Google Drive Link</h3>
+                   <p className="text-sm text-gray-600">
+                     Provide a Google Drive folder link containing resumes
+                   </p>
+                 </div>
 
-                {/* Google Drive Link */}
-                <div 
-                  className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-green-400 hover:bg-green-50 transition-all"
-                  onClick={() => setUploadMethod('drive')}
-                >
-                  <Link className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Google Drive Link</h3>
-                  <p className="text-sm text-gray-600">
-                    Provide a Google Drive folder link containing resumes
-                  </p>
-                </div>
-
-                {/* Excel Sheets Upload */}
-                <div 
-                  className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-all"
-                  onClick={() => setUploadMethod('sheets')}
-                >
-                  <FileSpreadsheet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Excel Sheets</h3>
-                  <p className="text-sm text-gray-600">
-                    Upload CSV/Excel file with resume links
-                  </p>
-                </div>
-              </div>
+                 {/* Excel Sheets Upload */}
+                 <div 
+                   className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
+                   onClick={() => setUploadMethod('sheets')}
+                 >
+                   <FileSpreadsheet className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Excel Sheets</h3>
+                   <p className="text-sm text-gray-600">
+                     Upload CSV/Excel file with resume links
+                   </p>
+                 </div>
+               </div>
             </div>
-          ) : uploadMethod === 'folder' ? (
-            <div className="space-y-6">
-              <button
-                onClick={() => setUploadMethod('')}
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-              >
-                ← Back to options
-              </button>
-              
-              <div className="text-center">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Upload Resume Folder</h3>
-                
-                <div 
-                  {...getRootProps()}
-                  className="border-2 border-dashed border-gray-300 rounded-xl p-12 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
-                >
-                  <input {...getInputProps()} />
-                  <UploadCloud className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-lg font-semibold text-gray-900 mb-2">
-                    Drag and drop files here, or click to browse
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    PDF and DOCX files only
-                  </p>
-                </div>
-
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600 mb-2">Or select a folder:</p>
-                  <input
-                    ref={folderInputRef}
-                    type="file"
-                    webkitdirectory=""
-                    directory=""
-                    multiple
-                    onChange={handleFolderSelect}
-                    className="hidden"
-                    accept=".pdf,.docx"
-                  />
-                  <button
-                    onClick={() => folderInputRef.current?.click()}
-                    className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-                  >
-                    Select Folder
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : uploadMethod === 'drive' ? (
+                      ) : uploadMethod === 'drive' ? (
             <div className="space-y-6">
               <button
                 onClick={() => setUploadMethod('')}
@@ -604,7 +483,7 @@ const BulkUploadModal = ({ onClose, jobDetails }) => {
                   <button
                     onClick={handleSheetsUpload}
                     disabled={!sheetsFile || isProcessing}
-                    className="w-full bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                    className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
                   >
                     {isProcessing ? "Processing..." : "Process Excel Sheets"}
                   </button>
