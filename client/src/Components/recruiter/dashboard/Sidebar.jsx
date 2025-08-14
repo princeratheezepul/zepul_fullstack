@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LayoutGrid, Briefcase, BarChart3, ChevronRight } from 'lucide-react';
+import { LayoutGrid, Briefcase, BarChart3, ChevronRight, Database } from 'lucide-react';
 
 const Sidebar = ({ activeComponent, setActiveComponent }) => {
   const [hoveredItem, setHoveredItem] = useState(null);
@@ -8,6 +8,7 @@ const Sidebar = ({ activeComponent, setActiveComponent }) => {
   const navItems = [
     { name: 'Dashboard', icon: <LayoutGrid /> },
     { name: 'Jobs', icon: <Briefcase /> },
+    { name: 'ZepDB', icon: <Database /> },
   ];
 
   const handleMouseEnter = (itemName, event) => {

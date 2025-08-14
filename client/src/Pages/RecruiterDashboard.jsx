@@ -8,6 +8,7 @@ import ShortlistChart from '../Components/recruiter/dashboard/ShortlistChart';
 import Sidebar from '../Components/recruiter/dashboard/Sidebar';
 import RecruiterJobs from '../Components/recruiter/dashboard/RecruiterJobs';
 import Settings from '../Components/recruiter/dashboard/Settings';
+import ZepDB from '../Components/recruiter/dashboard/ZepDB';
 
 
 const RecruiterDashboard = () => {
@@ -18,6 +19,10 @@ const RecruiterDashboard = () => {
       <Sidebar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
       {activeComponent === 'Settings' ? (
         <Settings />
+      ) : activeComponent === 'ZepDB' ? (
+        <div className="flex-1 ml-20">
+          <ZepDB />
+        </div>
       ) : (
         <main className="flex-1 ml-20 p-4 md:p-2 pt-2 md:pt-1">
           {activeComponent === 'Dashboard' && (
