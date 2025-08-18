@@ -15,6 +15,7 @@ import jobRoute from "./routes/job.route.js";
 import scorecardRoute from "./routes/scorecard.route.js";
 import adminRoutes from "./routes/admin.route.js";
 import accountmanagerRoutes from "./routes/accountmanager.route.js";
+import zepdbRoutes from "./routes/zepdb.route.js";
 const app = express();
 
 // Debug environment variables
@@ -70,7 +71,8 @@ app.use("/api/company", companyRoute);
 app.use("/api/jobs", jobRoute); 
 app.use("/api/scorecard", scorecardRoute); 
 app.use("/api/admin",adminRoutes);
-app.use("/api/accountmanager",accountmanagerRoutes)
+app.use("/api/accountmanager",accountmanagerRoutes);
+app.use("/api/zepdb", zepdbRoutes);
 app.listen(ServerConfig.PORT, async () => {
   console.log(`Server started on port ${ServerConfig.PORT}...`);
 });
