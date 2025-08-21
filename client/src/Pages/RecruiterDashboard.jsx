@@ -18,13 +18,15 @@ const RecruiterDashboard = () => {
     <div className="flex bg-gray-100 min-h-screen">
       <Sidebar activeComponent={activeComponent} setActiveComponent={setActiveComponent} />
       {activeComponent === 'Settings' ? (
-        <Settings />
+        <div className="flex-1 ml-20">
+          <Settings />
+        </div>
       ) : activeComponent === 'ZepDB' ? (
         <div className="flex-1 ml-20">
           <ZepDB />
         </div>
       ) : (
-        <main className="flex-1 ml-20 p-4 md:p-2 pt-2 md:pt-1">
+        <main className="flex-1 ml-20 p-4 md:p-0 pt-2 md:pt-0">
           {activeComponent === 'Dashboard' && (
             <div className="flex flex-col space-y-3 md:space-y-6 md:h-[calc(100vh-16px)]">
               <div className="md:h-[5vh]">
