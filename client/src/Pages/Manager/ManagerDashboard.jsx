@@ -34,26 +34,32 @@ const ArrowSegment = ({ value, color, isFirst, isLast, empty, index }) => {
   if (isFirst) shapeClass = "first";
   else if (isLast) shapeClass = "last";
   
-  // Different margins for different positions
+  // Responsive margins for different positions
   let marginLeft = 0;
   if (isFirst) {
     marginLeft = 0; // Applications - no margin
   } else if (index === 1) {
-    marginLeft = -18; // Screened - keep original position
+    marginLeft = -12; // Screened - reduced overlap
   } else if (index === 2) {
-    marginLeft = -45; // Interviewed - moderate overlap
+    marginLeft = -24; // Interviewed - reduced overlap
   } else if (index === 3) {
-    marginLeft = -70; // Shortlisted - more overlap
+    marginLeft = -36; // Shortlisted - reduced overlap
   } else if (index === 4) {
-    marginLeft = -90; // Offered - more overlap
+    marginLeft = -48; // Offered - reduced overlap
   } else {
-    marginLeft = -110; // Hired - more overlap
+    marginLeft = -60; // Hired - reduced overlap
   }
   
   return (
     <div
-      className={`pipeline-segment ${shapeClass} ${empty ? 'empty' : ''}`}
-      style={{ background: empty ? undefined : color, marginLeft: marginLeft, minWidth: 80, width: '5.5rem' }}
+      className={`pipeline-segment ${shapeClass} ${empty ? 'empty' : ''} text-xs`}
+      style={{ 
+        background: empty ? undefined : color, 
+        marginLeft: marginLeft, 
+        minWidth: 'clamp(50px, 12vw, 80px)', 
+        width: 'clamp(3rem, 12vw, 5rem)',
+        fontSize: 'clamp(10px, 2vw, 12px)'
+      }}
     >
       {value}
     </div>
@@ -573,7 +579,7 @@ function RecruiterPerformance({ recruiter, onClose }) {
   };
 
   return (
-    <div className="bg-[#F7F8FA] min-h-screen p-6">
+    <div className="min-h-screen p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -843,10 +849,10 @@ export default function ManagerDashboard() {
         
         const data = await response.json();
         if (data.recruiters && Array.isArray(data.recruiters)) {
-          // Sort by creation date (most recent first) and take only the first 10
+          // Sort by creation date (most recent first) and take only the first 6
           const sortedRecruiters = data.recruiters
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            .slice(0, 10)
+            .slice(0, 6)
             .map(recruiter => ({
               name: recruiter.fullname || 'Unknown',
               hires: recruiter.totalHires || 0,
@@ -925,6 +931,7 @@ export default function ManagerDashboard() {
   const [recruiters, setRecruiters] = useState([]);
   const [recruitersLoading, setRecruitersLoading] = useState(true);
   const [recruitersError, setRecruitersError] = useState(null);
+  const [hoveredIcon, setHoveredIcon] = useState(null);
 
   // Fetch recruiters once for the whole dashboard
   React.useEffect(() => {
@@ -952,14 +959,14 @@ export default function ManagerDashboard() {
   const icons = [
     // Dashboard (selected)
    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M1.55556 15.5556H10.8889C11.7444 15.5556 12.4444 14.8556 12.4444 14V1.55556C12.4444 0.7 11.7444 0 10.8889 0H1.55556C0.7 0 0 0.7 0 1.55556V14C0 14.8556 0.7 15.5556 1.55556 15.5556ZM1.55556 28H10.8889C11.7444 28 12.4444 27.3 12.4444 26.4444V20.2222C12.4444 19.3667 11.7444 18.6667 10.8889 18.6667H1.55556C0.7 18.6667 0 19.3667 0 20.2222V26.4444C0 27.3 0.7 28 1.55556 28ZM17.1111 28H26.4444C27.3 28 28 27.3 28 26.4444V14C28 13.1444 27.3 12.4444 26.4444 12.4444H17.1111C16.2556 12.4444 15.5556 13.1444 15.5556 14V26.4444C15.5556 27.3 16.2556 28 17.1111 28ZM15.5556 1.55556V7.77778C15.5556 8.63333 16.2556 9.33333 17.1111 9.33333H26.4444C27.3 9.33333 28 8.63333 28 7.77778V1.55556C28 0.7 27.3 0 26.4444 0H17.1111C16.2556 0 15.5556 0.7 15.5556 1.55556Z" fill="white" fill-opacity="0.7"/>
+<path d="M1.55556 15.5556H10.8889C11.7444 15.5556 12.4444 14.8556 12.4444 14V1.55556C12.4444 0.7 11.7444 0 10.8889 0H1.55556C0.7 0 0 0.7 0 1.55556V14C0 14.8556 0.7 15.5556 1.55556 15.5556ZM1.55556 28H10.8889C11.7444 28 12.4444 27.3 12.4444 26.4444V20.2222C12.4444 19.3667 11.7444 18.6667 10.8889 18.6667H1.55556C0.7 18.6667 0 19.3667 0 20.2222V26.4444C0 27.3 0.7 28 1.55556 28ZM17.1111 28H26.4444C27.3 28 28 27.3 28 26.4444V14C28 13.1444 27.3 12.4444 26.4444 12.4444H17.1111C16.2556 12.4444 15.5556 13.1444 15.5556 14V26.4444C15.5556 27.3 16.2556 28 17.1111 28ZM15.5556 1.55556V7.77778C15.5556 8.63333 16.2556 9.33333 17.1111 9.33333H26.4444C27.3 9.33333 28 8.63333 28 7.77778V1.55556C28 0.7 27.3 0 26.4444 0H17.1111C16.2556 0 15.5556 0.7 15.5556 1.55556Z" fill="black" fill-opacity="0.7"/>
 </svg>
 ,
     // Team
     <svg key="team" className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" stroke="currentColor" /><path d="M2 20c0-4 8-4 8 0" stroke="currentColor" /><path d="M14 20c0-4 8-4 8 0" stroke="currentColor" /></svg>,
     // List
 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M10.4997 19.8327H22.1663M10.4997 13.9993H22.1663M10.4997 8.16602H22.1663M5.83529 19.8327V19.835L5.83301 19.835V19.8327H5.83529ZM5.83529 13.9993V14.0017L5.83301 14.0016V13.9993H5.83529ZM5.83529 8.16602V8.16835L5.83301 8.16829V8.16602H5.83529Z" stroke="white" stroke-opacity="0.7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.4997 19.8327H22.1663M10.4997 13.9993H22.1663M10.4997 8.16602H22.1663M5.83529 19.8327V19.835L5.83301 19.835V19.8327H5.83529ZM5.83529 13.9993V14.0017L5.83301 14.0016V13.9993H5.83529ZM5.83529 8.16602V8.16835L5.83301 8.16829V8.16602H5.83529Z" stroke="black" stroke-opacity="0.7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 ,
 
@@ -1275,22 +1282,41 @@ export default function ManagerDashboard() {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-[#F7F8FA]">
       {/* Sidebar */}
-      <aside className="flex flex-col justify-between items-center bg-black w-20 py-6 fixed md:sticky top-0 left-0 h-screen z-20">
+      <aside className="flex flex-col justify-between items-center bg-white w-20 py-6 sticky top-0 left-0 h-screen z-20">
         <div className="flex flex-col items-center w-full gap-6">
           {/* Logo */}
           <div className="mb-8">
-            <img src="/zepul_sidebar_logo.png" alt="Logo" className="h-6 w-6" />
+            <img src="/zepul_sidebar_logo.png" alt="Logo" className="h-6 w-6 filter brightness-0" />
           </div>
           <hr className="w-10 border-gray-700 mb-8" />
           {/* Icons */}
           <nav className="flex flex-col items-center justify-center gap-8 w-full">
-            {icons.map((icon, idx) => (
-              <button key={idx} onClick={() => { setSelectedSidebar(idx); setShowAccountInfo(false); }} className={`cursor-pointer ${idx === selectedSidebar ? "bg-blue-600 rounded-lg p-2" : "p-2"}`}>
-                <span className={idx === selectedSidebar ? "text-white" : "text-gray-300"}>{icon}</span>
-              </button>
-            ))}
+            {icons.map((icon, idx) => {
+              const tooltipLabels = ["Dashboard", "Recruiter", "Jobs"];
+              return (
+                <div key={idx} className="relative">
+                  <button 
+                    onClick={() => { setSelectedSidebar(idx); setShowAccountInfo(false); }} 
+                    className={`cursor-pointer ${idx === selectedSidebar ? "bg-blue-600 rounded-lg p-2" : "p-2"}`}
+                    onMouseEnter={() => setHoveredIcon(idx)}
+                    onMouseLeave={() => setHoveredIcon(null)}
+                  >
+                    <span className={idx === selectedSidebar ? "text-black" : "text-black"}>{icon}</span>
+                  </button>
+                  {/* Tooltip */}
+                  {hoveredIcon === idx && (
+                    <div 
+                      className="absolute left-full top-1/2 transform -translate-y-1/2 ml-2 bg-gray-800 text-white px-2 py-1 rounded text-sm whitespace-nowrap"
+                      style={{ zIndex: 9999 }}
+                    >
+                      {tooltipLabels[idx]}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </nav>
         </div>
         {/* Avatar */}
@@ -1304,46 +1330,39 @@ export default function ManagerDashboard() {
         </div>
       </aside>
       {/* Main Content */}
-      <main className="flex-1 ml-20">
+      <main className="flex-1 ml-20 bg-[#F7F8FA] h-screen">
         {showAccountInfo ? (
-          <div className="bg-[#F7F8FA] min-h-screen flex items-start">
+          <div className="h-screen flex items-start overflow-y-auto">
             <div className="w-full max-w-[90vw]">
               <ManagerAccountSettings />
             </div>
           </div>
         ) : selectedSidebar === 1 ? (
-          <MyRecruiters selectedRecruiter={selectedRecruiter} setSelectedRecruiter={setSelectedRecruiter} />
+          <div className="h-screen overflow-y-auto">
+            <MyRecruiters selectedRecruiter={selectedRecruiter} setSelectedRecruiter={setSelectedRecruiter} />
+          </div>
         ) : selectedSidebar === 2 ? (
-          <div className="bg-[#F7F8FA] min-h-screen p-2 md:p-6">
+          <div className="h-screen overflow-y-auto p-2 md:p-6">
             <Jobs />
           </div>
         ) : (
-          <div className="bg-[#F7F8FA] min-h-screen p-2 md:p-6">
+          <div className="h-screen overflow-y-auto p-2 md:p-4">
             {/* Header */}
             <div className="bg-transparent">
               <div className="flex items-start justify-between">
                 <div>
                   <div className="text-xs text-blue-600 font-semibold tracking-wide mb-1">DASHBOARD</div>
-                  <div className="text-2xl font-bold text-gray-900">Manager Overview</div>
+                  <div className="text-xl font-bold text-gray-900">Manager Overview</div>
                 </div>
               </div>
-              <hr className="my-4 border-gray-200" />
-              <div className="flex items-center justify-between bg-white rounded-lg px-4 py-3 mb-6 border border-gray-100">
-                <span className="text-gray-900 font-medium">Task Requiring Manager Attention</span>
-                <button 
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-medium text-sm shadow-none cursor-pointer"
-                  onClick={() => setSelectedSidebar(2)}
-                >
-                  Job Creation
-                </button>
-              </div>
+              <hr className="my-2 border-gray-200" />
             </div>
            
             {/* Top Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-3">
               {/* Candidate Pipeline */}
-              <div className="bg-white rounded-2xl shadow p-4 md:p-8 mb-6 overflow-x-auto">
-                <div className="font-semibold text-gray-900 mb-6 text-xs md:text-sm">Candidate Pipeline</div>
+              <div className="bg-[#F7F8FA] rounded-2xl shadow p-3 md:p-4 mb-3">
+                <div className="font-semibold text-gray-900 mb-3 text-xs md:text-sm">Candidate Pipeline</div>
                 {pipelineLoading ? (
                   <div className="flex items-center justify-center h-32">
                     <div className="text-gray-500">Loading pipeline data...</div>
@@ -1356,65 +1375,69 @@ export default function ManagerDashboard() {
                     </div>
                   </div>
                 ) : (
-                <div className="min-w-[700px]">
-                  <table className="w-full table-fixed">
-                    <thead>
-                      <tr>
-                        <th className="w-48 text-left text-xs text-gray-500 font-medium pb-4"></th>
-                        {stageLabels.map((label, idx) => {
-                          let transformClass = '';
-                          if (label === 'Screened') {
-                            transformClass = 'transform -translate-x-4 md:-translate-x-3 lg:-translate-x-2';
-                          } else if (label === 'Shortlisted') {
-                            transformClass = 'transform -translate-x-16 md:-translate-x-11 lg:-translate-x-6';
-                          } else if (label === 'Offered') {
-                            transformClass = 'transform -translate-x-20 sm:-translate-x-14 lg:-translate-x-10';
-                          } else if (label === 'Hired') {
-                            transformClass = 'transform -translate-x-24 md:-translate-x-20 lg:-translate-x-16';
-                          }
-                          
-                          return (
-                            <th key={label} className={`text-xs text-gray-500 font-medium pb-4 ${label === 'Submitted' || label === 'Screened' || label === 'Shortlisted' || label === 'Offered' || label === 'Hired' ? 'text-left' : 'text-center'} ${transformClass}`}>
-                              {label}
-                            </th>
-                          );
-                        })}
-                      </tr>
-                    </thead>
-                    <tbody>
-                        {candidatePipelineData.length === 0 ? (
-                          <tr>
-                            <td colSpan="7" className="py-8 text-center text-gray-500">
-                              No pipeline data available
-                            </td>
-                          </tr>
-                        ) : (
-                          candidatePipelineData.map((item, idx) => (
-                        <tr key={item.role} className="align-middle">
-                          <td className="text-xs text-gray-700 font-medium py-2 pr-4">{item.role}</td>
-                          {item.stages.map((val, i) => (
-                            <td key={i} className="py-2 px-1">
-                              <ArrowSegment
-                                value={val !== null ? val : ""}
-                                color={stageColors[i]}
-                                isFirst={i === 0}
-                                isLast={i === item.stages.length - 1}
-                                empty={val === null}
-                                index={i}
-                              />
-                            </td>
-                          ))}
+                <div className="w-full">
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[600px] table-fixed">
+                      <thead>
+                        <tr>
+                          <th className="w-20 sm:w-24 md:w-32 text-left text-xs text-gray-500 font-medium pb-2"></th>
+                          {stageLabels.map((label, idx) => {
+                            let transformClass = '';
+                            let widthClass = 'w-12 sm:w-16 md:w-20';
+                            
+                            if (label === 'Screened') {
+                              transformClass = 'transform -translate-x-2 sm:-translate-x-3 md:-translate-x-4';
+                            } else if (label === 'Shortlisted') {
+                              transformClass = 'transform -translate-x-6 sm:-translate-x-8 md:-translate-x-8';
+                            } else if (label === 'Offered') {
+                              transformClass = 'transform -translate-x-8 sm:-translate-x-12 md:-translate-x-12';
+                            } else if (label === 'Hired') {
+                              transformClass = 'transform -translate-x-10 sm:-translate-x-16 md:-translate-x-20';
+                            }
+                            
+                            return (
+                              <th key={label} className={`${widthClass} text-xs text-gray-500 font-medium pb-2 text-left ${transformClass}`}>
+                                {label}
+                              </th>
+                            );
+                          })}
                         </tr>
-                          ))
-                        )}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                          {candidatePipelineData.length === 0 ? (
+                            <tr>
+                              <td colSpan="7" className="py-4 text-center text-gray-500">
+                                No pipeline data available
+                              </td>
+                            </tr>
+                          ) : (
+                            candidatePipelineData.map((item, idx) => (
+                          <tr key={item.role} className="align-middle">
+                            <td className="text-xs text-gray-700 font-medium py-1 pr-2">{item.role}</td>
+                            {item.stages.map((val, i) => (
+                              <td key={i} className="py-1 px-0.5">
+                                <ArrowSegment
+                                  value={val !== null ? val : ""}
+                                  color={stageColors[i]}
+                                  isFirst={i === 0}
+                                  isLast={i === item.stages.length - 1}
+                                  empty={val === null}
+                                  index={i}
+                                />
+                              </td>
+                            ))}
+                          </tr>
+                            ))
+                          )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 )}
               </div>
               {/* Pending Scorecard Review */}
-              <div className="bg-white rounded-2xl shadow p-6 flex flex-col items-center w-full max-w-sm mx-auto">
-                <div className="font-semibold text-gray-900 mb-6 text-lg text-left w-full">Pending Scorecard Review</div>
+              <div className="bg-[#F7F8FA] rounded-2xl shadow p-3 md:p-4 flex flex-col items-center w-full max-w-sm mx-auto">
+                <div className="font-semibold text-gray-900 mb-3 text-sm md:text-base text-left w-full">Pending Scorecard Review</div>
                 {scorecardLoading ? (
                   <div className="flex items-center justify-center h-48">
                     <div className="text-gray-500">Loading...</div>
@@ -1428,10 +1451,10 @@ export default function ManagerDashboard() {
                   </div>
                 ) : (
                   <>
-                <div className="relative flex items-center justify-center mb-8">
+                <div className="relative flex items-center justify-center mb-4">
                   <svg
-                    width={size}
-                    height={size}
+                    width={size * 0.8}
+                    height={size * 0.8}
                     viewBox={`0 0 ${size} ${size}`}
                     className="block"
                   >
@@ -1471,13 +1494,13 @@ export default function ManagerDashboard() {
                       transform={`rotate(-90 ${size / 2} ${size / 2})`}
                     />
                   </svg>
-                      <span className="absolute text-3xl font-bold text-gray-800">{pendingPercent}%</span>
+                      <span className="absolute text-2xl font-bold text-gray-800">{pendingPercent}%</span>
                 </div>
-                <div className="w-full flex flex-col gap-4">
-                  <div className="flex flex-col gap-3">
+                <div className="w-full flex flex-col gap-2">
+                  <div className="flex flex-col gap-2">
                     <div>
-                          <span className="text-gray-700 font-medium">Pending ({scorecardData.pendingResumes})</span>
-                      <div className="w-full h-3 bg-gray-200 rounded-full mt-1">
+                          <span className="text-gray-700 font-medium text-sm">Pending ({scorecardData.pendingResumes})</span>
+                      <div className="w-full h-2 bg-gray-200 rounded-full mt-1">
                         <div
                           className="h-full bg-[#0A1833] rounded-full"
                           style={{ width: `${pendingPercent}%` }}
@@ -1485,8 +1508,8 @@ export default function ManagerDashboard() {
                       </div>
                     </div>
                     <div>
-                          <span className="text-gray-700 font-medium">Reviewed ({scorecardData.reviewedResumes})</span>
-                      <div className="w-full h-3 bg-gray-200 rounded-full mt-1">
+                          <span className="text-gray-700 font-medium text-sm">Reviewed ({scorecardData.reviewedResumes})</span>
+                      <div className="w-full h-2 bg-gray-200 rounded-full mt-1">
                         <div
                           className="h-full bg-[#2563EB] rounded-full"
                           style={{ width: `${reviewedPercent}%` }}
@@ -1494,7 +1517,7 @@ export default function ManagerDashboard() {
                       </div>
                     </div>
                   </div>
-                      <div className="text-center text-sm text-gray-500 mt-2">
+                      <div className="text-center text-xs text-gray-500 mt-1">
                         Total: {scorecardData.totalResumes}
                 </div>
                     </div>
@@ -1503,48 +1526,48 @@ export default function ManagerDashboard() {
               </div>
             </div>
             {/* Recruiter Performance Summary */}
-            <div className="bg-white rounded-2xl shadow p-6">
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-2">
-                <div className="font-bold text-gray-900 text-xl">Recruiter Performance Summary</div>
+            <div className="bg-[#F7F8FA] rounded-2xl shadow p-2 md:p-3">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-2 gap-1">
+                <div className="font-bold text-gray-900 text-sm md:text-base">Recruiter Performance Summary</div>
               </div>
               <div className="overflow-x-auto">
                 {performanceLoading ? (
-                  <div className="flex items-center justify-center py-8">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                  <div className="flex items-center justify-center py-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
                   </div>
                 ) : performanceError ? (
-                  <div className="flex items-center justify-center py-8">
+                  <div className="flex items-center justify-center py-2">
                     <div className="text-center">
-                      <p className="text-red-500 mb-2">Error loading performance data</p>
-                      <p className="text-sm text-gray-500">{performanceError}</p>
+                      <p className="text-red-500 mb-1 text-xs">Error loading performance data</p>
+                      <p className="text-xs text-gray-500">{performanceError}</p>
                     </div>
                   </div>
                 ) : (
                   <table className="min-w-full text-sm text-left">
                     <thead>
                       <tr className="text-gray-500 border-b">
-                        <th className="py-3 px-2 font-medium">Recruiter</th>
-                        <th className="py-3 px-2 font-medium">Total Hires</th>
-                        <th className="py-3 px-2 font-medium">Offers Made</th>
-                        <th className="py-3 px-2 font-medium">Offers Accepted</th>
-                        <th className="py-3 px-2 font-medium">Avg TAT (Days)</th>
+                        <th className="py-1 px-2 font-medium text-xs">Recruiter</th>
+                        <th className="py-1 px-2 font-medium text-xs">Total Hires</th>
+                        <th className="py-1 px-2 font-medium text-xs">Offers Made</th>
+                        <th className="py-1 px-2 font-medium text-xs">Offers Accepted</th>
+                        <th className="py-1 px-2 font-medium text-xs">Avg TAT (Days)</th>
                       </tr>
                     </thead>
                     <tbody>
                       {recruiterPerformanceData.length === 0 ? (
                         <tr>
-                          <td colSpan="5" className="py-8 text-center text-gray-500">
+                          <td colSpan="5" className="py-2 text-center text-gray-500 text-xs">
                             No recruiter performance data available
                           </td>
                         </tr>
                       ) : (
                         recruiterPerformanceData.map((rec, idx) => (
                           <tr key={idx} className="border-b last:border-b-0">
-                            <td className="py-3 px-2 text-gray-900">{rec.name}</td>
-                            <td className="py-3 px-2">{rec.hires}</td>
-                            <td className="py-3 px-2">{rec.offers}</td>
-                            <td className="py-3 px-2">{rec.accepted}</td>
-                            <td className="py-3 px-2">{rec.tat}</td>
+                            <td className="py-1 px-2 text-gray-900 text-xs">{rec.name}</td>
+                            <td className="py-1 px-2 text-xs">{rec.hires}</td>
+                            <td className="py-1 px-2 text-xs">{rec.offers}</td>
+                            <td className="py-1 px-2 text-xs">{rec.accepted}</td>
+                            <td className="py-1 px-2 text-xs">{rec.tat}</td>
                           </tr>
                         ))
                       )}

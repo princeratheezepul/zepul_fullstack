@@ -6,6 +6,7 @@ import cors from "cors";
 import resumeRoutes from "./routes/resume.route.js";
 import managerResumeRoutes from "./routes/manager.resume.route.js";
 import adminResumeRoutes from "./routes/admin.resume.route.js";
+import bulkUploadRoutes from "./routes/bulkUpload.route.js";
 import connectDB from "./config/dbConfig.js";
 import recruiterRoutes from "./routes/recruiter.route.js";
 import managerRoutes from "./routes/manager.route.js";
@@ -14,6 +15,7 @@ import jobRoute from "./routes/job.route.js";
 import scorecardRoute from "./routes/scorecard.route.js";
 import adminRoutes from "./routes/admin.route.js";
 import accountmanagerRoutes from "./routes/accountmanager.route.js";
+import zepdbRoutes from "./routes/zepdb.route.js";
 const app = express();
 
 // Debug environment variables
@@ -62,13 +64,15 @@ app.use(cookieParser());
 app.use("/api/resumes", resumeRoutes);
 app.use("/api/manager/resumes", managerResumeRoutes);
 app.use("/api/admin/resumes", adminResumeRoutes);
+app.use("/api/resumes/bulk-upload", bulkUploadRoutes);
 app.use("/api/recruiter", recruiterRoutes);
 app.use("/api/manager",managerRoutes );
 app.use("/api/company", companyRoute);
 app.use("/api/jobs", jobRoute); 
 app.use("/api/scorecard", scorecardRoute); 
 app.use("/api/admin",adminRoutes);
-app.use("/api/accountmanager",accountmanagerRoutes)
+app.use("/api/accountmanager",accountmanagerRoutes);
+app.use("/api/zepdb", zepdbRoutes);
 app.listen(ServerConfig.PORT, async () => {
   console.log(`Server started on port ${ServerConfig.PORT}...`);
 });

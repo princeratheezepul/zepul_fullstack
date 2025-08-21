@@ -8,6 +8,11 @@
 .env.production
 .env.staging
 
+# Google Cloud Service Account Credentials
+**/google-credentials.json
+google-credentials.json
+server/google-credentials.json
+
 # OS generated files
 .DS_Store
 .DS_Store?

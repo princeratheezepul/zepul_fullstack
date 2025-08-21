@@ -79,6 +79,22 @@ const RecruiterJobDetailPage = () => {
     return date.toLocaleDateString('en-US', options);
   };
 
+  // Function to get company avatar background color
+  const getCompanyAvatarColor = (companyName) => {
+    const colors = [
+      'bg-blue-600',
+      'bg-green-600',
+      'bg-purple-600',
+      'bg-red-600',
+      'bg-indigo-600',
+      'bg-pink-600',
+      'bg-teal-600',
+      'bg-orange-600'
+    ];
+    const index = companyName ? companyName.charCodeAt(0) % colors.length : 0;
+    return colors[index];
+  };
+
   // Hardcoded data for the static UI
   const job = {
     jobId: jobId, // Add the jobId from URL params
@@ -136,7 +152,12 @@ const RecruiterJobDetailPage = () => {
               </div>
               <div className="flex items-center justify-between w-full gap-2 flex-wrap mt-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="flex items-center gap-1 text-sm text-gray-700 font-medium"><img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5 rounded-full" />{job.company}</span>
+                  <span className="flex items-center gap-1 text-sm text-gray-700 font-medium">
+                    <div className={`w-5 h-5 ${getCompanyAvatarColor(job.company)} text-white rounded-full flex items-center justify-center text-xs font-semibold`}>
+                      {job.company ? job.company.charAt(0).toUpperCase() : 'C'}
+                    </div>
+                    {job.company}
+                  </span>
                   <span className="h-5 w-px bg-gray-200 mx-1 hidden md:inline-block"></span>
                   <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-sm font-medium text-gray-700"><MapPin size={16} className="text-gray-500" />{job.location}</span>
                   <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-gray-100 text-sm font-medium text-gray-700"><Briefcase size={16} className="text-gray-500" />{job.employmentType}</span>
